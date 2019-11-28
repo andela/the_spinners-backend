@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import Sequelize from 'sequelize';
 import dotenv from 'dotenv';
-=======
-import Sequelize from "sequelize";
-import dotenv from "dotenv";
->>>>>>> Chore(setup): Setup postgresql and sequelize
 
 dotenv.config();
 
