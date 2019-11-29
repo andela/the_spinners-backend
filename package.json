@@ -17,9 +17,10 @@
   },
   "homepage": "https://github.com/andela/the_spinners-backend#readme",
   "devDependencies": {
-    "eslint": "^6.7.1"
+    "eslint": "^6.7.1",
+    "coveralls": "^3.0.9"
+  },
   "dependencies": {
     "dotenv": "^8.2.0"
   }
 }
-
