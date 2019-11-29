@@ -1,19 +1,26 @@
 {
-  "name": "blackninjas-backend",
+  "name": "the-snipers-backend",
   "version": "1.0.0",
   "description": "A platform to make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test nyc --reporter=text --reporter=html ./node_modules/.bin/_mocha ./src/test/**.test.js ",
+    "coveralls": "NODE_ENV=test nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andela/blackninjas-backend.git"
+    "url": "git+https://github.com/andela/the_spinners-backend.git"
   },
-  "author": "blackninjas",
+  "author": "theSnippers",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andela/blackninjas-backend/issues"
+    "url": "https://github.com/andela/the_spinners-backend/issues"
   },
-  "homepage": "https://github.com/andela/blackninjas-backend#readme"
+  "homepage": "https://github.com/andela/the_spinners-backend#readme",
+  "devDependencies": {
+    "coveralls": "^3.0.9",
+    "mocha": "^6.2.2",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^14.1.1"
+  }
 }
