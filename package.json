@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/andela/blackninjas-backend/issues"
   },
-  "homepage": "https://github.com/andela/blackninjas-backend#readme"
+  "homepage": "https://github.com/andela/blackninjas-backend#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
 }
