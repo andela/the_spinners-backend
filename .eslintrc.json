@@ -1,5 +1,5 @@
 {
-	"root": true,
+  "root": true,
   "extends": "airbnb-base",
   "env": {
     "node": true,
@@ -23,11 +23,12 @@
       "requireReturnDescription": true
     }],
     "require-jsdoc": ["error", {
-        "require": {
-            "FunctionDeclaration": true,
-            "MethodDefinition": true,
-            "ClassDeclaration": true
-        }
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true
+      }
     }]
   }
 }
+
