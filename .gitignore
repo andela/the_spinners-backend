@@ -2,4 +2,8 @@
 node_modules
 coverage
 package-lock.json
+<<<<<<< HEAD
 .env
+=======
+.env
+>>>>>>> chore(coveralls):install and integrate coveralls
