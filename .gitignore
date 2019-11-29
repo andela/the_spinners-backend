@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 .nyc_output
 node_modules
 coverage
 package-lock.json
 .env
 
+=======
+node_modules
+coverage
+.nyc_output
+>>>>>>> chore(coveralls):install and integrate coveralls
