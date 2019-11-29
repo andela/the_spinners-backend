@@ -46,12 +46,13 @@ To run tests run `npm test`
 
 ## Installation and usage instructions
 
-Clone the repository using: git clone https://github.com/andela/the_spinners-backend.git  
-Run `npm install` To install the project dependencies   
-Run `sequelize db:migrate` To create all tables by running migrations  
-Run `npm dev` To start the application in ***development environment***  
-Run `npm start` To start the application in ***production environment***
-Run `npm test` to run test  
+* Clone the repository using: `git clone https://github.com/andela/the_spinners-backend.git `  
+* Copy the file ***.env.sample*** then rename it to ***.env*** input the right credentials.  
+* Run `npm install` To install the project dependencies   
+* Run `sequelize db:migrate` To create all tables by running migrations  
+* Run `npm dev` To start the application in ***development environment***  
+* Run `npm start` To start the application in ***production environment***
+* Run `npm test` to run test  
  
 
 ## Features
