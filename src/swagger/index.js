@@ -1,5 +1,5 @@
 // Swagger set up
-export default swaggerDefinition = {
+const swaggerDefinition = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
@@ -14,3 +14,4 @@ export default swaggerDefinition = {
   // List of apis
   apis: ['./routes/*.js']
 };
+export default swaggerDefinition
