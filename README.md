@@ -44,6 +44,13 @@ The project use MOCHA and CHAI for testing.
 All tests are located in `./src/tests/**.test.js`  
 To run tests run `npm test`
 
+## Eslint setup and execution
+Install VS Code Package `eslint`
+run `cmd + ,`.  
+type in the search bar `eslint`  
+Set eslint to lint `on save`
+Set eslint to run `as you type`  
+
 ## Installation and usage instructions
 
 * Clone the repository using: `git clone https://github.com/andela/the_spinners-backend.git `  
