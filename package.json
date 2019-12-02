@@ -18,6 +18,8 @@
   "homepage": "https://github.com/andela/the_spinners-backend#readme",
   "devDependencies": {
     "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
     "coveralls": "^3.0.9"
   },
   "dependencies": {
