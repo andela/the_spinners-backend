@@ -1,8 +1,8 @@
 import express from 'express';
 import { serve, setup } from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerDefinition from './src/swagger';
-import db from './src/config/dbConfig';
+import swaggerDefinition from './swagger';
+import db from './config/dbConfig';
 
 const app = express();
 
