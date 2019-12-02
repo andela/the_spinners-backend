@@ -1,11 +1,11 @@
-import swaggerUi from 'swagger-ui-express'
-import swaggerJsdoc from 'swagger-jsdoc'
-import {swaggerDefinition} from './src/swagger';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerDefinition from './src/swagger';
 
-const swaggerOptions = {  
-  customSiteTitle: 'The Spinners',  
-  explorer: true, 
-};   
+const swaggerOptions = {
+  customSiteTitle: 'The Spinners',
+  explorer: true,
+};
 
 const swaggerSpecs = swaggerJsdoc(swaggerDefinition);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, swaggerOptions));
