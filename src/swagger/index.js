@@ -14,5 +14,4 @@ const swaggerDefinition = {
   // List of apis
   apis: ['./routes/*.js']
 };
-
 export default swaggerDefinition;
