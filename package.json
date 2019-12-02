@@ -4,7 +4,8 @@
   "description": "A platform to make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node index.js",
+    "transpile": "babel index.js  --out-file production/index.js && babel src  --out-dir production/src",
+    "start": "npm run transpile && node production/index.js",
     "dev": "nodemon --exec babel-node index.js"
   },
   "repository": {
