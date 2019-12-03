@@ -4,12 +4,12 @@ services:
     image: victorabz/the-spinners
     build: .
     ports: 
-      - 80:3000
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
-    depends_on:
+      - 3000:3000
+    command: npm start
+    depends_on: 
       - db
     environment:
-      - DB_URL=${DB_URL_CONTAINER}
+      - DB_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - PORT=3000
   db:
     image: postgres

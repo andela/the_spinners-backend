@@ -1,13 +1,12 @@
 FROM node:12.13.0
 
 WORKDIR /app
-ADD . .
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --quiet
 
-COPY . /app
+COPY . .
 
 EXPOSE 3000
 
