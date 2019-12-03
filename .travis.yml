@@ -1,0 +1,21 @@
+language: node_js
+
+node_js:
+  - 12.13.0
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database spinners;' -U postgres
+
+cashe: npm
+
+install:
+  - npm install
+
+script:
+  - npm test  
+
+after-script:
+  - npm run migrate

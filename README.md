@@ -2,6 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/andela/the_spinners-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/the_spinners-backend?branch=develop)
 [![](https://img.shields.io/badge/Hound-CI-yellowgreen)](https://houndci.com)
+[![Build Status](https://travis-ci.org/andela/the_spinners-backend.svg?branch=develop)](https://travis-ci.org/andela/the_spinners-backend)
 
  
  > A platform to make company global travel and accommodation easy and convenient for the 
@@ -90,4 +91,3 @@ ISHIMWE Gad - [@gadishimwe](https://github.com/gadishimwe)
 IRAGENA Eric - [@ericvand](https://github.com/erickvand)
 
 HARINTWARI Gustave - [@higustave-ops](https://github.com/higustave-ops)
-
