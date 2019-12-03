@@ -6,8 +6,14 @@ node_js:
 services:
   - postgresql
 
+env:
+  global:
+  - NODE_ENV=test  
+
 before_script:
   - psql -c 'create database spinners;' -U postgres
+  - npm install -g sequelize-cli
+  - sequelize db:migrate
 
 cashe: npm
 
@@ -15,8 +21,4 @@ install:
   - npm install
 
 script:
-  - npm run migrate
   - npm test  
-
-after-script:
-  - npm run migrate

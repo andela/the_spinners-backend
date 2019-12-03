@@ -6,9 +6,8 @@
   "scripts": {
     "build": "babel src  --out-dir production",
     "start": "node production/src/index.js",
-    "migrate": "babel-node ./src/database/tables.js",
     "dev": "nodemon --exec babel-node index.js",
-    "test": "nyc --reporter=html --reporter=text mocha  --require  @babel/register  src/tests/*.js --exit"
+    "test": "export NODE_ENV=test &&  sequelize db:migrate:undo:all  && sequelize db:migrate && nyc --reporter=html --reporter=text mocha  --require  @babel/register  src/tests/*.js --exit"
   },
   "repository": {
     "type": "git",
