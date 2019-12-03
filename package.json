@@ -4,7 +4,7 @@
   "description": "A platform to make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.",
   "main": "index.js",
   "scripts": {
-    "build": "babel src  --out-dir production/src",
+    "build": "babel src  --out-dir production",
     "start": "node production/src/index.js",
     "dev": "nodemon --exec babel-node index.js"
   },
