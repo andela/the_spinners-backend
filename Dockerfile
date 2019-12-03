@@ -1,12 +1,14 @@
 FROM node:12.13.0
 
-RUN mkdir /app
-ADD . /app
 WORKDIR /app
-#COPY package*.json ./
+ADD . .
+
+COPY package*.json ./
 
 RUN npm install
 
+COPY . /app
+
 EXPOSE 3000
 
-CMD ./scripts/start.sh
+CMD ["npm", "start"]
