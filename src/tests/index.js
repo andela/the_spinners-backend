@@ -12,6 +12,7 @@ describe('Test on the array:', () => {
     dummyData.should.be.an('array');
     done();
   });
+
   it('Should return length of array equal to 3', (done) => {
     dummyData.should.have.lengthOf(3);
     done();
