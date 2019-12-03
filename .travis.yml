@@ -12,9 +12,8 @@ env:
 
 before_script:
   - psql -c 'create database spinners;' -U postgres
-  - npm install -g sequelize-cli
 
-cashe: npm
+cache: npm
 
 install:
   - npm install
