@@ -1,10 +1,12 @@
 import chai from 'chai';
 
-const chaiHttp = require('chai-http');
+import chaiHttp from 'chai-http';
 
-const dummyData = [{ Name: 'Gustave', Age: 26 }, { Name: 'Peter', Age: 23 }, { Name: 'Anne', Age: 20 }];
 chai.should();
 chai.use(chaiHttp);
+
+const dummyData = [{ Name: 'Gustave', Age: 26 }, { Name: 'Peter', Age: 23 }, { Name: 'Anne', Age: 20 }];
+
 describe('Test on the array:', () => {
   it('Should return array type', (done) => {
     dummyData.should.be.an('array');
