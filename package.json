@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src  --out-dir production",
-    "start": "node production/src/index.js",
-    "dev": "nodemon --exec babel-node index.js",
-    "test": "nyc --reporter=html --reporter=text mocha  --require  @babel/register  src/tests/*.js --exit"
+    "start": "node production/index.js",
+    "dev": "nodemon --exec babel-node src/index.js",
+    "test": "nyc --reporter=html --reporter=text mocha  --require  @babel/register  src/tests/*.js --exit",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "repository": {
     "type": "git",
