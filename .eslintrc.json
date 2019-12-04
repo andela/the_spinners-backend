@@ -54,6 +54,7 @@
     ]
   },
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
   }
 }
