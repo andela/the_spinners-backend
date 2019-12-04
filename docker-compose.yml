@@ -4,12 +4,8 @@ services:
     build: .
     ports: 
       - 3000:3000
-    command: npm start
     depends_on: 
       - db
-    env_file: .env
-    environment:
-      - DB_HOST=db
   db:
     image: postgres:9.4
     environment:
