@@ -63,11 +63,7 @@ Set eslint to run `as you type`
 * Run `npm start` To start the application in ***production environment***
 * Run `npm test` to run test  
  
-<<<<<<< HEAD
  ## Run application with Docker
-=======
-## Run application with Docker
->>>>>>> chore(Docker): Add Readme instructions
 * Install Docker on your machine
 * Clone the repository using: `git clone https://github.com/andela/the_spinners-backend.git `  
 * Copy the file ***.env.sample*** then rename it to ***.env***.  
