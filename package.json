@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src  --out-dir production",
-    "start": "node production/src/index.js",
-    "dev": "nodemon --exec babel-node index.js",
-    "test": "nyc --reporter=html --reporter=text mocha  --require  @babel/register  src/tests/*.js --exit"
-
+    "start": "node production/index.js",
+    "dev": "nodemon --exec babel-node src/index.js",
+    "test": "nyc --reporter=html --reporter=text mocha  --require  @babel/register  src/tests/*.js --exit",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "repository": {
     "type": "git",
@@ -31,19 +31,20 @@
     "nyc": "^14.1.1"
   },
   "dependencies": {
-    "swagger-jsdoc": "^3.4.0",
-    "swagger-ui-express": "^4.1.2",
-    "dotenv": "^8.2.0",
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.4",
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
+    "@babel/register": "^7.7.4",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.2",
-    "@babel/register": "^7.7.4",
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0"
+    "sequelize-cli": "^5.5.1",
+    "swagger-jsdoc": "^3.4.0",
+    "swagger-ui-express": "^4.1.2"
   }
 }
