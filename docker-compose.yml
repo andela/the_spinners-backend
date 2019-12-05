@@ -1,0 +1,19 @@
+version: "3"
+services:
+  node: 
+    build: .
+    restart: always
+    ports: 
+      - 3000:3000
+    depends_on: 
+      - db
+  db:
+    image: postgres:9.4
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:

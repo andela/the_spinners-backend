@@ -53,7 +53,7 @@ type in the search bar `eslint`
 Set eslint to lint `on save`
 Set eslint to run `as you type`  
 
-## Installation and usage instructions
+## Installation and usage instructions with Node
 
 * Clone the repository using: `git clone https://github.com/andela/the_spinners-backend.git `  
 * Copy the file ***.env.sample*** then rename it to ***.env*** input the right credentials.  
@@ -63,6 +63,17 @@ Set eslint to run `as you type`
 * Run `npm start` To start the application in ***production environment***
 * Run `npm test` to run test  
  
+ ## Run application with Docker
+* Install Docker on your machine
+* Clone the repository using: `git clone https://github.com/andela/the_spinners-backend.git `  
+* Copy the file ***.env.sample*** then rename it to ***.env***.  
+* In the `.env file` Set database host as `db`
+* Set the following `POSTGRES_USER=your_db_user_name`
+      - `POSTGRES_PASSWORD=User_PASSWORD`
+      - `POSTGRES_DB=POSTGRES_DB`
+* Run `docker-compose up` To run the application with docker   
+* wait to see the message `Listening on port 3000.......` 
+
 
 ## Features
 * User can sign up
