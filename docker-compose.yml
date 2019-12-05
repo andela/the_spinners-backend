@@ -4,6 +4,7 @@ services:
     build: .
     ports: 
       - 3000:3000
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm run dev'
     depends_on: 
       - db
   db:
@@ -14,7 +15,5 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - db_data:/var/lib/postgresql/data
-    ports:
-      - "5000:5432"
 volumes:
   db_data:
