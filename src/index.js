@@ -4,6 +4,7 @@ import { serve, setup } from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerDefinition from './swagger';
 import router from './routes/signupRoutes';
+import routes from './routes/routes';
 
 const app = express();
 
@@ -14,20 +15,7 @@ const swaggerOptions = {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(router);
-
-app.use((req, _res, next) => {
-  const error = new Error('Ressources not found');
-  error.status = 404;
-  next(error);
-});
-app.use((error, req, res, next) => {
-  res.status(error.status);
-  res.json({
-    status: '404',
-    error: error.message,
-  });
-});
+routes(app);
 
 const swaggerSpecs = swaggerJsdoc(swaggerDefinition);
 app.use('/docs', serve, setup(swaggerSpecs, swaggerOptions));

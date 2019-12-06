@@ -38,9 +38,12 @@
     "@babel/plugin-transform-runtime": "^7.7.5",
     "@babel/preset-env": "^7.7.5",
     "@babel/register": "^7.7.4",
+<<<<<<< HEAD
     "@babel/runtime": "^7.7.5",
     "babel-loader": "^8.0.6",
     "bcrypt": "^3.0.7",
+=======
+>>>>>>> (Feature: user signup): User signup
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
