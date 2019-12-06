@@ -1,7 +1,9 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import { serve, setup } from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerDefinition from './swagger';
+import routes from './routes/routes';
 
 const app = express();
 
@@ -9,6 +11,10 @@ const swaggerOptions = {
   customSiteTitle: 'The Spinners',
   explorer: true,
 };
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+routes(app);
 
 const swaggerSpecs = swaggerJsdoc(swaggerDefinition);
 app.use('/docs', serve, setup(swaggerSpecs, swaggerOptions));
