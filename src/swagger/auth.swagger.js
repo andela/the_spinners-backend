@@ -151,3 +151,109 @@
  *         description: No Token supplied
  *
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   findUser:
+ *     type: object
+ *     properties:
+ *       email:
+ *         type: string
+ *       required:
+ *         - email
+ */
+
+/**
+ * @swagger
+ * /api/auth/find-user:
+ *   post:
+ *     tags:
+ *       - User
+ *     name: Find User
+ *     summary: Find a user in a system
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/findUser'
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *         required:
+ *           - email
+ *     responses:
+ *       '200':
+ *         description: Check your email address,
+ *                      copy the token and follow instruction
+ *       '404':
+ *         description: Email does not exists,
+ *                      Enter valid email,
+ *                      Please enter email
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   resetPassword:
+ *     type: object
+ *     properties:
+ *       newPassword:
+ *         type: string
+ *         format: password
+ *       confirmPass:
+ *         type: string
+ *         format: password
+ *       required:
+ *         - newPassword
+ *         - confirPass
+ */
+
+/**
+ * @swagger
+ * /api/auth/reset-password:
+ *   put:
+ *     tags:
+ *       - User
+ *     name: Reset Password
+ *     summary: Reset user password
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - name: body
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/resetPassword'
+ *           type: object
+ *           properties:
+ *             newPassword:
+ *               type: string
+ *               format: password
+ *             confirmPass:
+ *               type: string
+ *               format: password
+ *         required:
+ *           - newPassword
+ *           - confirmPass
+ *     responses:
+ *       '200':
+ *         description: Password reset success
+ *       '403':
+ *         description: Forbidden,
+ *                      Please check if the token is correct and try again to access this route
+ *       '400':
+ *         description: Password does not match,
+ *                      Password should be at least 8 characters long,
+ *                      Please input password
+ */

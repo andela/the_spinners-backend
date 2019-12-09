@@ -23,7 +23,6 @@ const payload = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName()
 };
-// get some fake data for example
 export const activeUser = {
   id: 2,
   firstName: faker.name.firstName(),
@@ -44,6 +43,7 @@ export const wrongEmail = {
   password: 'Pass1234'
 };
 export const tokenWithWrongUser = JwtService.generateToken(payload);
+export const resetToken = JwtService.generateToken({ email: activeUser.email });
 export const loggedInUser = {
   id: 30,
   firstName: faker.name.firstName(),
@@ -62,13 +62,46 @@ export const loggedInToken = JwtService.generateToken({
   email: loggedInUser.email,
 });
 
-export const createUsers = async () => {
-  await Users.destroy({ where: {} });
-  await Users.create(activeUser);
-  await Users.create({ ...loggedInUser, token: loggedInToken });
+// crete real user to that help receive email
+const realUser = 'icyiiddy@gmail.com';
+
+export const createUser = {
+  id: 3,
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: realUser,
+  password: BcryptService.hashPassword(userPassword),
+  isVerified: true,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export const user = {
   email: activeUser.email,
   password: userPassword,
 };
+
+// password that does not match
+export const passMatch = {
+  newPassword: faker.internet.password(),
+  confirmPass: faker.internet.password()
+};
+
+// reseting password
+const password = faker.internet.password();
+export const resetPass = {
+  newPassword: password,
+  confirmPass: password
+};
+
+export const emailNotExists = {
+  email: faker.internet.email()
+};
+
+export const createUsers = async () => {
+  await Users.destroy({ where: {} });
+  await Users.create(activeUser);
+  await Users.create(createUser);
+  await Users.create({ ...loggedInUser, token: loggedInToken });
+};
+export const token = JwtService.generateToken(activeUser);
