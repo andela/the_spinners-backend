@@ -16,19 +16,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(router);
 
-app.use((req, _res, next) => {
-  const error = new Error('Ressources not found');
-  error.status = 404;
-  next(error);
-});
-app.use((error, req, res, next) => {
-  res.status(error.status);
-  res.json({
-    status: '404',
-    error: error.message,
-  });
-});
-
 const swaggerSpecs = swaggerJsdoc(swaggerDefinition);
 app.use('/docs', serve, setup(swaggerSpecs, swaggerOptions));
 

@@ -50,7 +50,7 @@ describe('Test on user signup:', () => {
   });
 
   // Incomplete inputs
-  it('It should NOT create a new user, All fields Not completed', (done) => {
+  it('It should NOT create a new user, Firstname is required', (done) => {
     const newUser = {
       firstName: '', // Empty field
       lastName: 'Harintwali',
@@ -65,20 +65,91 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('All fields are required.');
+        res.body.should.have.property('error').equal('Firstname is required');
         done();
       });
   });
 
-  // Invalid endpoint url
-  it('Should show ERROR upon invalid endpoint URL', (done) => {
+  // Incomplete inputs
+  it('It should NOT create a new user, Lastname is required', (done) => {
+    const newUser = {
+      firstName: 'Gustave',
+      lastName: '', // Empty field
+      username: 'higustave123',
+      email: 'higustave@gmail.com',
+      password: '12345'
+    };
     chai.request(app)
-      .get('/api/amata') // Example of invalid url in our API
+      .post('/api/v1/signup')
       .set('Accept', 'application/json')
+      .send(newUser)
       .end((err, res) => {
         res.body.should.be.an('object');
-        res.should.have.status(404);
-        res.body.should.have.property('error').equal('Ressources not found');
+        res.should.have.status(400);
+        res.body.should.have.property('error').equal('Lastname is required');
+        done();
+      });
+  });
+
+  // Incomplete inputs
+  it('It should NOT create a new user, Email is required', (done) => {
+    const newUser = {
+      firstName: 'Gustave',
+      lastName: 'Harintwari',
+      username: 'higustave123',
+      email: '', // Empty field
+      password: '12345'
+    };
+    chai.request(app)
+      .post('/api/v1/signup')
+      .set('Accept', 'application/json')
+      .send(newUser)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('error').equal('Email is required');
+        done();
+      });
+  });
+
+  // Incomplete inputs
+  it('It should NOT create a new user, Username is required', (done) => {
+    const newUser = {
+      firstName: 'Gustave',
+      lastName: 'Harintwari',
+      username: '', // Empty field
+      email: 'higustave@gmail.com',
+      password: '12345'
+    };
+    chai.request(app)
+      .post('/api/v1/signup')
+      .set('Accept', 'application/json')
+      .send(newUser)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('error').equal('Username is required');
+        done();
+      });
+  });
+
+  // Incomplete inputs
+  it('It should NOT create a new user, Password is required', (done) => {
+    const newUser = {
+      firstName: 'Gustave',
+      lastName: 'Harintwari',
+      username: 'higustave123',
+      email: 'higustave@gmail.com',
+      password: '' // Empty field
+    };
+    chai.request(app)
+      .post('/api/v1/signup')
+      .set('Accept', 'application/json')
+      .send(newUser)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('error').equal('Password is required');
         done();
       });
   });
