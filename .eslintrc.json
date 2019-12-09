@@ -35,6 +35,7 @@
   "parserOptions": {
     "emcaVersion": 6,
     "sourceType": "module",
-    "allowImportExportEverywhere": true
+    "allowImportExportEverywhere": true,
+    "ecmaVersion": 11
   }
 }
