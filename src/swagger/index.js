@@ -9,7 +9,7 @@ const swaggerDefinition = {
       description:
         'A platform to make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.'
     },
-    host: process.env.BASE_URL,
+    host: process.env.BaseUrl,
     basePath: '/'
   },
   // List of apis

@@ -5,10 +5,6 @@
  */
 export default class Response {
   /**
-     * Creates an instance of Response.
-     * @memberof Response
-     */
-  /**
      *
      * @param  {statusCode} statusCode
      * @param  {message} message

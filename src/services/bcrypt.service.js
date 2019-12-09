@@ -16,6 +16,15 @@ class BcryptService {
   static hashPassword(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(Number(process.env.SaltRounds)));
   }
-}
 
+  /**
+   *
+   * @param {myPassword} myPassword
+   * @param {dbPassword} dbPassword
+   * @return {result} @memberof BcryptService
+   */
+  static verifyPassword(myPassword, dbPassword) {
+    return bcrypt.compareSync(myPassword, dbPassword);
+  }
+}
 export default BcryptService;
