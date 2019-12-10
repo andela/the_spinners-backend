@@ -7,7 +7,7 @@
     "build": "babel src  --out-dir production",
     "start": "node production/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coverage": "nyc report --reporter=html",
     "test": "nyc --reporter=html --reporter=text mocha  --require  @babel/register  src/tests/*.js --exit",
     "migrate": "npx sequelize-cli db:migrate"
   },
