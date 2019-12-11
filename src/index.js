@@ -1,24 +1,16 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { serve, setup } from 'swagger-ui-express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerDefinition from './swagger';
-import router from './routes/signupRoutes';
-// import routes from './routes/routes';
+import registerApiDocs from './swagger';
+import router from './routes/auth';
 
 const app = express();
 
-const swaggerOptions = {
-  customSiteTitle: 'The Spinners',
-  explorer: true,
-};
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(router);
 
-const swaggerSpecs = swaggerJsdoc(swaggerDefinition);
-app.use('/docs', serve, setup(swaggerSpecs, swaggerOptions));
+registerApiDocs(app);
 
 const PORT = process.env.PORT || 3000;
 

@@ -18,9 +18,6 @@ export function up(queryInterface, Sequelize) {
     lastName: {
       type: Sequelize.STRING
     },
-    username: {
-      type: Sequelize.STRING
-    },
     email: {
       type: Sequelize.STRING
     },
@@ -28,8 +25,12 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING
     },
     role: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false
+      type: Sequelize.STRING,
+      defaultValue: 'User'
+    },
+    token: {
+      type: Sequelize.STRING,
+      allowNull: true
     },
     isVerified: {
       type: Sequelize.BOOLEAN,
