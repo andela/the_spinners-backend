@@ -3,7 +3,15 @@
   "version": "1.0.0",
   "description": "A platform to make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.",
   "main": "index.js",
+  "nyc": {
+    "exclude": [
+      "src/database/*",
+      "src/models"
+    ]
+  },
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build": "babel src  --out-dir production",
     "start": "node production/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
@@ -24,6 +32,7 @@
   "homepage": "https://github.com/andela/the_spinners-backend#readme",
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.7.6",
+    "babel-eslint": "^8.2.6",
     "coveralls": "^3.0.9",
     "eslint": "^6.7.1",
     "eslint-config-airbnb-base": "^14.0.0",
