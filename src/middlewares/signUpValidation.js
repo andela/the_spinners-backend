@@ -1,32 +1,18 @@
-// eslint-disable-next-line import/no-unresolved
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 
 export default (req, res, next) => {
-  const signUpSchema = {
-    firstName: (Joi.string().required()).replace(/\s/g, '').error(() => ({
-      message: 'Firstname is required'
-    })),
-    lastName: (Joi.string().required()).replace(/\s/g, '').error(() => ({
-      message: 'Lastname is required'
-    })),
-    username: (Joi.string().required()).replace(/\s/g, '').error(() => ({
-      message: 'Username is required'
-    })),
-    email: (Joi.string().email({ minDomainSegments: 2 }).required()).replace(/\s/g, '')
-      .error(() => ({
-        message: 'Email is required'
-      })),
-    password: (Joi.string().required()).replace(/\s/g, '').error(() => ({
-      message: 'Password is required'
-    })),
-  };
+  const signUpSchema = Joi.object({
+    firstName: Joi.string().required().error(new Error('Firstname is required')),
+    lastName: Joi.string().required().error(new Error('Lastname is required')),
+    email: Joi.string().email({ minDomainSegments: 2 }).required().error(new Error('Email is required')),
+    password: Joi.string().required().error(new Error('Password is required'))
+  });
 
-  const validationResult = Joi.validate(req.body, signUpSchema);
-
-  if (validationResult.error) {
+  const { error } = signUpSchema.validate(req.body);
+  if (error) {
     return res.status(400).json({
       status: 400,
-      error: `${validationResult.error.details[0].message}`
+      error: error.message
     });
   }
   next();

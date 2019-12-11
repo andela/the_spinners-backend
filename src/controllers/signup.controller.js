@@ -1,9 +1,6 @@
-import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
-import SignupService from '../services/signupService';
+import SignupService from '../services/signup.service';
+import hashPassword from '../helpers/hashPassword';
 
-dotenv.config();
 /**
  * @exports
  * @class UsersController
@@ -21,18 +18,14 @@ class UsersController {
   static async signUp(req, res) {
     const userExist = await SignupService.checkUserExistByEmail(req.body.email);
     if (!userExist) {
-      const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+      const hashedPassword = hashPassword(req.body.password);
       req.body.password = hashedPassword;
       const createdUser = await SignupService.addUser(req.body);
       const {
-        id, firstName, lastName, email, username, role, isVerified
+        id, firstName, lastName, email, role, isVerified
       } = createdUser;
-      const token = jwt.sign({
-        id, email, username, role, isVerified
-      }, process.env.secretKey);
-      res.header('x-auth-token', token);
       const data = {
-        token, id, firstName, lastName, email, username, role, isVerified
+        id, firstName, lastName, email, role, isVerified
       };
       return res.status(201).send({ status: 201, message: 'User created successfully', data });
     }
