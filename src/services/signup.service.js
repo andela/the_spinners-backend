@@ -1,6 +1,7 @@
 import users from '../models';
 
 const { Users } = users;
+
 /**
  * @exports
  * @class SignupService
