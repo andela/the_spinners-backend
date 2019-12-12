@@ -1,17 +1,26 @@
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerui from 'swagger-ui-express';
 // Swagger set up
 const swaggerDefinition = {
   swaggerDefinition: {
-    openapi: '3.0.0',
     info: {
       title: 'Barefoot Nomad(The Spiners)',
       version: '1.0.0',
       description:
         'A platform to make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.'
     },
-    host: 'localhost:1234', // the host or url of the app
-    basePath: '/api/v1', // the basepath of your endpoint
+    host: process.env.BASE_URL,
+    basePath: '/'
   },
   // List of apis
-  apis: ['./routes/*.js']
+  apis: ['./src/routes/*.js']
 };
-export default swaggerDefinition;
+const options = {
+  swaggerDefinition,
+  apis: ['./src/routes/*.js']
+};
+const swaggerSpec = swaggerJSDoc(options);
+
+const registerSwagger = (app) => app.use('/docs', swaggerui.serve, swaggerui.setup(swaggerSpec));
+
+export default registerSwagger;
