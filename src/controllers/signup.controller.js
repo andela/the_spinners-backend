@@ -1,5 +1,5 @@
 import SignupService from '../services/signup.service';
-import hashPassword from '../helpers/hashPassword';
+import passwordHandler from '../services/bcrypt';
 
 /**
  * @exports
@@ -18,7 +18,7 @@ class UsersController {
   static async signUp(req, res) {
     const userExist = await SignupService.checkUserExistByEmail(req.body.email);
     if (!userExist) {
-      const hashedPassword = hashPassword(req.body.password);
+      const hashedPassword = passwordHandler.hashPassword(req.body.password);
       req.body.password = hashedPassword;
       const createdUser = await SignupService.addUser(req.body);
       const {

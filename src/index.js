@@ -1,14 +1,13 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import registerApiDocs from './swagger';
-import router from './routes/auth';
+import auth from './routes/auth';
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-app.use(router);
+app.use('/api/auth', auth);
 
 registerApiDocs(app);
 
