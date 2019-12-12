@@ -37,11 +37,8 @@
     ]
   },
   "parser": "babel-eslint",
-  "ecmaFeatures": {
-    "modules": true
-  },
   "parserOptions": {
-    "ecmaVersion": 11,
-    "sourceType": "module"
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
   }
 }
