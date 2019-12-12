@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
  * @exports
  * @class passwordHandler
  */
-class passwordHandler {
+class Bcrypt {
   /**
  * users can create an account
  * @static
@@ -15,8 +15,8 @@ class passwordHandler {
  */
   static hashPassword(password) {
     return bcrypt.hashSync(password,
-      bcrypt.genSaltSync(Number(process.env.saltRounds)));
+      bcrypt.genSaltSync(Number(process.env.SaltRounds)));
   }
 }
 
-export default passwordHandler;
+export default Bcrypt;

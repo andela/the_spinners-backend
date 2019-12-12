@@ -1,10 +1,10 @@
 import express from 'express';
 import UsersController from '../controllers/signup.controller';
-import signUpSchema from '../middlewares/signup.middleware';
+import signupValidation from '../validations/signup.validations';
 
-const auth = express.Router();
+const router = express.Router();
 
-auth.post('/signup', signUpSchema, UsersController.signUp); // API route for user to signup
+router.post('/signup', signupValidation, UsersController.signUp); // API route for user to signup
 /**
  * @swagger
  * definitions:
@@ -70,4 +70,4 @@ auth.post('/signup', signUpSchema, UsersController.signUp); // API route for use
  *             description: User already exist.
  */
 
-export default auth;
+export default router;

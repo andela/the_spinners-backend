@@ -14,6 +14,7 @@
     "consistent-return": 0,
     "no-param-reassign": 0,
     "comma-dangle": 0,
+    "import/prefer-default-export": "off",
     "curly": ["error", "multi-line"],
     "import/no-unresolved": [2, { "commonjs": true }],
     "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
@@ -31,8 +32,10 @@
       }
     }]
   },
-    "parserOptions": {
-      "sourceType": "module"
-    }
-
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "emcaVersion": 6,
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  }
 }

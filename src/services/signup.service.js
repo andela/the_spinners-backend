@@ -1,6 +1,6 @@
-import model from '../models';
+import users from '../models';
 
-const { Users } = model;
+const { Users } = users;
 /**
  * @exports
  * @class SignupService
@@ -13,8 +13,9 @@ class SignupService {
  * @memberof SignupService
  * @returns {object} data
  */
-  static addUser(newUser) {
-    return Users.create(newUser);
+  static async addUser(newUser) {
+    const newCreatedUSer = await Users.create(newUser);
+    return newCreatedUSer;
   }
 
   /**
@@ -24,8 +25,9 @@ class SignupService {
  * @memberof SignupService
  * @returns {object} data
  */
-  static checkUserExistByEmail(userEmail) {
-    return Users.findOne({ where: { email: userEmail } });
+  static async checkUserExistByEmail(userEmail) {
+    const foundUserByEmail = await Users.findOne({ where: { email: userEmail } });
+    return foundUserByEmail;
   }
 }
 
