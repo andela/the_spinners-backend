@@ -38,6 +38,7 @@
   },
   "parser": "babel-eslint",
   "parserOptions": {
+    "emcaVersion": 6,
     "sourceType": "module",
     "allowImportExportEverywhere": true
   }
