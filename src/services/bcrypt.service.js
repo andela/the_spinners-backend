@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
  * @exports
  * @class passwordHandler
  */
-class Bcrypt {
+class BcryptService {
   /**
  * users can create an account
  * @static
@@ -19,4 +19,4 @@ class Bcrypt {
   }
 }
 
-export default Bcrypt;
+export default BcryptService;
