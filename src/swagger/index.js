@@ -21,6 +21,6 @@ const options = {
 };
 const swaggerSpec = swaggerJSDoc(options);
 
-const registerSwagger = (app) => app.use('/docs', swaggerui.serve, swaggerui.setup(swaggerSpec));
+const registerSwagger = (app) => { app.use('/docs', swaggerui.serve, swaggerui.setup(swaggerSpec)); };
 
 export default registerSwagger;

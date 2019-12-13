@@ -15,10 +15,9 @@
     "build": "babel src  --out-dir production",
     "start": "node production/index.js",
     "drop": "sequelize db:migrate:undo:all",
-    "create": "sequelize db:migrate",
     "dev": "nodemon --exec babel-node src/index.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "pretest": "npm run drop && npm run create",
+    "pretest": "npm run drop && npm run migrate",
     "test": "export NODE_ENV=test && nyc --reporter=html --reporter=text mocha  --require  @babel/register src/tests/*.js --timeout 100000 --exit",
     "migrate": "npx sequelize-cli db:migrate"
   },
