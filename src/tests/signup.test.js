@@ -35,7 +35,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(409);
-        res.body.should.have.property('error').equal(`${signupFixtures.email} already exist`);
+        res.body.should.have.property('message').equal(`${signupFixtures.email} already exist`);
         done();
       });
   });

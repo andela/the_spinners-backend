@@ -1,6 +1,8 @@
 import SignupService from '../services/signup.service';
 import BcryptService from '../services/bcrypt.service';
+import Response from '../helpers/response';
 
+const response = new Response();
 /**
  * @exports
  * @class UsersController
@@ -27,9 +29,11 @@ class UsersController {
       const data = {
         id, firstName, lastName, email, role, isVerified
       };
-      return res.status(201).send({ status: 201, message: 'User created successfully', data });
+      response.setSuccess(201, 'User created successfully', data);
+      return response.send(res);
     }
-    return res.status(409).send({ status: 409, error: `${req.body.email} already exist` });
+    response.setError(409, `${req.body.email} already exist`);
+    return response.send(res);
   }
 }
 
