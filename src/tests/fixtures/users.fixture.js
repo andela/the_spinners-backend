@@ -6,3 +6,7 @@ export const signupFixtures = {
   email: faker.internet.email(),
   password: faker.internet.password()
 };
+
+export default {
+  signupFixtures
+};
