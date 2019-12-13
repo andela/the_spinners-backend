@@ -14,11 +14,7 @@ class BcryptService {
  * @returns {object} hash
  */
   static hashPassword(password) {
-    return bcrypt.hashSync(
-      password, bcrypt.genSaltSync(
-        Number(process.env.SaltRounds)
-      )
-    );
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(Number(process.env.SaltRounds)));
   }
 }
 

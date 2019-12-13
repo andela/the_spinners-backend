@@ -1,10 +1,12 @@
 import express from 'express';
 import UsersController from '../controllers/signup.controller';
-import signupValidation from '../middlewares/validations/auth.validation';
+import checkData from '../middlewares/checkData';
+
+const { validateSignup } = checkData;
 
 const router = express.Router();
 
-router.post('/signup', signupValidation, UsersController.signUp); // API route for user to signup
+router.post('/signup', validateSignup, UsersController.signUp); // API route for user to signup
 /**
  * @swagger
  * definitions:

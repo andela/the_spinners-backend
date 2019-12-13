@@ -49,8 +49,6 @@
     "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.7.5",
     "@babel/register": "^7.7.4",
-    "joi": "^14.3.1",
-    "babel-loader": "^8.0.6",
     "@babel/runtime": "^7.7.6",
     "@hapi/joi": "^16.1.8",
     "bcrypt": "^3.0.7",

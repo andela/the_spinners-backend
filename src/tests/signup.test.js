@@ -50,7 +50,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Firstname is required, And must be letters only');
+        res.body.should.have.property('message').equal('firstName is required');
         done();
       });
   });
@@ -65,7 +65,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Lastname is required, And must be letters only');
+        res.body.should.have.property('message').equal('lastName is required');
         done();
       });
   });
@@ -80,7 +80,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Email should be valid e.g(example@site.ext)');
+        res.body.should.have.property('message').equal('email is required');
         done();
       });
   });
@@ -95,7 +95,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Password is required, Minimum lenght 8 characters');
+        res.body.should.have.property('message').equal('password is required');
         done();
       });
   });
