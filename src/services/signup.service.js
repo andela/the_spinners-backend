@@ -1,6 +1,6 @@
-import users from '../models';
+import models from '../models';
 
-const { Users } = users;
+const { Users } = models;
 
 /**
  * @exports

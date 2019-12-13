@@ -26,7 +26,7 @@ export function up(queryInterface, Sequelize) {
     },
     role: {
       type: Sequelize.STRING,
-      defaultValue: 'User'
+      defaultValue: 'Requester'
     },
     token: {
       type: Sequelize.STRING,
