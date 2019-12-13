@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
-import { signupFixtures } from '../fixtures/users.fixture';
+import { signupFixtures } from './fixtures/users.fixture';
 
 chai.use(chaiHttp);
 chai.should();
@@ -50,7 +50,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Firstname is required');
+        res.body.should.have.property('error').equal('Firstname is required, And must be letters only');
         done();
       });
   });
@@ -65,7 +65,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Lastname is required');
+        res.body.should.have.property('error').equal('Lastname is required, And must be letters only');
         done();
       });
   });
@@ -80,7 +80,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Email is required');
+        res.body.should.have.property('error').equal('Email should be valid e.g(example@site.ext)');
         done();
       });
   });
@@ -95,7 +95,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('error').equal('Password is required, Max lenght 8');
+        res.body.should.have.property('error').equal('Password is required, Minimum lenght 8 characters');
         done();
       });
   });
