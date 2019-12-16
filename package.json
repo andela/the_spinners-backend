@@ -14,10 +14,10 @@
     "lint:fix": "eslint . --fix",
     "build": "babel src  --out-dir production",
     "start": "node production/index.js",
-    "drop": "sequelize db:migrate:undo:all",
-    "dev": "nodemon --exec babel-node src/index.js",
+    "drop:migrate": "sequelize db:migrate:undo:all",
+    "dev": "nodemon --exec babel-node src/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "pretest": "npm run drop && npm run migrate",
+    "pretest": "npm run drop:migrate && npm run migrate",
     "test": "export NODE_ENV=test && nyc --reporter=html --reporter=text mocha  --require  @babel/register src/tests/*.js --timeout 100000 --exit",
     "migrate": "npx sequelize-cli db:migrate"
   },

@@ -3,8 +3,8 @@ import { signupSchema } from './validations/auth.validation';
 
 const response = new Response();
 
-const checkData = {
-  validateSignup: (req, res, next) => {
+const authValidation = {
+  signupValidate: (req, res, next) => {
     const { error } = signupSchema.signup.validate(req.body);
     if (error) {
       const { message } = error;
@@ -16,4 +16,4 @@ const checkData = {
 };
 
 
-export default checkData;
+export default authValidation;
