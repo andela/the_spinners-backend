@@ -14,9 +14,8 @@ class SignupService {
  * @memberof SignupService
  * @returns {object} data
  */
-  static async addUser(newUser) {
-    const newCreatedUSer = await Users.create(newUser);
-    return newCreatedUSer;
+  static addUser(newUser) {
+    return Users.create(newUser);
   }
 
   /**
@@ -26,9 +25,8 @@ class SignupService {
  * @memberof SignupService
  * @returns {object} data
  */
-  static async checkUserExistByEmail(userEmail) {
-    const foundUserByEmail = await Users.findOne({ where: { email: userEmail } });
-    return foundUserByEmail;
+  static checkUserExistByEmail(userEmail) {
+    return Users.findOne({ where: { email: userEmail } });
   }
 }
 
