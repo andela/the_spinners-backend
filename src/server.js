@@ -1,12 +1,5 @@
-import express from 'express';
 import registerApiDocs from './swagger';
-import auth from './routes/auth';
-
-const app = express();
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use('/api/auth', auth);
+import app from './app';
 
 registerApiDocs(app);
 
