@@ -2,7 +2,7 @@
 import Joi from '@hapi/joi';
 import Response from '../helpers/response';
 
-export const signupSchema = Joi.object({
+const signupSchema = Joi.object({
   firstName: Joi.string()
     .trim()
     .regex(/^[a-zA-Z]+$/)

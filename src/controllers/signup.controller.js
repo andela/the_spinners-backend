@@ -17,7 +17,7 @@ class UsersController {
  * @returns {object} data
  */
   static async signUp(req, res) {
-    const userExist = await SignupService.checkUserExistByEmail(req.body.email.trim());
+    const userExist = await SignupService.findByEmail(req.body.email.trim());
     if (!userExist) {
       const userInput = {
         firstName: req.body.firstName.trim(),

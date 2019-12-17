@@ -25,7 +25,7 @@ class SignupService {
  * @memberof SignupService
  * @returns {object} data
  */
-  static checkUserExistByEmail(userEmail) {
+  static findByEmail(userEmail) {
     return Users.findOne({ where: { email: userEmail } });
   }
 }
