@@ -17,11 +17,15 @@ class UsersController {
  * @returns {object} data
  */
   static async signUp(req, res) {
-    const userExist = await SignupService.checkUserExistByEmail(req.body.email);
+    const userExist = await SignupService.checkUserExistByEmail(req.body.email.trim());
     if (!userExist) {
-      const hashedPassword = BcryptService.hashPassword(req.body.password);
-      req.body.password = hashedPassword;
-      const createdUser = await SignupService.addUser(req.body);
+      const userInput = {
+        firstName: req.body.firstName.trim(),
+        lastName: req.body.lastName.trim(),
+        email: req.body.email.trim(),
+        password: BcryptService.hashPassword(req.body.password.trim())
+      };
+      const createdUser = await SignupService.addUser(userInput);
       const {
         id, firstName, lastName, email, role, isVerified
       } = createdUser;
@@ -31,7 +35,7 @@ class UsersController {
       Response.setSuccess(201, 'User created successfully', data);
       return Response.send(res);
     }
-    Response.setError(409, `${req.body.email} already exist`);
+    Response.setError(409, `${req.body.email.trim()} already exist`);
     return Response.send(res);
   }
 }

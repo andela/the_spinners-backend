@@ -50,7 +50,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('message').equal('firstName is required');
+        res.body.should.have.property('message');
         done();
       });
   });
@@ -65,7 +65,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('message').equal('lastName is required');
+        res.body.should.have.property('message');
         done();
       });
   });
@@ -80,7 +80,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('message').equal('email is required');
+        res.body.should.have.property('message');
         done();
       });
   });
@@ -95,7 +95,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(400);
-        res.body.should.have.property('message').equal('password is required');
+        res.body.should.have.property('message');
         done();
       });
   });
