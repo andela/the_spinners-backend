@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import Joi from '@hapi/joi';
-import Response from '../helpers/response';
+import Response from '../services/response';
 
 const signupSchema = Joi.object({
   firstName: Joi.string()
