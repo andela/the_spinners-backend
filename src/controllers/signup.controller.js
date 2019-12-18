@@ -1,6 +1,6 @@
 import SignupService from '../services/signup.service';
 import BcryptService from '../services/bcrypt.service';
-import Response from '../helpers/response';
+import Response from '../services/response';
 
 /**
  * @exports
