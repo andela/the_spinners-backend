@@ -8,13 +8,6 @@ export default class Response {
      * Creates an instance of Response.
      * @memberof Response
      */
-  constructor() {
-    this.statusCode = null;
-    this.type = null;
-    this.data = null;
-    this.message = null;
-  }
-
   /**
      *
      * @param  {statusCode} statusCode
@@ -22,7 +15,7 @@ export default class Response {
      * @param  {data} data
      * @return {error}@memberof Response
      */
-  setSuccess(statusCode, message, data) {
+  static setSuccess(statusCode, message, data) {
     this.statusCode = statusCode;
     this.message = message;
     this.data = data;
@@ -35,7 +28,7 @@ export default class Response {
      * @param  {message} message
      * @return {response}@memberof Response
      */
-  setError(statusCode, message) {
+  static setError(statusCode, message) {
     this.statusCode = statusCode;
     this.message = message;
     this.type = 'error';
@@ -47,7 +40,7 @@ export default class Response {
      * @return
      * @return {response}@memberof Response
      */
-  send(res) {
+  static send(res) {
     const result = {
       status: this.type,
       message: this.message,

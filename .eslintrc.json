@@ -1,4 +1,5 @@
 {
+  
   "root": true,
   "extends": "airbnb-base",
   "env": {
@@ -30,7 +31,9 @@
       }
     }]
   },
+  "parser": "babel-eslint",
   "parserOptions": {
+    "emcaVersion": 6,
     "sourceType": "module",
     "allowImportExportEverywhere": true
   }
