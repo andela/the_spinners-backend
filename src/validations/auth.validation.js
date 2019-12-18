@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
 import ResponseService from '../services/response.service';
+import JwtService from '../services/jwt.service';
 
 const signupSchema = Joi.object({
   firstName: Joi.string()
@@ -65,6 +66,26 @@ const loginSchema = Joi.object({
     })
 }).options({ abortEarly: false });
 
+const resendAcccActivationLinkSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2 })
+    .required()
+    .trim()
+    .messages({
+      'string.empty': 'Please enter email',
+      'string.email': 'Enter valid email i.e: email@example.com',
+      'any.required': 'Email is required'
+    }),
+}).options({ abortEarly: false });
+
+export const validateToken = (req, res, next) => {
+  const auth = JwtService.verifyToken(req.token);
+  if (auth.name) {
+    ResponseService.setError(403, 'Wrong Token Provided');
+    return ResponseService.send(res);
+  }
+  next();
+};
 
 const validateHandler = (schema, body, res, next) => {
   const { error } = schema.validate(body);
@@ -87,8 +108,13 @@ export const validateSignup = (req, res, next) => {
 export const validateLogin = (req, res, next) => {
   validateHandler(loginSchema, req.body, res, next);
 };
+export const validateResendVerificationLink = (req, res, next) => {
+  validateHandler(resendAcccActivationLinkSchema, req.body, res, next);
+};
 
 export default {
   validateSignup,
-  validateLogin
+  validateLogin,
+  validateResendVerificationLink,
+  validateToken
 };

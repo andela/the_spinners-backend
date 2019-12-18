@@ -1,7 +1,7 @@
 import models from '../models';
 
-const { Users } = models;
 
+const { Users } = models;
 /**
  * @exports
  * @class UserService

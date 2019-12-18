@@ -4,7 +4,6 @@ import BcryptService from '../services/bcrypt.service';
 import JwtService from '../services/jwt.service';
 import SendEmailService from '../services/send-email.service';
 
-
 /**
  *
  *
@@ -16,9 +15,9 @@ class AuthController {
  * @static
  * @description POST /api/v1/signUp
  * @param {object} req request object
- * @param {object} res ResponseService object
+ * @param {object} res response object
  * @memberof AuthController
- * @returns {object} data
+ * @returns {object} ResponseService
  */
   static async signUp(req, res) {
     const userExist = await UserService.findUserByProperty({ email: req.body.email.trim() });
@@ -36,11 +35,64 @@ class AuthController {
       const data = {
         id, firstName, lastName, email, role, isVerified
       };
-      ResponseService.setSuccess(201, 'User created successfully', data);
+      SendEmailService.sendAccVerificationLink(email);
+      ResponseService.setSuccess(201, 'User created successfully, Visit Your Email To Activate Account', data);
       return ResponseService.send(res);
     }
     ResponseService.setError(409, `${req.body.email.trim()} already exist`);
     return ResponseService.send(res);
+  }
+
+  /**
+* users can verify his/her account
+* @static
+* @description PATCH /api/auth/account_verify
+* @param {object} req request object
+* @param {object} res response object
+* @memberof AuthController
+* @returns {object} ResponseService
+*/
+  static async verifyAccount(req, res) {
+    const userToken = JwtService.verifyToken(req.token);
+    const isUserRegistered = await UserService.findUserByProperty({ email: userToken.email });
+    if (isUserRegistered && (isUserRegistered.isVerified) === true) {
+      ResponseService.setError(400, 'Can\'t reverify this account. Account already verified.');
+      ResponseService.send(res);
+    } else {
+      const userData = {
+        id: isUserRegistered.id,
+        firstName: isUserRegistered.firstName,
+        lastName: isUserRegistered.lastName,
+        email: isUserRegistered.email
+      };
+      const providedToken = JwtService.generateToken(userData);
+      await UserService.updateUser({ email: userToken.email }, {
+        isVerified: true, token: providedToken
+      });
+      ResponseService.setSuccess(200, 'Account verified successfully. You can proceed to login', providedToken);
+      ResponseService.send(res);
+    }
+  }
+
+  /**
+* users can request a new verify link
+* @static
+* @description PATCH /api/auth/resend_verification_link
+* @param {object} req request object
+* @param {object} res response object
+* @memberof AuthController
+* @returns {object} ResponseService
+*/
+  static async resendAccVerificationLink(req, res) {
+    const emailExist = await UserService.findUserByProperty({ email: req.body.email.trim() });
+    if (emailExist) {
+      SendEmailService.sendAccVerificationLink(req.body.email.trim());
+      ResponseService.setSuccess(200, 'Verification Link Successfully Sent, Visit Your Email To Activate Account');
+      ResponseService.send(res);
+    } else {
+      ResponseService.setSuccess(404, 'Email Not Found in The Database. To Get a Link You Must Register');
+      ResponseService.send(res);
+    }
   }
 
   /**
