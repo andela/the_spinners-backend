@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 
 /**
  * @exports
- * @class passwordHandler
+ * @class BcryptService
  */
 class BcryptService {
   /**
@@ -10,11 +10,11 @@ class BcryptService {
  * @static
  * @param {string} password
  * @param {string} Salt
- * @memberof passwordHandler
+ * @memberof BcryptService
  * @returns {object} hash
  */
   static hashPassword(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(Number(process.env.SaltRounds)));
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS)));
   }
 
   /**

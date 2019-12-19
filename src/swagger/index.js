@@ -9,7 +9,7 @@ const swaggerDefinition = {
       description:
         'A platform to make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.'
     },
-    host: process.env.BaseUrl,
+    host: process.env.BASE_URL,
     basePath: '/'
   },
   // List of apis
@@ -17,7 +17,7 @@ const swaggerDefinition = {
 };
 const options = {
   swaggerDefinition,
-  apis: ['./src/routes/*.js']
+  apis: ['./src/swagger/**/*.docs.js']
 };
 const swaggerSpec = swaggerJSDoc(options);
 

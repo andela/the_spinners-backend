@@ -1,6 +1,5 @@
-/* eslint-disable quotes */
 import Joi from '@hapi/joi';
-import Response from '../services/response';
+import ResponseService from '../services/response.service';
 
 const signupSchema = Joi.object({
   firstName: Joi.string()
@@ -68,32 +67,32 @@ const loginSchema = Joi.object({
     })
 }).options({ abortEarly: false });
 
-export const signupValidator = (req, res, next) => {
+export const validateSignup = (req, res, next) => {
   const userInputValidator = signupSchema.validate(req.body);
   if (userInputValidator.error) {
     const errors = [];
     for (let i = 0; i < userInputValidator.error.details.length; i += 1) {
-      errors.push(userInputValidator.error.details[i].message.split('"').join(" "));
+      errors.push(userInputValidator.error.details[i].message.split('"').join(' '));
     }
-    Response.setError(400, errors);
-    return Response.send(res);
+    ResponseService.setError(400, errors);
+    return ResponseService.send(res);
   }
   next();
 };
-export const loginValidator = (req, res, next) => {
+export const validateLogin = (req, res, next) => {
   const userInputValidator = loginSchema.validate(req.body);
   if (userInputValidator.error) {
     const errors = [];
     for (let i = 0; i < userInputValidator.error.details.length; i += 1) {
-      errors.push(userInputValidator.error.details[i].message.split('"').join(" "));
+      errors.push(userInputValidator.error.details[i].message.split('"').join(' '));
     }
-    Response.setError(400, errors);
-    return Response.send(res);
+    ResponseService.setError(400, errors);
+    return ResponseService.send(res);
   }
   next();
 };
 
 export default {
-  signupValidator,
-  loginSchema
+  validateSignup,
+  validateLogin
 };

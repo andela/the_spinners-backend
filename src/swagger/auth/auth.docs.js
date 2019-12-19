@@ -1,15 +1,3 @@
-import express from 'express';
-import UsersController from '../controllers/signup.controller';
-import loginHandler from '../controllers/login.controller';
-import authValidation from '../middlewares/login.middleware';
-import { signupValidator, loginValidator } from '../validations/auth.validation';
-
-const { userExist, isAccountActive } = authValidation;
-
-const router = express.Router();
-
-router.post('/signup', signupValidator, UsersController.signUp); // API route for user to signup
-router.post('/login', loginValidator, userExist, isAccountActive, loginHandler.login); // API route for user to login
 /**
  * @swagger
  * definitions:
@@ -116,5 +104,3 @@ router.post('/login', loginValidator, userExist, isAccountActive, loginHandler.l
  *       '401':
  *         description: Incorrect credentials.
  */
-
-export default router;

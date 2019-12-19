@@ -1,7 +1,11 @@
 import faker from 'faker';
 import BcryptService from '../../services/bcrypt.service';
-import AuthHandler from '../../services/jwt.service';
+import JwtService from '../../services/jwt.service';
+import models from '../../models';
 
+const { Users } = models;
+
+export const userPassword = faker.internet.password();
 export const signupFixtures = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
@@ -25,7 +29,7 @@ export const activeUser = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
   email: faker.internet.email(),
-  password: BcryptService.hashPassword('Pass1234'),
+  password: BcryptService.hashPassword(userPassword),
   isVerified: true,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -36,7 +40,7 @@ export const notActive = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
   email: faker.internet.email(),
-  password: BcryptService.hashPassword('Pass1234'),
+  password: BcryptService.hashPassword(userPassword),
   isVerified: false,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -49,4 +53,32 @@ export const wrongEmail = {
   email: 'testspinners.com',
   password: 'Pass1234'
 };
-export const tokenWithWrongUser = AuthHandler.generateToken(payload);
+export const tokenWithWrongUser = JwtService.generateToken(payload);
+export const loggedInUser = {
+  id: 30,
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: BcryptService.hashPassword(userPassword),
+  isVerified: true,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const loggedInToken = JwtService.generateToken({
+  id: loggedInUser.id,
+  firstName: loggedInUser.firstName,
+  lastName: loggedInUser.lastName,
+  email: loggedInUser.email,
+});
+
+export const createUsers = async () => {
+  await Users.create(activeUser);
+  await Users.create(notActive);
+  await Users.create({ ...loggedInUser, token: loggedInToken });
+};
+
+export const user = {
+  email: activeUser.email,
+  password: userPassword,
+};

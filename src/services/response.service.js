@@ -1,15 +1,15 @@
 /**
  *
  * @export
- * @class Response
+ * @class ResponseService
  */
-export default class Response {
+export default class ResponseService {
   /**
      *
      * @param  {statusCode} statusCode
      * @param  {message} message
      * @param  {data} data
-     * @return {error}@memberof Response
+     * @return {error}@memberof ResponseService
      */
   static setSuccess(statusCode, message, data) {
     this.statusCode = statusCode;
@@ -22,7 +22,7 @@ export default class Response {
      *
      * @param  {statusCode} statusCode
      * @param  {message} message
-     * @return {response}@memberof Response
+     * @return {response}@memberof ResponseService
      */
   static setError(statusCode, message) {
     this.statusCode = statusCode;
@@ -34,7 +34,7 @@ export default class Response {
      *
      * @param  {res} res
      * @return
-     * @return {response}@memberof Response
+     * @return {response}@memberof ResponseService
      */
   static send(res) {
     const result = {

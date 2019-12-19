@@ -3,30 +3,30 @@ import jwt from 'jsonwebtoken';
 /**
  * Generate token
  * Verify token
- * @class AuthHandler
+ * @class JwtService
  */
-class AuthHandler {
+class JwtService {
   /**
    *
    *
    * @param {data} data
-   * @returns {token} @memberof AuthHandler
+   * @returns {token} @memberof JwtService
    */
   static generateToken(data) {
     const token = jwt.sign(
-      data, process.env.SecretKey,
-      { expiresIn: process.env.TokenExpireTime }
+      data, process.env.SECRET_KEY,
+      { expiresIn: process.env.TOKEN_EXPIRE_TIME }
     );
     return token;
   }
 
   /**
    * @param {token} token
-   *@return {result} @memberof AuthHandler
+   *@return {result} @memberof JwtService
    */
   static verifyToken(token) {
     return jwt.verify(
-      token, process.env.SecretKey,
+      token, process.env.SECRET_KEY,
       (err, decoded) => {
         if (err) {
           return err;
@@ -36,4 +36,4 @@ class AuthHandler {
     );
   }
 }
-export default AuthHandler;
+export default JwtService;

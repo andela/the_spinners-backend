@@ -1,50 +1,49 @@
 import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
-import models from '../../models';
 import app from '../../app';
 import {
+  user,
   activeUser,
   notActive,
   wrongToken,
   tokenWithWrongUser,
-  wrongUser
+  wrongUser,
+  userPassword,
+  loggedInToken,
+  createUsers
 } from '../fixtures/users.fixture';
 
 chai.use(chaiHttp);
-const router = () => chai.request(app);
-
-const { Users } = models;
-
-let user = null;
-let token = null;
-const userPassword = 'Pass1234';
-
 
 describe('Tests for user login', () => {
   before(async () => {
-    await Users.create(activeUser);
-    await Users.create(notActive);
-    user = {
-      email: activeUser.email,
-      password: userPassword,
-    };
+    await createUsers();
   });
   it('should login a user', (done) => {
-    router()
+    chai.request(app)
       .post('/api/auth/login')
       .send(user)
       .end((err, res) => {
-        token = res.body.data;
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.a('string');
         expect(res.body).to.have.property('message')
           .that.contain('Successfully logged in.. redirecting');
         done(err);
       });
   });
+  it('Should decode correct token', (done) => {
+    chai.request(app)
+      .get('/api/auth/protected')
+      .set('Authorization', loggedInToken)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done(err);
+      });
+  });
   it('Should give err if a user not active', (done) => {
-    router()
+    chai.request(app)
       .post('/api/auth/login')
       .send({
         email: notActive.email,
@@ -59,8 +58,8 @@ describe('Tests for user login', () => {
       });
   });
   it('Should check if not token provided', (done) => {
-    router()
-      .get('/api/protected')
+    chai.request(app)
+      .get('/api/auth/protected')
       .set('Authorization', '')
       .send({
         email: activeUser.email,
@@ -74,8 +73,8 @@ describe('Tests for user login', () => {
       });
   });
   it('Should not authorize wrong token', (done) => {
-    router()
-      .get('/api/protected')
+    chai.request(app)
+      .get('/api/auth/protected')
       .set('Authorization', wrongToken)
       .send({
         email: activeUser.email,
@@ -88,34 +87,8 @@ describe('Tests for user login', () => {
         done(err);
       });
   });
-  it('Should decode correct token', (done) => {
-    router()
-      .get('/api/protected')
-      .set('Authorization', token)
-      .send({
-        email: activeUser.email,
-        password: userPassword,
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        done(err);
-      });
-  });
-  it('Should slice \'Bearer\' from token token with it', (done) => {
-    router()
-      .get('/api/protected')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        email: activeUser.email,
-        password: userPassword,
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        done(err);
-      });
-  });
   it('Should return err when user or password incorrect', (done) => {
-    router()
+    chai.request(app)
       .post('/api/auth/login')
       .send({ email: activeUser.email, password: '122eghguvg354' })
       .end((err, res) => {
@@ -127,7 +100,7 @@ describe('Tests for user login', () => {
       });
   });
   it('Should check if a user exist', (done) => {
-    router()
+    chai.request(app)
       .post('/api/auth/login')
       .send(wrongUser)
       .end((err, res) => {
@@ -139,13 +112,10 @@ describe('Tests for user login', () => {
       });
   });
   it('Should not allow inexisting user', (done) => {
-    router()
-      .get('/api/protected')
+    chai.request(app)
+      .get('/api/auth/protected')
       .set('Authorization', tokenWithWrongUser)
-      .send({
-        email: activeUser.email,
-        password: userPassword,
-      })
+      .send(user)
       .end((err, res) => {
         expect(res).to.have.status(401);
         expect(res.body).to.have.property('message')
