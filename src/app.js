@@ -1,7 +1,7 @@
 
 import express from 'express';
 import morgan from 'morgan';
-import authRoute from './routes/auth/auth.route';
+import authRoute from './routes/auth.route';
 
 const app = express();
 app.use(morgan('dev'));

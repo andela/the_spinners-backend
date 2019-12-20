@@ -35,16 +35,6 @@ export const activeUser = {
   updatedAt: new Date(),
 };
 export const wrongToken = 'eyJhbGcihgvasdbjvdskmnhwb erfqr63489u2bnlsdkvqerui2346R5cCJ9';
-export const notActive = {
-  id: 3,
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.email(),
-  password: BcryptService.hashPassword(userPassword),
-  isVerified: false,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
 export const wrongUser = {
   email: 'test1@spinners.com',
   password: 'aspword1234'
@@ -74,7 +64,6 @@ export const loggedInToken = JwtService.generateToken({
 
 export const createUsers = async () => {
   await Users.create(activeUser);
-  await Users.create(notActive);
   await Users.create({ ...loggedInUser, token: loggedInToken });
 };
 

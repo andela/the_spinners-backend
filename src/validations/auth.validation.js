@@ -27,9 +27,8 @@ const signupSchema = Joi.object({
     .required()
     .trim()
     .messages({
-      'string.base': 'Invalid type, email must be a string',
       'string.empty': 'Please enter email',
-      'string.pattern.base': 'Enter valid email i.e: gustave@gmail.com',
+      'string.email': 'Enter valid email i.e: email@example.com',
       'any.required': 'Email is required'
     }),
   password: Joi.string()
@@ -50,9 +49,8 @@ const loginSchema = Joi.object({
     .required()
     .trim()
     .messages({
-      'string.base': 'Invalid type, email must be a string',
       'string.empty': 'Please enter email',
-      'string.pattern.base': 'Enter valid email i.e: gustave@gmail.com',
+      'string.email': 'Enter valid email i.e: email@example.com',
       'any.required': 'Email is required'
     }),
   password: Joi.string()
@@ -67,29 +65,27 @@ const loginSchema = Joi.object({
     })
 }).options({ abortEarly: false });
 
-export const validateSignup = (req, res, next) => {
-  const userInputValidator = signupSchema.validate(req.body);
-  if (userInputValidator.error) {
+
+const validateHandler = (schema, body, res, next) => {
+  const { error } = schema.validate(body);
+
+  if (error) {
     const errors = [];
-    for (let i = 0; i < userInputValidator.error.details.length; i += 1) {
-      errors.push(userInputValidator.error.details[i].message.split('"').join(' '));
-    }
+    const { details } = error;
+    details.forEach(({ message }) => {
+      errors.push(message.split('"').join(' '));
+    });
     ResponseService.setError(400, errors);
     return ResponseService.send(res);
   }
   next();
 };
+
+export const validateSignup = (req, res, next) => {
+  validateHandler(signupSchema, req.body, res, next);
+};
 export const validateLogin = (req, res, next) => {
-  const userInputValidator = loginSchema.validate(req.body);
-  if (userInputValidator.error) {
-    const errors = [];
-    for (let i = 0; i < userInputValidator.error.details.length; i += 1) {
-      errors.push(userInputValidator.error.details[i].message.split('"').join(' '));
-    }
-    ResponseService.setError(400, errors);
-    return ResponseService.send(res);
-  }
-  next();
+  validateHandler(loginSchema, req.body, res, next);
 };
 
 export default {

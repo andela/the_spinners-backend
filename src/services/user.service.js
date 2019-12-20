@@ -21,15 +21,13 @@ class UserService {
   /**
  * find user by email
  * @static
- * @param {object} userEmail
+ * @param {object} property
  * @memberof UserService
  * @returns {object} data
  */
-  static findByEmail(userEmail) {
+  static findUserByProperty(property) {
     return Users.findOne({
-      where: {
-        email: userEmail
-      }
+      where: property
     });
   }
 
@@ -44,17 +42,6 @@ class UserService {
   static updateUser(user, userInfo) {
     return Users.update(userInfo, {
       where: user
-    });
-  }
-
-  /**
-   *
-   * @param {string} token it acepts a valid token
-   * @returns {boolean} returns true when token is found otherwise false
-   */
-  static findByToken({ token }) {
-    return Users.findOne({
-      where: { token }
     });
   }
 }

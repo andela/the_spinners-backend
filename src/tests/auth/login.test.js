@@ -4,7 +4,6 @@ import app from '../../app';
 import {
   user,
   activeUser,
-  notActive,
   wrongToken,
   tokenWithWrongUser,
   wrongUser,
@@ -29,7 +28,7 @@ describe('Tests for user login', () => {
         expect(res.body).to.have.property('data');
         expect(res.body.data).to.be.a('string');
         expect(res.body).to.have.property('message')
-          .that.contain('Successfully logged in.. redirecting');
+          .that.contain('Successfully logged in');
         done(err);
       });
   });
@@ -39,21 +38,6 @@ describe('Tests for user login', () => {
       .set('Authorization', loggedInToken)
       .end((err, res) => {
         expect(res).to.have.status(200);
-        done(err);
-      });
-  });
-  it('Should give err if a user not active', (done) => {
-    chai.request(app)
-      .post('/api/auth/login')
-      .send({
-        email: notActive.email,
-        password: userPassword,
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.property('message')
-          .that.contain('You have not activated your account. Please activate your account first');
         done(err);
       });
   });

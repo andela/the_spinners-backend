@@ -19,12 +19,12 @@ class BcryptService {
 
   /**
    *
-   * @param {myPassword} myPassword
-   * @param {dbPassword} dbPassword
+   * @param {myPassword} inputPassword
+   * @param {dbPassword} passwordFromDb
    * @return {result} @memberof BcryptService
    */
-  static verifyPassword(myPassword, dbPassword) {
-    return bcrypt.compareSync(myPassword, dbPassword);
+  static verifyPassword(inputPassword, passwordFromDb) {
+    return bcrypt.compareSync(inputPassword, passwordFromDb);
   }
 }
 export default BcryptService;

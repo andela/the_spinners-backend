@@ -13,11 +13,10 @@ class JwtService {
    * @returns {token} @memberof JwtService
    */
   static generateToken(data) {
-    const token = jwt.sign(
+    return jwt.sign(
       data, process.env.SECRET_KEY,
       { expiresIn: process.env.TOKEN_EXPIRE_TIME }
     );
-    return token;
   }
 
   /**

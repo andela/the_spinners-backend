@@ -20,7 +20,7 @@ class AuthController {
  * @returns {object} data
  */
   static async signUp(req, res) {
-    const userExist = await UserService.findByEmail(req.body.email.trim());
+    const userExist = await UserService.findUserByProperty({ email: req.body.email.trim() });
     if (!userExist) {
       const userInput = {
         firstName: req.body.firstName.trim(),
@@ -51,7 +51,7 @@ class AuthController {
    * @returns {token} @memberof AuthController
    */
   static async login(req, res) {
-    const user = await UserService.findByEmail(req.body.email.trim());
+    const user = await UserService.findUserByProperty({ email: req.body.email.trim() });
     const verifyPassword = BcryptService.verifyPassword(req.body.password.trim(), user.password);
     if (!verifyPassword) {
       ResponseService.setError(401, 'Authentication failed. Wrong Email or Password.');
@@ -67,7 +67,7 @@ class AuthController {
     const token = JwtService.generateToken(payload);
 
     await UserService.updateUser({ id: user.id }, { token });
-    ResponseService.setSuccess(200, 'Successfully logged in.. redirecting', token);
+    ResponseService.setSuccess(200, 'Successfully logged in', token);
     ResponseService.send(res);
   }
 }
