@@ -38,7 +38,7 @@ export default class ResponseService {
      */
   static send(res) {
     const result = {
-      status: this.type,
+      status: this.statusCode,
       message: this.message,
       data: this.data,
     };

@@ -70,6 +70,20 @@ class AuthController {
     ResponseService.setSuccess(200, 'Successfully logged in', token);
     ResponseService.send(res);
   }
+
+  /**
+   * @description logs out a user
+   *
+   * @param {object} req request from body to log out
+   * @param {object} res response to the body
+   * @returns {object} @memberof AuthController
+   */
+  static async logout(req, res) {
+    const token = null;
+    await UserService.updateUser({ id: req.userData.id }, { token });
+    ResponseService.setSuccess(200, 'Successful logout');
+    return ResponseService.send(res);
+  }
 }
 
 export default AuthController;
