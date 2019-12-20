@@ -41,4 +41,9 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Tri
     type: Sequelize.DATE
   }
 });
-export const down = (queryInterface) => { queryInterface.dropTable('Trips'); };
+/**
+ * @exports
+ * @class
+ * @param {object} queryInterface
+ */
+export function down(queryInterface) { return queryInterface.dropTable('Trips'); }

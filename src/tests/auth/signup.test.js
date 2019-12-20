@@ -1,12 +1,15 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import { signupFixtures } from '../fixtures/users.fixture';
+import { signupFixtures, cleanDb } from '../fixtures/users.fixture';
 
 chai.use(chaiHttp);
 chai.should();
 
 describe('Test on user signup:', () => {
+  before(async () => {
+    await cleanDb();
+  });
   it('It should create a new user', (done) => {
     chai.request(app)
       .post('/api/auth/signup')
@@ -17,7 +20,7 @@ describe('Test on user signup:', () => {
         res.should.have.status(201);
         res.body.should.have.property('message').equal('User created successfully');
         res.body.should.have.property('data');
-        res.body.data.should.have.property('id').equal(1);
+        res.body.data.should.have.property('id');
         res.body.data.should.have.property('firstName').equal(`${signupFixtures.firstName}`);
         res.body.data.should.have.property('lastName').equal(`${signupFixtures.lastName}`);
         res.body.data.should.have.property('email').equal(`${signupFixtures.email}`);

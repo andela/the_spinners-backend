@@ -19,7 +19,7 @@ describe('Test one way trip:', () => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('data');
-        expect(res.body.data).to.have.property('id').equal(1);
+        expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('departure').equal(newTrip.departure);
         expect(res.body.data).to.have.property('destination').equal(newTrip.destination);
         expect(res.body.data).to.have.property('travelReasons').equal(newTrip.travelReasons);

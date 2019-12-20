@@ -104,4 +104,33 @@ export const createUsers = async () => {
   await Users.create(createUser);
   await Users.create({ ...loggedInUser, token: loggedInToken });
 };
+export const cleanDb = async () => {
+  await Users.destroy({ where: {} });
+};
+
 export const token = JwtService.generateToken(activeUser);
+export const googleFacebookUser = {
+  id: 7,
+  firstName: 'userfirstname',
+  lastName: 'userlastname',
+  email: 'socialuser@gmail.com',
+  provider: 'google or facebook'
+};
+export const googleProfile = {
+  _json: {
+    given_ame: 'userfirstname',
+    family_name: 'userlastname',
+    email: 'googleuser@gmail.com'
+  }
+};
+export const facebookProfile = {
+  _json: {
+    first_ame: 'userfirstname',
+    last_name: 'userlastname',
+    email: 'facebookuser@gmail.com'
+  }
+};
+export const OAuthTokens = {
+  accessToken: 'oidhfioerhfrhfuierghfr8u438r9h34wf',
+  refreshToken: 'fruyfg78w43gf78w4gfwf8hw43hf89hf8',
+};
