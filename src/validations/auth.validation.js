@@ -1,6 +1,5 @@
-/* eslint-disable quotes */
 import Joi from '@hapi/joi';
-import Response from '../services/response';
+import ResponseService from '../services/response.service';
 
 const signupSchema = Joi.object({
   firstName: Joi.string()
@@ -28,9 +27,8 @@ const signupSchema = Joi.object({
     .required()
     .trim()
     .messages({
-      'string.base': 'Invalid type, email must be a string',
       'string.empty': 'Please enter email',
-      'string.pattern.base': 'Enter valid email i.e: gustave@gmail.com',
+      'string.email': 'Enter valid email i.e: email@example.com',
       'any.required': 'Email is required'
     }),
   password: Joi.string()
@@ -45,19 +43,52 @@ const signupSchema = Joi.object({
     })
 }).options({ abortEarly: false });
 
-export const signupValidator = (req, res, next) => {
-  const userInputValidator = signupSchema.validate(req.body);
-  if (userInputValidator.error) {
+const loginSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2 })
+    .required()
+    .trim()
+    .messages({
+      'string.empty': 'Please enter email',
+      'string.email': 'Enter valid email i.e: email@example.com',
+      'any.required': 'Email is required'
+    }),
+  password: Joi.string()
+    .trim()
+    .min(8)
+    .required()
+    .messages({
+      'string.base': 'Invalid type, password must be a string',
+      'string.empty': 'Please enter password',
+      'string.min': 'Password must be atleast 8 characters long',
+      'any.required': 'Password is required'
+    })
+}).options({ abortEarly: false });
+
+
+const validateHandler = (schema, body, res, next) => {
+  const { error } = schema.validate(body);
+
+  if (error) {
     const errors = [];
-    for (let i = 0; i < userInputValidator.error.details.length; i += 1) {
-      errors.push(userInputValidator.error.details[i].message.split('"').join(" "));
-    }
-    Response.setError(400, errors);
-    return Response.send(res);
+    const { details } = error;
+    details.forEach(({ message }) => {
+      errors.push(message.split('"').join(' '));
+    });
+    ResponseService.setError(400, errors);
+    return ResponseService.send(res);
   }
   next();
 };
 
+export const validateSignup = (req, res, next) => {
+  validateHandler(signupSchema, req.body, res, next);
+};
+export const validateLogin = (req, res, next) => {
+  validateHandler(loginSchema, req.body, res, next);
+};
+
 export default {
-  signupValidator
+  validateSignup,
+  validateLogin
 };

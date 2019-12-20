@@ -1,73 +1,15 @@
 import express from 'express';
-import UsersController from '../controllers/signup.controller';
-import { signupValidator } from '../validations/auth.validation';
+import authController from '../controllers/auth.controller';
+import authMiddleware from '../middlewares/auth.middleware';
+import { validateSignup, validateLogin } from '../validations/auth.validation';
+
+const { checkUserExist, checkUserLoggedIn } = authMiddleware;
 
 const router = express.Router();
 
-router.post('/signup', signupValidator, UsersController.signUp); // API route for user to signup
-/**
- * @swagger
- * definitions:
- *   Signup:
- *     type: object
- *     properties:
- *       firstName:
- *         type: string
- *       lastName:
- *         type: string
- *       email:
- *         type: string
- *         format: email
- *       password:
- *         type: string
- *         format: password
- *       required:
- *         - firstName
- *         - lastName
- *         - email
- *         - password
- */
-
-/**
- * @swagger
- * /api/auth/signup:
- *   post:
- *     tags:
- *       - User
- *     name: Signup
- *     summary: Signup a user in a system
- *     produces:
- *       - application/json
- *     consumes:
- *       - application/json
- *     parameters:
- *       - name: body
- *         in: body
- *         schema:
- *           $ref: '#/definitions/Signup'
- *           type: object
- *           properties:
- *             firstName:
- *               type: string
- *             lastName:
- *               type: string
- *             email:
- *               type: string
- *             password:
- *               type: string
- *               format: password
- *         required:
- *           - firstName
- *           - lastName
- *           - email
- *           - password
- *     responses:
- *       '201':
- *             description: User created.
- *       '400':
- *             description: Bad request.
- *       '409':
- *             description: User already exist.
- */
-
+router.post('/signup', validateSignup, authController.signUp); // API route for user to signup
+router.post('/login', validateLogin, checkUserExist, authController.login); // API route for user to login
+router.get('/protected', checkUserLoggedIn, (req, res) => {
+  res.status(200).send('Welcome to the protected route');
+});
 export default router;

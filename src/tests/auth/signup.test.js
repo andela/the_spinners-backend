@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../app';
-import { signupFixtures } from './fixtures/users.fixture';
+import app from '../../app';
+import { signupFixtures } from '../fixtures/users.fixture';
 
 chai.use(chaiHttp);
 chai.should();

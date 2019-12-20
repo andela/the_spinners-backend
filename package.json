@@ -18,7 +18,7 @@
     "dev": "nodemon --exec babel-node src/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "pretest": "npm run migrate:drop && npm run migrate:up",
-    "test": "export NODE_ENV=test && nyc --reporter=html --reporter=text mocha  --require  @babel/register src/tests/*.js --timeout 100000 --exit",
+    "test": "export NODE_ENV=test && nyc --reporter=html --reporter=text mocha  --require  @babel/register src/tests/**/*.test.js --timeout 100000 --exit",
     "migrate:up": "npx sequelize-cli db:migrate"
   },
   "repository": {
@@ -58,6 +58,7 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.2",
