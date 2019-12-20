@@ -63,6 +63,7 @@ export const loggedInToken = JwtService.generateToken({
 });
 
 export const createUsers = async () => {
+  await Users.destroy({ where: {} });
   await Users.create(activeUser);
   await Users.create({ ...loggedInUser, token: loggedInToken });
 };

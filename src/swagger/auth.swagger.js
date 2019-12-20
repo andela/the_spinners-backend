@@ -104,3 +104,50 @@
  *       '401':
  *         description: Incorrect credentials.
  */
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     tags:
+ *       - User
+ *     name: Logout
+ *     summary: Logs out a user from system
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: Succesful
+ *       '401':
+ *         description: No Token supplied
+ */
+/**
+ * @swagger
+ * /api/auth/protected:
+ *   get:
+ *     tags:
+ *       - User
+ *     name: Protected
+ *     summary: Protected route that can be accessed only by logged in user
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: Succesful
+ *       '401':
+ *         description: No Token supplied
+ *
+ */
