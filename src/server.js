@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime';
 import registerApiDocs from './swagger';
 import app from './app';
 
