@@ -3,6 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/andela/the_spinners-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/the_spinners-backend?branch=develop)
 [![](https://img.shields.io/badge/Hound-CI-yellowgreen)](https://houndci.com)
 [![Build Status](https://travis-ci.org/andela/the_spinners-backend.svg?branch=develop)](https://travis-ci.org/andela/the_spinners-backend)
+[![Maintainability](https://api.codeclimate.com/v1/badges/84945ffa4beea956155d/maintainability)](https://codeclimate.com/github/andela/the_spinners-backend/maintainability)
 
  
  > A platform to make company global travel and accommodation easy and convenient for the 
