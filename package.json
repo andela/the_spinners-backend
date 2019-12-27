@@ -7,7 +7,9 @@
     "exclude": [
       "src/database/*",
       "src/models"
-    ]
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "scripts": {
     "lint": "eslint .",
@@ -45,6 +47,7 @@
   "dependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.4",
+    "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/node": "^7.7.4",
     "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.7.5",
@@ -52,18 +55,24 @@
     "@babel/runtime": "^7.7.6",
     "@hapi/joi": "^16.1.8",
     "bcrypt": "^3.0.7",
+    "@babel/plugin-transform-regenerator": "^7.7.5",
+    "@hapi/joi-date": "^2.0.1",
+    "babel-plugin-istanbul": "^5.2.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
+    "find-up": "^4.1.0",
+    "istanbul-lib-instrument": "^3.3.0",
     "morgan": "^1.9.1",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1",
     "swagger-jsdoc": "^3.4.0",
-    "swagger-ui-express": "^4.1.2"
+    "swagger-ui-express": "^4.1.2",
+    "test-exclude": "^5.2.3"
   }
 }
