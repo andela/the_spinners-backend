@@ -115,6 +115,20 @@ class AuthController {
     ResponseService.setSuccess(200, 'Password reset success');
     ResponseService.send(res);
   }
+
+  /**
+  * @static
+  * @param {*} req
+  * @param {*} res
+  * @memberof AuthController
+  * @returns {*} data
+  */
+  static async googleFacebookAuthHandler(req, res) {
+    const token = JwtService.generateToken({ id: req.user.id });
+    await UserService.updateUser({ id: req.user.id }, { token });
+    ResponseService.setSuccess(200, `Successfully logged in with your ${req.user.provider} account`, { token });
+    return ResponseService.send(res);
+  }
 }
 
 export default AuthController;

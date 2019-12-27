@@ -1,9 +1,11 @@
 import express from 'express';
+import passport from 'passport';
 import AuthController from '../controllers/auth.controller';
 import authMiddleware from '../middlewares/auth.middleware';
 import { validateSignup, validateLogin } from '../validations/auth.validation';
 import RouteAccessMiddleware from '../middlewares/route-access.middleware';
 import userValidation from '../validations/user.validation';
+import '../config/passport';
 
 const { checkUserExist, checkUserLoggedIn } = authMiddleware;
 
@@ -15,6 +17,12 @@ router.post('/login', validateLogin, checkUserExist, AuthController.login); // A
 router.post('/logout', checkUserLoggedIn, AuthController.logout); // API for logout
 router.post('/find-user', userValidation.findUserValidation, AuthController.findUserToSendEmail);
 router.put('/reset-password', RouteAccessMiddleware.checkRouteAccess, userValidation.validateFields, AuthController.resetPassword); // API To find user for reset
+
+router.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+router.get('/google/redirect', passport.authenticate('google', { session: false, failureRedirect: '/login' }), AuthController.googleFacebookAuthHandler);
+
+router.get('/facebook', passport.authenticate('facebook'));
+router.get('/facebook/redirect', passport.authenticate('facebook', { session: false, failureRedirect: '/login' }), AuthController.googleFacebookAuthHandler);
 
 router.get('/protected', checkUserLoggedIn, (req, res) => {
   res.status(200).send('Welcome to the protected route');
