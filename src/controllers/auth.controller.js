@@ -2,6 +2,7 @@ import ResponseService from '../services/response.service';
 import UserService from '../services/user.service';
 import BcryptService from '../services/bcrypt.service';
 import JwtService from '../services/jwt.service';
+import SendEmailService from '../services/send-email.service';
 
 
 /**
@@ -83,6 +84,36 @@ class AuthController {
     await UserService.updateUser({ id: req.userData.id }, { token });
     ResponseService.setSuccess(200, 'Successful logout');
     return ResponseService.send(res);
+  }
+
+  /**
+    * @param {Request} req
+    * @param {Response} res
+    * @returns {FindUser} this function finds if user exist in database
+    */
+  static async findUserToSendEmail(req, res) {
+    const user = await UserService.findUserByProperty({ email: req.body.email.trim() });
+    const { email } = user;
+    const token = JwtService.generateToken({ email });
+    const emailSubject = 'Request reset password';
+    const emailBody = `Copy this token: <br><strong style="color:blue">${token}</strong><br> and include it in the header of <strong style="color:green">/api/resetpassword<strong> route.`;
+    SendEmailService.sendGridEmail(email, token, emailSubject, emailBody);
+    ResponseService.setSuccess(200, 'Check your email address, copy the token and follow instruction');
+    ResponseService.send(res);
+  }
+
+  /**
+  * @param {Request} req
+  * @param {Response} res
+  * @returns {resetPassword} the function reset a password of a user
+  */
+  static async resetPassword(req, res) {
+    const { newPassword } = req.body;
+
+    const hash = BcryptService.hashPassword(newPassword);
+    UserService.updateUser({ email: req.userData.email }, { password: hash });
+    ResponseService.setSuccess(200, 'Password reset success');
+    ResponseService.send(res);
   }
 }
 
