@@ -1,6 +1,6 @@
 import TripService from '../services/trip.service';
-import Response from '../services/response.service';
-
+import ResponseService from '../services/response.service';
+import JwtService from '../services/jwt.service';
 
 /**
  *
@@ -22,8 +22,37 @@ class TripController {
     });
     delete newTrip.dataValues.updatedAt;
     delete newTrip.dataValues.createdAt;
-    Response.setSuccess(201, 'Trip is successfully created', newTrip.dataValues);
-    return Response.send(res);
+    ResponseService.setSuccess(201, 'Trip is successfully created', newTrip.dataValues);
+    return ResponseService.send(res);
+  }
+
+  /**
+   *
+   * @static
+   * @param {req} req
+   * @param {res} res
+   * @returns {response} @memberof Trips
+   */
+  static async requestReturnTrip(req, res) {
+    const signInUser = JwtService.verifyToken(req.headers.authorization);
+    const {
+      departure, destination, travelDate, returnDate, travelReasons, accommodation
+    } = req.body;
+
+    const returnTrip = {
+      userId: signInUser.id,
+      tripType: 'return-trip',
+      departure,
+      destination,
+      travelDate,
+      returnDate,
+      travelReasons,
+      accommodation,
+      status: 'pending'
+    };
+    await TripService.createTrip(returnTrip);
+    ResponseService.setSuccess(201, 'Trip created successfully', returnTrip);
+    return ResponseService.send(res);
   }
 }
 
