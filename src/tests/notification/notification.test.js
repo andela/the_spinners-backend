@@ -52,7 +52,6 @@ describe('Tests notification preferences', () => {
         done(err);
       });
   });
-
   it('Should set preferred email notification mode to false', (done) => {
     chai.request(app)
       .put('/api/notifications')
