@@ -79,6 +79,26 @@ export const createUser = {
   updatedAt: new Date(),
 };
 
+// create a user who does not have a trip
+export const userWithNoTrip = {
+  id: 29,
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: BcryptService.hashPassword(userPassword),
+  isVerified: true,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+// generate a token for a user who does not have a trip
+export const userWithNoTripToken = JwtService.generateToken({
+  id: userWithNoTrip.id,
+  firstName: userWithNoTrip.firstName,
+  lastName: userWithNoTrip.lastName,
+  email: userWithNoTrip.email,
+});
+
 export const user = {
   email: activeUser.email,
   password: userPassword,
@@ -106,6 +126,7 @@ export const createUsers = async () => {
   await Users.create(activeUser);
   await Users.create(createUser);
   await Users.create({ ...loggedInUser, token: loggedInToken });
+  await Users.create({ ...userWithNoTrip, token: userWithNoTripToken });
 };
 export const cleanDb = async () => {
   await Users.destroy({ where: {} });
