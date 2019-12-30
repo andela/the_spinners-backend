@@ -30,6 +30,13 @@
  *       required:
  *         - email
  *         - password
+ *   Resend Account Verification Link:
+ *     type: object
+ *     properties:
+ *       email:
+ *         type: string
+ *       required:
+ *         - email
  */
 
 /**
@@ -172,10 +179,7 @@
  *       - User
  *     name: Find User
  *     summary: Find a user in a system
- *     produces:
- *       - application/json
- *     consumes:
- *       - application/json
+
  *     parameters:
  *       - name: body
  *         in: body
@@ -256,4 +260,61 @@
  *         description: Password does not match,
  *                      Password should be at least 8 characters long,
  *                      Please input password
+ */
+/**
+ * @swagger
+ * /api/auth/user/verify:
+ *   patch:
+ *     tags:
+ *       - User
+ *     name: Verify Account
+ *     summary: Verify Newly Created User's Account
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: Account verified successfully. You can proceed to login
+ *       '400':
+ *         description: Bad Request
+ *       '403':
+ *         description: Forbiden
+ */
+/**
+ * @swagger
+ * /api/auth/user/resendLink:
+ *   patch:
+ *     tags:
+ *       - User
+ *     name: Resend Verification Link
+ *     summary: Resend Account Verification Link
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/Resend Account Verification Link'
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *         required:
+ *           - email
+ *     responses:
+ *       '200':
+ *             description: Verification Link Successfully Sent,
+ *                          Visit Your Email To Activate Account
+ *       '400':
+ *             description: Bad request.
+ *       '404':
+ *             description: Email Not Found in The Database. To Get a Link You Must Register
  */

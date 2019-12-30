@@ -13,9 +13,11 @@ export const signupFixtures = {
   password: faker.internet.password()
 };
 
-export default {
-  signupFixtures
+export const signedUpUserToken = JwtService.generateToken({ email: signupFixtures.email });
+export const unregisteredEmail = {
+  email: 'higustave123@gmail.com'
 };
+export const signupExpiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhpZ3VzdGF2ZUBnbWFpbC5jb20iLCJpYXQiOjE1NzcxOTg5MjUsImV4cCI6MTU3NzE5ODkyNX0.cAYmYykkBtddmq7YyP3OKVrtVXwCrpxBxhFPJNDUYxE';
 
 const payload = {
   id: 20,

@@ -1,12 +1,19 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import { signupFixtures, cleanDb } from '../fixtures/users.fixture';
+import {
+  signupFixtures,
+  signedUpUserToken,
+  signupExpiredToken,
+  unregisteredEmail,
+  wrongToken,
+  cleanDb
+} from '../fixtures/users.fixture';
 
 chai.use(chaiHttp);
 chai.should();
 
-describe('Test on user signup:', () => {
+describe('Test for User Signup:', () => {
   before(async () => {
     await cleanDb();
   });
@@ -18,7 +25,7 @@ describe('Test on user signup:', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(201);
-        res.body.should.have.property('message').equal('User created successfully');
+        res.body.should.have.property('message').equal('User created successfully, Visit Your Email To Activate Account');
         res.body.should.have.property('data');
         res.body.data.should.have.property('id');
         res.body.data.should.have.property('firstName').equal(`${signupFixtures.firstName}`);
@@ -99,6 +106,109 @@ describe('Test on user signup:', () => {
         res.body.should.be.an('object');
         res.should.have.status(400);
         res.body.should.have.property('message');
+        done();
+      });
+  });
+});
+
+describe('Test for User Account Verification:', () => {
+  it('Should verify a newly created user\'s account', (done) => {
+    chai.request(app)
+      .patch('/api/auth/user/verify')
+      .set('Authorization', signedUpUserToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('Account verified successfully. You can proceed to login');
+        done();
+      });
+  });
+
+  it('Should NOT reverify account: Account already verified.', (done) => {
+    chai.request(app)
+      .patch('/api/auth/user/verify')
+      .set('Authorization', signedUpUserToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('message').equal('Can\'t reverify this account. Account already verified.');
+        done();
+      });
+  });
+
+  it('Should NOT verify account: Wrong Token Provided', (done) => {
+    chai.request(app)
+      .patch('/api/auth/user/verify')
+      .set('Authorization', signupExpiredToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(403);
+        res.body.should.have.property('message').equal('Wrong Token Provided');
+        done();
+      });
+  });
+
+  it('Should NOT verify account: Forbidden. No token provided', (done) => {
+    chai.request(app)
+      .patch('/api/auth/user/verify')
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(403);
+        res.body.should.have.property('message').equal('Forbidden');
+        done();
+      });
+  });
+
+  it('Should NOT verify account: Wrong Token Provided', (done) => {
+    chai.request(app)
+      .patch('/api/auth/user/verify')
+      .set('Authorization', wrongToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(403);
+        res.body.should.have.property('message').equal('Wrong Token Provided');
+        done();
+      });
+  });
+});
+
+describe('Test for Resend Account Verification Link:', () => {
+  it('Should Resend Account Verification Link', (done) => {
+    const { email } = signupFixtures;
+    const inputData = { email };
+    chai.request(app)
+      .patch('/api/auth/user/resendLink')
+      .send(inputData)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('Verification Link Successfully Sent, Visit Your Email To Activate Account');
+        done();
+      });
+  });
+
+  it('Should NOT Resend Account Verification Link: Email Not Found in The Database', (done) => {
+    const { email } = unregisteredEmail;
+    const userEmail = { email };
+    chai.request(app)
+      .patch('/api/auth/user/resendLink')
+      .send(userEmail)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(404);
+        res.body.should.have.property('message').equal('Email Not Found in The Database. To Get a Link You Must Register');
+        done();
+      });
+  });
+
+  it('Should NOT Resend Account Verification Link: Email is required', (done) => {
+    chai.request(app)
+      .patch('/api/auth/user/resendLink')
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('message');
+        res.body.message[0].should.be.equal('Email is required');
         done();
       });
   });

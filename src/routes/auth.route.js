@@ -2,10 +2,15 @@ import express from 'express';
 import passport from 'passport';
 import AuthController from '../controllers/auth.controller';
 import authMiddleware from '../middlewares/auth.middleware';
-import { validateSignup, validateLogin } from '../validations/auth.validation';
 import RouteAccessMiddleware from '../middlewares/route-access.middleware';
 import userValidation from '../validations/user.validation';
 import '../config/passport';
+import {
+  validateSignup,
+  validateLogin,
+  validateResendVerificationLink,
+  validateToken
+} from '../validations/auth.validation';
 
 const { checkUserExist, checkUserLoggedIn } = authMiddleware;
 
@@ -27,4 +32,6 @@ router.get('/facebook/redirect', passport.authenticate('facebook', { session: fa
 router.get('/protected', checkUserLoggedIn, (req, res) => {
   res.status(200).send('Welcome to the protected route');
 });
+router.patch('/user/verify', RouteAccessMiddleware.checkRouteAccess, validateToken, AuthController.verifyAccount);
+router.patch('/user/resendLink', validateResendVerificationLink, AuthController.resendAccVerificationLink);
 export default router;
