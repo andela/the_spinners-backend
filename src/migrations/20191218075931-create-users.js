@@ -60,6 +60,9 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.BOOLEAN,
       defaultValue: false
     },
+    lineManagerId: {
+      type: Sequelize.INTEGER
+    },
     token: {
       allowNull: true,
       type: Sequelize.STRING

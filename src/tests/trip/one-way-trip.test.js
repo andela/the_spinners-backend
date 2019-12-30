@@ -15,15 +15,15 @@ describe('Test one way trip:', () => {
     chai.request(app)
       .post('/api/one-way-trips')
       .set('Authorization', loggedInToken)
-      .send({ ...newTrip, travelDate: '2020-05-23' })
+      .send({ ...newTrip, departureDate: '2020-05-23' })
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('data');
         expect(res.body.data).to.have.property('id');
-        expect(res.body.data).to.have.property('departure').equal(newTrip.departure);
-        expect(res.body.data).to.have.property('destination').equal(newTrip.destination);
+        expect(res.body.data).to.have.property('originId').equal(newTrip.originId);
+        expect(res.body.data).to.have.property('destinationId').equal(newTrip.destinationId);
         expect(res.body.data).to.have.property('travelReasons').equal(newTrip.travelReasons);
-        expect(res.body.data).to.have.property('accommodation').equal(newTrip.accommodation);
+        expect(res.body.data).to.have.property('accommodationId').equal(newTrip.accommodationId);
         done();
       });
   });
@@ -31,7 +31,7 @@ describe('Test one way trip:', () => {
     chai.request(app)
       .post('/api/one-way-trips')
       .set('Authorization', loggedInToken)
-      .send({ ...newTrip, travelDate: '2020-05-23' })
+      .send({ ...newTrip, departureDate: '2020-05-23' })
       .end((err, res) => {
         expect(res).to.have.status(409);
         expect(res.body).to.have.property('message');
@@ -87,6 +87,17 @@ describe('Test one way trip:', () => {
       .post('/api/one-way-trips')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, accommodation: '' })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.property('message');
+        done();
+      });
+  });
+  it('Should return status code of 400 on unavailable location', (done) => {
+    chai.request(app)
+      .post('/api/one-way-trips')
+      .set('Authorization', loggedInToken)
+      .send({ ...newTrip, originId: 999 })
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body).to.have.property('message');

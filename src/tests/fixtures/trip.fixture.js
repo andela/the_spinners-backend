@@ -1,37 +1,53 @@
 import faker from 'faker';
 
 export const trip = {
-  departure: faker.address.city(),
-  destination: faker.address.city(),
-  travelDate: '2020-02-02',
+  originId: faker.random.number({ min: 1, max: 9 }),
+  destinationId: faker.random.number({ min: 1, max: 9 }),
+  departureDate: '2020-02-02',
   returnDate: '2020-02-15',
   travelReasons: faker.lorem.sentence(),
-  accommodation: faker.address.streetName()
+  accommodationId: faker.random.number()
 };
 
 const newTrip = {
-  departure: faker.address.city(),
-  destination: faker.address.city(),
-  travelDate: faker.date.future(),
+  originId: faker.random.number({ min: 1, max: 9 }),
+  destinationId: faker.random.number({ min: 1, max: 9 }),
+  departureDate: faker.date.future(),
   travelReasons: faker.lorem.sentence(),
-  accommodation: faker.lorem.sentence()
+  accommodationId: faker.random.number()
 };
 
 export const badRequest = {
-  departure: faker.address.city(),
-  destination: faker.address.city(),
-  travelDate: '2020-02-02',
+  originId: faker.random.number({ min: 155, max: 999 }),
+  destinationId: faker.random.number({ min: 155, max: 999 }),
+  departureDate: '2020-02-02',
   returnDate: '2020-02-15',
   travelReasons: faker.lorem.sentence()
 };
 
 export const checkDate = {
-  departure: faker.address.city(),
-  destination: faker.address.city(),
-  travelDate: '2020-03-02',
+  originId: faker.random.number({ min: 1, max: 9 }),
+  destinationId: faker.random.number({ min: 1, max: 9 }),
+  departureDate: '2020-03-02',
   returnDate: '2020-02-15',
   travelReasons: faker.lorem.sentence(),
-  accommodation: faker.address.streetName()
+  accommodationId: faker.random.number()
 };
+export const multiCitytrip = [
+  {
+    originId: faker.random.number({ min: 1, max: 9 }),
+    destinationId: 2,
+    departureDate: '2020-07-25',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 3
+  },
+  {
+    originId: 2,
+    destinationId: faker.random.number({ min: 1, max: 9 }),
+    departureDate: '2020-07-28',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 5
+  }
+];
 
 export default newTrip;

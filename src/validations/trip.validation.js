@@ -2,6 +2,7 @@ import joiBase from '@hapi/joi';
 import joiDate from '@hapi/joi-date';
 import ResponseService from '../services/response.service';
 import TripService from '../services/trip.service';
+import LocationService from '../services/location.service';
 
 const Joi = joiBase.extend(joiDate);
 
@@ -13,28 +14,15 @@ const Joi = joiBase.extend(joiDate);
 */
 async function tripValidation(req, res, next) {
   const {
-    travelDate,
+    departureDate,
     returnDate,
-    destination
   } = req.body;
   const schema = Joi.object({
-    departure: Joi.string().min(2).trim().regex(/^[a-zA-Z .]+$/)
-      .required()
-      .messages({
-        'any.required': 'Departure is required',
-        'string.empty': 'Departure is not allowed to be empty',
-        'string.min': 'Departure must be at least 2 characters long',
-        'string.pattern.base': 'Invalid, numbers are not allowed in departure field'
-      }),
-    destination: Joi.string().min(2).trim().regex(/^[a-zA-Z .]+$/)
-      .required()
-      .messages({
-        'any.required': 'Destination is required',
-        'string.empty': 'Destination is not allowed to be empty',
-        'string.min': 'Destination must be at least 2 characters long',
-        'string.pattern.base': 'Invalid, numbers are not allowed in destination field'
-      }),
-    travelDate: Joi.date().greater('now').utc().format('YYYY-MM-DD')
+    originId: Joi.number()
+      .required(),
+    destinationId: Joi.number()
+      .required(),
+    departureDate: Joi.date().greater('now').utc().format('YYYY-MM-DD')
       .required()
       .messages({
         'date.greater': 'Date should be greater than today\'s date',
@@ -55,34 +43,39 @@ async function tripValidation(req, res, next) {
         'string.empty': 'Travel reasons is not allowed to be empty',
         'string.min': 'Travel reasons must be at least 5 characters long'
       }),
-    accommodation: Joi.string().allow('').allow(null).regex(/^[a-zA-Z .]+$/)
-      .required()
-      .messages({
-        'any.required': 'Accommodation is required',
-        'string.pattern.base': 'Invalid, numbers are not allowed in accommodation field'
-      })
+    accommodationId: Joi.number()
   });
 
   const { error } = schema.validate(req.body);
-
+  const errorMessages = [];
   if (error) {
-    ResponseService.setError(400, error.details[0].message);
-    return ResponseService.send(res);
+    error.details.forEach((err) => {
+      errorMessages.push(err.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
+    });
   }
-  if (travelDate > returnDate) {
+  const locations = [req.body.originId, req.body.destinationId];
+  await Promise.all(locations.map(async loc => {
+    const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
+    if (!isLocationExist) {
+      errorMessages.push(`location with id ${loc} is not available`);
+    }
+  }));
+  if (departureDate > returnDate) {
     ResponseService.setError(400, 'Travel date can not be greater than return date');
     return ResponseService.send(res);
   }
-
-  const existTrip = await TripService.findTripByProperty({
-    destination,
-    travelDate: new Date(travelDate)
-  });
-
-  if (existTrip) {
-    ResponseService.setError(409, 'A trip can not have same destination or same travel date');
+  if (errorMessages.length !== 0) {
+    ResponseService.setError(400, errorMessages);
     return ResponseService.send(res);
   }
+
+  const tripId = `${req.userData.id}${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}${req.body.destinationId}`;
+  const existTrip = await TripService.findTripByProperty({ tripId });
+  if (existTrip) {
+    ResponseService.setError(409, 'Trip request already created');
+    return ResponseService.send(res);
+  }
+  req.tripId = tripId;
   next();
 }
 

@@ -6,12 +6,15 @@ import {
   badRequest,
   checkDate
 } from '../fixtures/trip.fixture';
-import { loggedInToken, createUsers } from '../fixtures/users.fixture';
+import { loggedInToken, createUsers, cleanDb } from '../fixtures/users.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('/POST create return trip', () => {
+  before(async () => {
+    await cleanDb();
+  });
   before(async () => {
     await createUsers();
   });
@@ -32,11 +35,10 @@ describe('/POST create return trip', () => {
     chai.request(app)
       .post('/api/return-trip')
       .set('Authorization', loggedInToken)
-      .send(badRequest)
+      .send({ ...badRequest, travelReasons: '' })
       .end((err, res) => {
         res.body.should.be.an('object');
         res.status.should.be.equal(400);
-        res.body.should.have.property('message').equal('Accommodation is required');
         done();
       });
   });
@@ -49,7 +51,7 @@ describe('/POST create return trip', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.status.should.be.equal(400);
-        res.body.should.have.property('message').equal('Travel date can not be greater than return date');
+        res.body.should.have.property('message');
         done();
       });
   });
@@ -63,6 +65,17 @@ describe('/POST create return trip', () => {
         res.body.should.be.an('object');
         res.status.should.be.equal(409);
         res.body.should.have.property('message');
+        done();
+      });
+  });
+  it('Should return status code of 400 on unavailable location', (done) => {
+    chai.request(app)
+      .post('/api/return-trip')
+      .set('Authorization', loggedInToken)
+      .send({ ...trip, originId: 999 })
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.status.should.be.equal(400);
         done();
       });
   });

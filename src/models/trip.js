@@ -1,18 +1,19 @@
 export default (sequelize, DataTypes) => {
   const Trip = sequelize.define('Trip', {
-    userId: DataTypes.INTEGER,
     tripType: DataTypes.STRING,
-    departure: DataTypes.STRING,
-    destination: DataTypes.STRING,
-    travelDate: DataTypes.DATE,
+    tripId: DataTypes.STRING,
+    userId: DataTypes.INTEGER,
+    originId: DataTypes.INTEGER,
+    destinationId: DataTypes.INTEGER,
+    departureDate: DataTypes.DATE,
     returnDate: DataTypes.DATE,
     travelReasons: DataTypes.STRING,
-    accommodation: DataTypes.STRING,
-    status: DataTypes.STRING
+    accommodationId: DataTypes.INTEGER
   }, {});
   Trip.associate = (models) => {
-    // associations can be defined here
-    Trip.belongsTo(models.Users, { foreignKey: 'userId', as: 'user', targetKey: 'id' });
+    Trip.belongsTo(models.Users, { foreignKey: 'userId', targetKey: 'id' });
+    Trip.belongsTo(models.Location, { foreignKey: 'originId', targetKey: 'id' });
+    Trip.belongsTo(models.Location, { foreignKey: 'destinationId', targetKey: 'id' });
   };
   return Trip;
 };
