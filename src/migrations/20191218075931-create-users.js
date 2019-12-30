@@ -24,9 +24,37 @@ export function up(queryInterface, Sequelize) {
     password: {
       type: Sequelize.STRING
     },
-    role: {
+    gender: {
       type: Sequelize.STRING,
-      defaultValue: 'Requester'
+      allowNull: true
+    },
+    birthDate: {
+      type: Sequelize.DATE,
+      allowNull: true
+    },
+    preferredLanguage: {
+      type: Sequelize.STRING,
+      defaultValue: 'english'
+    },
+    preferredCurrency: {
+      type: Sequelize.STRING,
+      defaultValue: 'Dollar'
+    },
+    residence: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    department: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    lineManager: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    role: {
+      type: Sequelize.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
+      defaultValue: 'requester',
     },
     isVerified: {
       type: Sequelize.BOOLEAN,

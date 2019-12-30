@@ -17,6 +17,7 @@ export const signedUpUserToken = JwtService.generateToken({ email: signupFixture
 export const unregisteredEmail = {
   email: 'higustave123@gmail.com'
 };
+export const unregisteredUserToken = JwtService.generateToken({ email: unregisteredEmail });
 export const signupExpiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhpZ3VzdGF2ZUBnbWFpbC5jb20iLCJpYXQiOjE1NzcxOTg5MjUsImV4cCI6MTU3NzE5ODkyNX0.cAYmYykkBtddmq7YyP3OKVrtVXwCrpxBxhFPJNDUYxE';
 
 const payload = {
@@ -135,4 +136,14 @@ export const facebookProfile = {
 export const OAuthTokens = {
   accessToken: 'oidhfioerhfrhfuierghfr8u438r9h34wf',
   refreshToken: 'fruyfg78w43gf78w4gfwf8hw43hf89hf8',
+};
+
+export const userData = {
+  gender: 'M',
+  birthDate: '1990-10-17',
+  preferredLanguage: 'french',
+  preferredCurrency: 'Euro',
+  residence: 'Kigali',
+  department: 'IT',
+  lineManager: 'James Bond'
 };
