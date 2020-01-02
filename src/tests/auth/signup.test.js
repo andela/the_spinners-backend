@@ -31,7 +31,7 @@ describe('Test for User Signup:', () => {
         res.body.data.should.have.property('firstName').equal(`${signupFixtures.firstName}`);
         res.body.data.should.have.property('lastName').equal(`${signupFixtures.lastName}`);
         res.body.data.should.have.property('email').equal(`${signupFixtures.email}`);
-        res.body.data.should.have.property('role').equal('Requester');
+        res.body.data.should.have.property('role').equal('requester');
         res.body.data.should.have.property('isVerified').equal(false);
         done();
       });
