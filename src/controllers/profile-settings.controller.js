@@ -1,6 +1,11 @@
+import cloudinary from 'cloudinary';
+import dotenv from 'dotenv';
+import { cloudinaryConfig } from '../config/cloudinary-config';
 import ResponseService from '../services/response.service';
 import UserService from '../services/user.service';
 import JwtService from '../services/jwt.service';
+
+dotenv.config();
 /**
  *
  *
@@ -49,6 +54,14 @@ class ProfileSettingsController {
         { [key]: (Object.values(req.body)[index]).trim() }
       );
     }));
+    cloudinary.v2.config(cloudinaryConfig);
+    let photoUrl;
+    await cloudinary.v2.uploader.upload(req.files.profilePicture.tempFilePath, (err, result) => {
+      photoUrl = result.url;
+    });
+    await UserService.updateUser(
+      { email: userToken.email }, { profilePicture: photoUrl }
+    );
     const userData = await UserService.findUserByProperty({ email: userToken.email });
     const { password, token, isVerified, createdAt, updatedAt, ...data } = userData.dataValues;
     ResponseService.setSuccess(200, 'Profile Updated successfully', data);

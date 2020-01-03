@@ -54,6 +54,18 @@ class TripController {
     ResponseService.setSuccess(201, 'Trip created successfully', returnTrip);
     return ResponseService.send(res);
   }
+
+  /**
+   * @param {req} req
+   * @param {res} res
+   * @returns {requestLists} this function returns user request Lists
+  */
+  static async userTripRequestList(req, res) {
+    const { userId } = req.params;
+    const trips = await TripService.findAllByProperty({ userId });
+    ResponseService.setSuccess(200, 'List of requested trips', trips);
+    return ResponseService.send(res);
+  }
 }
 
 export default TripController;

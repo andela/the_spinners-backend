@@ -101,9 +101,9 @@
  * /api/return-trip:
  *   post:
  *     tags:
- *       - User
- *     name: Reset Password
- *     summary: Reset user password
+ *       - trips
+ *     name: Return Trip
+ *     summary: User should be able to request a trip that has return date
  *     produces:
  *       - application/json
  *     consumes:
@@ -145,4 +145,47 @@
  *                      Accommodation is not allowed to be empty,
  *                      Accommodation must be at least 5 characters long,
  *                      Invalid, numbers are not allowed in accommodation field
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   requests:
+ *     type: object
+ *
+ */
+
+/**
+ * @swagger
+ * /api/requests/{userId}:
+ *   get:
+ *     tags:
+ *       - trips
+ *     name: Requests Trip List
+ *     summary: User should be able to view his requested trip
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - name: userId
+ *         in: path
+ *         schema:
+ *           $ref: '#/definitions/requests'
+ *           type: object
+ *     responses:
+ *       '200':
+ *         description: List of requested trips
+ *       '401':
+ *         description: Anauthorized, the ID does not match the signed in user ID
+ *       '400':
+ *         description: Invalid, ID must contain only numbers,
+ *                      User ID length must be less than or equal to 11 characters long
+ *       '404':
+ *         description: User ID does not exists, You didn\'t create a trip, please create one
+ *
  */
