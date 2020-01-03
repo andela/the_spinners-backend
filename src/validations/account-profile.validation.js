@@ -82,6 +82,21 @@ export const validateAccountProfile = (req, res, next) => {
   validateHandler(accountProfileSchema, req.body, res, next);
 };
 
+
+export const validateProfilePicture = (req, res, next) => {
+  const uploadedPicture = req.files.profilePicture;
+
+  if ((uploadedPicture.mimetype !== 'image/jpeg') && (uploadedPicture.mimetype !== 'image/jpg')) {
+    ResponseService.setError(400, 'Only JPG and JPEG files allowed');
+    return ResponseService.send(res);
+  }
+  if ((uploadedPicture.size) > 1200000) { // 1.2MB
+    ResponseService.setError(400, 'Picture size exceed 1.2MB');
+    return ResponseService.send(res);
+  }
+  next();
+};
 export default {
-  validateAccountProfile
+  validateAccountProfile,
+  validateProfilePicture
 };

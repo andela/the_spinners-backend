@@ -56,6 +56,10 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
       defaultValue: 'requester',
     },
+    profilePicture: {
+      type: Sequelize.STRING(1234),
+      allowNull: true
+    },
     isVerified: {
       type: Sequelize.BOOLEAN,
       defaultValue: false

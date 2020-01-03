@@ -12,11 +12,18 @@ export default (sequelize, DataTypes) => {
     department: DataTypes.STRING,
     lineManager: DataTypes.STRING,
     role: DataTypes.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
+    profilePicture: DataTypes.STRING(1234),
     token: DataTypes.STRING,
     isVerified: DataTypes.BOOLEAN
   }, {});
-  Users.associate = () => {
+  Users.associate = (models) => {
     // associations can be defined here
+    Users.hasMany(models.Trip, {
+      foreignKey: 'userId',
+      as: 'user',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return Users;
 };
