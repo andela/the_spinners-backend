@@ -15,8 +15,14 @@ export default (sequelize, DataTypes) => {
     token: DataTypes.STRING,
     isVerified: DataTypes.BOOLEAN
   }, {});
-  Users.associate = () => {
+  Users.associate = (models) => {
     // associations can be defined here
+    Users.hasMany(models.Trip, {
+      foreignKey: 'userId',
+      as: 'user',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return Users;
 };

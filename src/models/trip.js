@@ -10,5 +10,9 @@ export default (sequelize, DataTypes) => {
     accommodation: DataTypes.STRING,
     status: DataTypes.STRING
   }, {});
+  Trip.associate = (models) => {
+    // associations can be defined here
+    Trip.belongsTo(models.Users, { foreignKey: 'userId', as: 'user', targetKey: 'id' });
+  };
   return Trip;
 };

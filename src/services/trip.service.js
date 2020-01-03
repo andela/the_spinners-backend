@@ -31,6 +31,22 @@ class TripService {
       where: { ...property }
     });
   }
+
+  /**
+ *
+ * @static
+ * @param {property} property
+ * @memberof TripService
+ * @returns {object} data
+ */
+  static findAllByProperty(property) {
+    return Trip.findAll({
+      where: {
+        ...property
+      },
+      attributes: ['userId', 'tripType', 'departure', 'destination', 'travelDate', 'returnDate', 'travelReasons', 'accommodation', 'status']
+    });
+  }
 }
 
 
