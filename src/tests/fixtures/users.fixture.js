@@ -166,5 +166,5 @@ export const userData = {
   preferredCurrency: 'Euro',
   residence: 'Kigali',
   department: 'IT',
-  lineManager: 'James Bond'
+  profilePicture: 'https://res.cloudinary.com/higustave/image/upload/v1578147858/jju0kvgyb8a3nrj8j5oz.jpg'
 };

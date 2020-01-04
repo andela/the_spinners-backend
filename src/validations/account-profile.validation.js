@@ -53,13 +53,11 @@ const accountProfileSchema = Joi.object({
       'string.empty': 'Please enter your preferred department',
       'string.pattern.base': 'Department must contain only letters',
     }),
-  lineManager: Joi.string()
+  profilePicture: Joi.string()
     .trim()
-    .regex(/^[a-zA-Z][a-zA-Z\s]*$/)
     .messages({
-      'string.base': 'Invalid type, Line Manager must be a string',
-      'string.empty': 'Please enter your Line Manager',
-      'string.pattern.base': 'Line Manager must contain only letters'
+      'string.base': 'Invalid type, profilePicture must be a string',
+      'string.empty': 'Please enter your preferred profilePicture'
     })
 }).options({ abortEarly: false });
 
@@ -82,21 +80,6 @@ export const validateAccountProfile = (req, res, next) => {
   validateHandler(accountProfileSchema, req.body, res, next);
 };
 
-
-export const validateProfilePicture = (req, res, next) => {
-  const uploadedPicture = req.files.profilePicture;
-
-  if ((uploadedPicture.mimetype !== 'image/jpeg') && (uploadedPicture.mimetype !== 'image/jpg')) {
-    ResponseService.setError(400, 'Only JPG and JPEG files allowed');
-    return ResponseService.send(res);
-  }
-  if ((uploadedPicture.size) > 1200000) { // 1.2MB
-    ResponseService.setError(400, 'Picture size exceed 1.2MB');
-    return ResponseService.send(res);
-  }
-  next();
-};
 export default {
-  validateAccountProfile,
-  validateProfilePicture
+  validateAccountProfile
 };

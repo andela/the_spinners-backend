@@ -48,8 +48,8 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true
     },
-    lineManager: {
-      type: Sequelize.STRING,
+    lineManagerId: {
+      type: Sequelize.INTEGER,
       allowNull: true
     },
     role: {

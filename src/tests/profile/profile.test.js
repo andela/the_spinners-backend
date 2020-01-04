@@ -28,7 +28,6 @@ describe('Test for User Account Profile:', () => {
         res.body.data.should.have.property('preferredCurrency');
         res.body.data.should.have.property('residence');
         res.body.data.should.have.property('department');
-        res.body.data.should.have.property('lineManager');
         done();
       });
   });
@@ -65,8 +64,6 @@ describe('Test for User Account Profile:', () => {
         res.body.data.should.have.property('preferredCurrency');
         res.body.data.should.have.property('residence');
         res.body.data.should.have.property('department');
-        res.body.data.should.have.property('lineManager');
-        res.body.data.should.have.property('role');
         done();
       });
   });

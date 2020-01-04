@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
     preferredCurrency: DataTypes.STRING,
     residence: DataTypes.STRING,
     department: DataTypes.STRING,
-    lineManager: DataTypes.STRING,
+    lineManagerId: DataTypes.INTEGER,
     role: DataTypes.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
     profilePicture: DataTypes.STRING(1234),
     token: DataTypes.STRING,
