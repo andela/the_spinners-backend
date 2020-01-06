@@ -16,8 +16,14 @@ const notificationSchema = Joi.object().keys({
   .messages({ 'object.xor': 'You can set one notification mode at a time.' })
   .options({ abortEarly: false });
 
-const validateNotification = (req, res, next) => {
+const notificationIdSchema = Joi.object({
+  id: Joi.number().min(1)
+}).options({ abortEarly: false });
+
+export const validateNotification = (req, res, next) => {
   transformErrorHandler(notificationSchema, req.body, res, next);
 };
 
-export default validateNotification;
+export const validateIdInParams = (req, res, next) => {
+  transformErrorHandler(notificationIdSchema, req.params, res, next);
+};

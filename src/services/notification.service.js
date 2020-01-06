@@ -50,4 +50,28 @@ export default class NotificationService {
     if (!users[receiver]) return 0;
     users[receiver].emit('new-notification', notification);
   }
+
+  /** find notification
+   * @static
+   * @param {object} property
+   * @memberof UserService
+   * @returns {object} data
+   */
+  static findNotificationByProperty(property) {
+    return Notifications.findOne({
+      where: property
+    });
+  }
+
+  /**
+   * Mark as read notifications
+   * @param {object} userInfo notification
+   * @param {object} user notification
+   * @returns {object} The notification object.
+   */
+  static updateNotification(userInfo, user) {
+    return Notifications.update(userInfo, {
+      where: user
+    });
+  }
 }
