@@ -13,6 +13,7 @@ export default (sequelize, DataTypes) => {
   Trip.associate = (models) => {
     // associations can be defined here
     Trip.belongsTo(models.Users, { foreignKey: 'userId', as: 'user', targetKey: 'id' });
+    Trip.hasMany(models.Comments, { foreignKey: 'tripId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
   };
   return Trip;
 };

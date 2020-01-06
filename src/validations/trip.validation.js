@@ -59,7 +59,7 @@ async function tripValidation(req, res, next) {
       .required()
       .messages({
         'any.required': 'Accommodation is required',
-        'string.pattern.base': 'Invalid, numbers are not allowed in accommodation field'
+        'string.pattern.base': 'Invalid, only alphabetics are allowed in accommodation field'
       })
   });
 

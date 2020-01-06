@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Trip } = models;
+const { Trip, Comments } = models;
 
 /**
  *
@@ -45,6 +45,27 @@ class TripService {
         ...property
       },
       attributes: ['userId', 'tripType', 'departure', 'destination', 'travelDate', 'returnDate', 'travelReasons', 'accommodation', 'status']
+    });
+  }
+
+  /**
+   * @param {newComment} newComment
+   * @returns {create} this function creates comment
+  */
+  static createComment(newComment) {
+    return Comments.create(newComment);
+  }
+
+  /**
+   * find trip
+   * @static
+   * @param {object} property
+   * @memberof TripService
+   * @returns {object} data
+   */
+  static findCommentByProperty(property) {
+    return Comments.findOne({
+      where: { ...property }
     });
   }
 }

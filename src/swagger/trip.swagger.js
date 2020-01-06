@@ -189,3 +189,57 @@
  *         description: User ID does not exists, You didn\'t create a trip, please create one
  *
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   comments:
+ *     type: object
+ *     properties:
+ *       tripId:
+ *         type: integer
+ *       comment:
+ *         type: string
+ *       required:
+ *         - tripId
+ *         - comment
+ */
+
+/**
+ * @swagger
+ * /api/comments:
+ *   post:
+ *     tags:
+ *       - trips
+ *     name: Comment on trip request
+ *     summary: User should be able to comment on trip they requested to give more details
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - name: body
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/comments'
+ *           type: object
+ *     responses:
+ *       '201':
+ *         description: Your comment was submitted successfully
+ *       '401':
+ *         description: Unauthorized access. Invalid token,
+ *                      Unauthorized access. Invalid token for this user,
+ *                      No Token supplied,
+ *                      You are not allowed to comment on this trip request
+ *       '400':
+ *         description: Trip ID is required,
+ *                      Trip ID must be greater than 0,
+ *                      Trip ID must be a number,
+ *                      Comment is required,
+ *                      Comment is not allowed to be empty,
+ *                      Comment length must be less than or equal to 250 characters long
+ */

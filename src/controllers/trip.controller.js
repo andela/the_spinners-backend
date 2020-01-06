@@ -66,6 +66,27 @@ class TripController {
     ResponseService.setSuccess(200, 'List of requested trips', trips);
     return ResponseService.send(res);
   }
+
+  /**
+   * @param {req} req
+   * @param {res} res
+   * @returns {comments} this function create comments on trip request
+  */
+  static async userCommentOnRequestsTrip(req, res) {
+    const userId = req.signInUser.id;
+    const { tripId, comment } = req.body;
+
+    const createComment = {
+      userId,
+      tripId,
+      commentId: req.commentId,
+      comment
+    };
+    await TripService.createComment(createComment);
+    delete createComment.commentId;
+    ResponseService.setSuccess(201, 'Your comment was submitted successfully', createComment);
+    return ResponseService.send(res);
+  }
 }
 
 export default TripController;
