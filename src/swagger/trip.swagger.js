@@ -270,3 +270,36 @@
  *       '409':
  *         description: Trip already created
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   Locations:
+ *     type: object
+ *
+ */
+
+
+/**
+ * @swagger
+ * /api/locations:
+ *   get:
+ *     tags:
+ *       - locations
+ *     name: Locations
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: List of available locations
+ *       '401':
+ *         description: No valid token supplied
+ *
+ */

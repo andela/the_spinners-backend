@@ -76,16 +76,17 @@ class TripController {
   * @returns {response} @memberof Trips
   */
   static async requestMultiCityTrip(req, res) {
-    const newMultiCityTrip = [];
-    await Promise.all(req.body.map(async (trip) => {
-      const { dataValues } = await TripService.createTrip({ ...trip, tripId: req.tripId, userId: req.userData.id, tripType: 'multi-city' });
+    const newMultiCityTrip = req.body.map((trip) => ({ ...trip, tripId: req.tripId, userId: req.userData.id, tripType: 'multi-city' }));
+    const newTrips = await TripService.createMultiCityTrip(newMultiCityTrip);
+    const newTripArray = newTrips.map((trip) => {
+      const { dataValues } = trip;
       const { updatedAt, createdAt, ...newTrip } = dataValues;
-      newMultiCityTrip.push(newTrip);
-    }));
+      return newTrip;
+    });
     const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
-    const { dataValues } = await RequestService.createRequest({ requesterId: newMultiCityTrip[0].userId, tripId: req.tripId, status: 'pending', managerId: lineManagerId });
+    const { dataValues } = await RequestService.createRequest({ requesterId: newMultiCityTrip[0].userId, tripId: req.tripId, status: 'pending', lineManagerId });
     const { updatedAt, createdAt, ...newRequest } = dataValues;
-    ResponseService.setSuccess(201, 'Trip request is successfully created', { newTrip: newMultiCityTrip, newRequest });
+    ResponseService.setSuccess(201, 'Trip request is successfully created', { newTrip: newTripArray, newRequest });
     return ResponseService.send(res);
   }
 
@@ -99,11 +100,10 @@ class TripController {
    */
   static async viewAvailableLocations(req, res) {
     const locations = await TripService.findAllLocations();
-    const availableLocations = [];
-    locations.forEach(loc => {
+    const availableLocations = locations.map(loc => {
       const { dataValues } = loc;
       const { updatedAt, createdAt, ...location } = dataValues;
-      availableLocations.push(location);
+      return location;
     });
     ResponseService.setSuccess(200, 'List of all available locations', availableLocations);
     return ResponseService.send(res);

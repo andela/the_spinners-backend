@@ -57,6 +57,17 @@ class TripService {
   static findAllLocations() {
     return Location.findAll();
   }
+
+  /**
+       *
+       *
+       * @static
+       * @param {newTrip} newTrip
+       * @returns {newTrip} @memberof TripService
+       */
+  static createMultiCityTrip(newTrip) {
+    return Trip.bulkCreate(newTrip);
+  }
 }
 
 

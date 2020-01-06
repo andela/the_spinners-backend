@@ -9,12 +9,12 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Req
     type: Sequelize.INTEGER
   },
   tripId: {
-    type: Sequelize.STRING
+    type: Sequelize.BIGINT
   },
   status: {
     type: Sequelize.STRING
   },
-  managerId: {
+  lineManagerId: {
     type: Sequelize.INTEGER
   },
   createdAt: {

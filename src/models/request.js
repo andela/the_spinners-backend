@@ -1,9 +1,9 @@
 export default (sequelize, DataTypes) => {
   const Request = sequelize.define('Request', {
     requesterId: DataTypes.INTEGER,
-    tripId: DataTypes.STRING,
+    tripId: DataTypes.BIGINT,
     status: DataTypes.STRING,
-    managerId: DataTypes.INTEGER
+    lineManagerId: DataTypes.INTEGER
   }, {});
   Request.associate = (models) => {
     Request.belongsTo(models.Users, { foreignKey: 'requesterId', targetKey: 'id' });
