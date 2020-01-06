@@ -20,11 +20,11 @@ class TripService {
   }
 
   /**
- * find trip
+ *
  * @static
  * @param {object} property
  * @memberof TripService
- * @returns {object} data
+ * @returns {object} this function finds trip
  */
   static findTripByProperty(property) {
     return Trip.findOne({
@@ -37,7 +37,7 @@ class TripService {
  * @static
  * @param {property} property
  * @memberof TripService
- * @returns {object} data
+ * @returns {object} this function finds all
  */
   static findAllByProperty(property) {
     return Trip.findAll({

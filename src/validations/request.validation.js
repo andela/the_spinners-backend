@@ -39,7 +39,7 @@ async function requestValidation(req, res, next) {
   }
 
   if (Number(userId) !== signInUser.id) {
-    ResponseService.setError(401, 'Anauthorized, the ID does not match the signed in user ID');
+    ResponseService.setError(401, 'Unauthorized, the ID does not match the signed in user ID');
     return ResponseService.send(res);
   }
 
