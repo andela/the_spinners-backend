@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Trip } = models;
+const { Trip, Location } = models;
 
 /**
  *
@@ -44,8 +44,29 @@ class TripService {
       where: {
         ...property
       },
-      attributes: ['userId', 'tripType', 'departure', 'destination', 'travelDate', 'returnDate', 'travelReasons', 'accommodation', 'status']
+      attributes: ['userId', 'tripType', 'originId', 'destinationId', 'departureDate', 'returnDate', 'travelReasons', 'accommodationId']
     });
+  }
+
+  /** find locations
+  * @static
+  * @param {object} property
+  * @memberof TripService
+  * @returns {object} data
+  */
+  static findAllLocations() {
+    return Location.findAll();
+  }
+
+  /**
+       *
+       *
+       * @static
+       * @param {newTrip} newTrip
+       * @returns {newTrip} @memberof TripService
+       */
+  static createMultiCityTrip(newTrip) {
+    return Trip.bulkCreate(newTrip);
   }
 }
 

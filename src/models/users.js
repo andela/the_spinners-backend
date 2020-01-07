@@ -14,7 +14,8 @@ export default (sequelize, DataTypes) => {
     role: DataTypes.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
     profilePicture: DataTypes.STRING(1234),
     token: DataTypes.STRING,
-    isVerified: DataTypes.BOOLEAN
+    isVerified: DataTypes.BOOLEAN,
+    lineManagerId: DataTypes.INTEGER
   }, {});
   Users.associate = (models) => {
     // associations can be defined here

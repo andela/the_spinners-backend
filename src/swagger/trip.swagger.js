@@ -1,25 +1,25 @@
 /**
  * @swagger
  * definitions:
- *   Trip:
+ *   OneWayTrip:
  *     type: object
  *     properties:
- *       departure:
- *         type: string
- *       destination:
- *         type: string
- *       travelDate:
+ *       originId:
+ *         type: integer
+ *       destinationId:
+ *         type: integer
+ *       departureDate:
  *         type: string
  *       travelReasons:
  *         type: string
- *       accommodation:
- *         type: string
+ *       accommodationId:
+ *         type: integer
  *     required:
- *         - departure
- *         - destination
- *         - travelDate
+ *         - originId
+ *         - destinationId
+ *         - departureDate
  *         - travelReasons
- *         - accommodation
+ *         - accommodationId
  */
 
 /**
@@ -42,31 +42,33 @@
  *       - name: body
  *         in: body
  *         schema:
- *           $ref: '#/definitions/Trip'
+ *           $ref: '#/definitions/OneWayTrip'
  *           type: object
- *           departure:
- *              type: string
- *           destination:
- *              type: string
- *           travelDate:
+ *           originId:
+ *              type: integer
+ *           destinationId:
+ *              type: integer
+ *           departureDate:
  *              type: string
  *           travelReasons:
  *              type: string
- *           accommodation:
- *              type: string
+ *           accommodationId:
+ *              type: integer
  *         required:
- *              - departure
- *              - destination
- *              - travelDate
+ *              - originId
+ *              - destinationId
+ *              - departureDate
  *              - travelReasons
- *              - accommodation
+ *              - accommodationId
  *     responses:
  *       '201':
  *         description: Trip created successfully
  *       '400':
- *         description: invalid inputs.
+ *         description: Invalid inputs.
  *       '401':
- *         description: No Token supplied
+ *         description: No valid token provided
+ *       '409':
+ *         description: Trip already created
  */
 
 /**
@@ -75,25 +77,25 @@
  *   returnTrip:
  *     type: object
  *     properties:
- *       departure:
- *         type: string
- *       destination:
- *         type: string
- *       travelDate:
+ *       originId:
+ *         type: integer
+ *       destinationId:
+ *         type: integer
+ *       departureDate:
  *         type: string
  *       returnDate:
  *         type: string
  *       travelReasons:
  *         type: string
- *       accommodation:
- *         type: string
+ *       accommodationId:
+ *         type: integer
  *       required:
- *         - departure
- *         - destination
- *         - travelDate
+ *         - originId
+ *         - destinationId
+ *         - departureDate
  *         - returnDate
  *         - travelReasons
- *         - accommodation
+ *         - accommodationId
  */
 
 /**
@@ -126,14 +128,14 @@
  *                      Unauthorized access. Invalid token for this user,
  *                      No Token supplied
  *       '400':
- *         description: Departure is required,
- *                      Departure is not allowed to be empty,
- *                      Departure must be at least 2 characters long,
- *                      Invalid, numbers are not allowed in departure field,
- *                      Destination is required,
- *                      Destination is not allowed to be empty,
- *                      Destination must be at least 2 characters long,
- *                      Invalid, numbers are not allowed in destination field,
+ *         description: originId is required,
+ *                      originId is not allowed to be empty,
+ *                      originId must be at least 2 characters long,
+ *                      Invalid, numbers are not allowed in originId field,
+ *                      DestinationId is required,
+ *                      DestinationId is not allowed to be empty,
+ *                      DestinationId must be at least 2 characters long,
+ *                      Invalid, numbers are not allowed in destinationId field,
  *                      Date should be greater than today\'s date,
  *                      Date must be in YYYY-MM-DD format,
  *                      Travel date is required,
@@ -141,10 +143,10 @@
  *                      Travel reasons is required,
  *                      Travel reasons is not allowed to be empty,
  *                      Travel reasons must be at least 5 characters long,
- *                      Accommodation is required,
- *                      Accommodation is not allowed to be empty,
- *                      Accommodation must be at least 5 characters long,
- *                      Invalid, numbers are not allowed in accommodation field
+ *                      AccommodationId is required,
+ *                      AccommodationId is not allowed to be empty,
+ *                      AccommodationId must be at least 5 characters long,
+ *                      Invalid, numbers are not allowed in accommodationId field
  */
 
 /**
@@ -187,5 +189,117 @@
  *                      User ID length must be less than or equal to 11 characters long
  *       '404':
  *         description: User ID does not exists, You didn\'t create a trip, please create one
+ *
+ */
+/**
+ * @swagger
+ * definitions:
+ *   MultiCityTrip:
+ *     type: array
+ *     collectionFormat: multi
+ *     minItems: 2
+ *     items:
+ *        type: object
+ *        properties:
+ *            originId:
+ *              type: integer
+ *            destinationId:
+ *              type: integer
+ *            departureDate:
+ *              type: string
+ *            travelReasons:
+ *              type: string
+ *            accommodationId:
+ *              type: integer
+ *        required:
+ *             - originId
+ *             - destinationId
+ *             - departureDate
+ *             - travelReasons
+ *             - accommodationId
+ */
+
+/**
+ * @swagger
+ * /api/multi-city-trips:
+ *   post:
+ *     tags:
+ *       - trips
+ *     name: Multi city trip
+ *     summary: A user should be able to request multi city trip
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *              type: string
+ *       - name: body
+ *         in: body
+ *         schema:
+ *            type: array
+ *            $ref: '#/definitions/MultiCityTrip'
+ *            items:
+ *              type: object
+    *              originId:
+    *               type: integer
+    *              destinationId:
+    *               type: array
+    *              departureDate:
+    *               type: string
+    *              travelReasons:
+    *               type: string
+    *              accommodationId:
+    *               type: integer
+    *         minItems: 2
+ *         required:
+ *              - originId
+ *              - destinationId
+ *              - departureDate
+ *              - travelReasons
+ *              - accommodationId
+ *     responses:
+ *       '201':
+ *         description: Trip created successfully
+ *       '400':
+ *         description: Invalid inputs.
+ *       '401':
+ *         description: No valid token provided
+ *       '409':
+ *         description: Trip already created
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   Locations:
+ *     type: object
+ *
+ */
+
+
+/**
+ * @swagger
+ * /api/locations:
+ *   get:
+ *     tags:
+ *       - locations
+ *     name: Locations
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: List of available locations
+ *       '401':
+ *         description: No valid token supplied
  *
  */

@@ -1,20 +1,19 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import {
-  signedUpUserToken,
-  wrongToken,
-  userData
-} from '../fixtures/users.fixture';
+import { loggedInToken, createUsers, wrongToken, userData } from '../fixtures/users.fixture';
 
 chai.use(chaiHttp);
 chai.should();
 
 describe('Test for User Account Profile:', () => {
+  before(async () => {
+    await createUsers();
+  });
   it('It should allow user to view profile', (done) => {
     chai.request(app)
       .get('/api/view-profile')
-      .set('Authorization', signedUpUserToken)
+      .set('Authorization', loggedInToken)
       .end((err, res) => {
         res.body.should.be.an('object');
         res.should.have.status(200);
@@ -47,7 +46,7 @@ describe('Test for User Account Profile:', () => {
   it('It should allow user to edit profile', (done) => {
     chai.request(app)
       .patch('/api/edit-profile')
-      .set('Authorization', signedUpUserToken, 'Accept', 'application/json')
+      .set('Authorization', loggedInToken, 'Accept', 'application/json')
       .send(userData)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -72,7 +71,7 @@ describe('Test for User Account Profile:', () => {
     userData.gender = userGender;
     chai.request(app)
       .patch('/api/edit-profile')
-      .set('Authorization', signedUpUserToken, 'Accept', 'application/json')
+      .set('Authorization', loggedInToken, 'Accept', 'application/json')
       .send(userData)
       .end((err, res) => {
         res.body.should.be.an('object');

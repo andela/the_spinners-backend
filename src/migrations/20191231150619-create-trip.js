@@ -5,19 +5,22 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Tri
     primaryKey: true,
     type: Sequelize.INTEGER
   },
-  userId: {
-    type: Sequelize.INTEGER
-  },
   tripType: {
     type: Sequelize.STRING
   },
-  departure: {
-    type: Sequelize.STRING
+  tripId: {
+    type: Sequelize.BIGINT
   },
-  destination: {
-    type: Sequelize.STRING
+  userId: {
+    type: Sequelize.INTEGER
   },
-  travelDate: {
+  originId: {
+    type: Sequelize.INTEGER
+  },
+  destinationId: {
+    type: Sequelize.INTEGER
+  },
+  departureDate: {
     type: Sequelize.DATE
   },
   returnDate: {
@@ -26,11 +29,8 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Tri
   travelReasons: {
     type: Sequelize.STRING
   },
-  accommodation: {
-    type: Sequelize.STRING
-  },
-  status: {
-    type: Sequelize.STRING
+  accommodationId: {
+    type: Sequelize.INTEGER
   },
   createdAt: {
     allowNull: false,
