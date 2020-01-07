@@ -2,9 +2,7 @@ import express from 'express';
 import ProfileSettingsController from '../controllers/profile-settings.controller';
 import RouteAccessMiddleware from '../middlewares/route-access.middleware';
 import { validateToken } from '../validations/auth.validation';
-import {
-  validateAccountProfile
-} from '../validations/account-profile.validation';
+import { validateAccountProfile } from '../validations/account-profile.validation';
 
 const router = express.Router();
 

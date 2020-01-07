@@ -53,13 +53,11 @@ const accountProfileSchema = Joi.object({
       'string.empty': 'Please enter your preferred department',
       'string.pattern.base': 'Department must contain only letters',
     }),
-  lineManager: Joi.string()
+  profilePicture: Joi.string()
     .trim()
-    .regex(/^[a-zA-Z][a-zA-Z\s]*$/)
     .messages({
-      'string.base': 'Invalid type, Line Manager must be a string',
-      'string.empty': 'Please enter your Line Manager',
-      'string.pattern.base': 'Line Manager must contain only letters'
+      'string.base': 'Invalid type, profilePicture must be a string',
+      'string.empty': 'Please enter your preferred profilePicture'
     })
 }).options({ abortEarly: false });
 

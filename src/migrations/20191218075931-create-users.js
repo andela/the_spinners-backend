@@ -48,13 +48,17 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true
     },
-    lineManager: {
-      type: Sequelize.STRING,
+    lineManagerId: {
+      type: Sequelize.INTEGER,
       allowNull: true
     },
     role: {
       type: Sequelize.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
       defaultValue: 'requester',
+    },
+    profilePicture: {
+      type: Sequelize.STRING(1234),
+      allowNull: true
     },
     isVerified: {
       type: Sequelize.BOOLEAN,

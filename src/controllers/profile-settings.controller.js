@@ -31,7 +31,6 @@ class ProfileSettingsController {
     ResponseService.send(res);
   }
 
-
   /**
   * users can create an account
   * @static
