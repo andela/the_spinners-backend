@@ -2,11 +2,11 @@ export default (sequelize, DataTypes) => {
   const AccommodationType = sequelize.define('AccommodationType', {
     name: DataTypes.STRING,
     category: DataTypes.STRING,
-    stars: DataTypes.INTEGER,
+    rating: DataTypes.INTEGER,
     locationId: DataTypes.INTEGER,
-    peopleCapacity: DataTypes.INTEGER,
-    rooms: DataTypes.INTEGER,
-    availability: DataTypes.BOOLEAN
+    numberOfPeople: DataTypes.INTEGER,
+    numberOfRooms: DataTypes.INTEGER,
+    isAvailable: DataTypes.BOOLEAN
   }, {});
   return AccommodationType;
 };

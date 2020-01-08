@@ -9,7 +9,7 @@
 
 /**
  * @swagger
- * /api/accommodation-type:
+ * /api/accommodations/types:
  *   get:
  *     tags:
  *       - accommodation
@@ -51,7 +51,7 @@
 
 /**
  * @swagger
- * /api/book-accommodation:
+ * /api/accommodations:
  *   post:
  *     tags:
  *       - accommodation
