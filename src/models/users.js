@@ -15,7 +15,6 @@ export default (sequelize, DataTypes) => {
     profilePicture: DataTypes.STRING(1234),
     token: DataTypes.STRING,
     isVerified: DataTypes.BOOLEAN,
-    lineManagerId: DataTypes.INTEGER
   }, {});
   Users.associate = (models) => {
     // associations can be defined here

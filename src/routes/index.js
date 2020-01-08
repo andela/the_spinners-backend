@@ -8,7 +8,7 @@ const app = express();
 
 app.use('/api/auth', authRoute);
 app.use('/api/', tripRoute);
-app.use('/api/', profileSettingsRoute);
 app.use('/api/accommodations', accommodationRoute);
+app.use('/api/users', profileSettingsRoute);
 
 export default app;

@@ -16,13 +16,11 @@
  *         type: string
  *       department:
  *         type: string
- *       lineManager:
- *         type: string
  */
 
 /**
  * @swagger
- * /api/view-profile:
+ * /api/users/view-profile:
  *   get:
  *     tags:
  *       - User
@@ -48,7 +46,7 @@
 
 /**
  * @swagger
- * /api/edit-profile:
+ * /api/users/edit-profile:
  *   patch:
  *     tags:
  *       - User
@@ -81,7 +79,7 @@
  *               type: string
  *             department:
  *               type: string
- *             lineManager:
+ *             profilePicture:
  *               type: string
  *     responses:
  *       '200':

@@ -12,7 +12,7 @@ describe('Test for User Account Profile:', () => {
   });
   it('It should allow user to view profile', (done) => {
     chai.request(app)
-      .get('/api/view-profile')
+      .get('/api/users/view-profile')
       .set('Authorization', loggedInToken)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -33,7 +33,7 @@ describe('Test for User Account Profile:', () => {
 
   it('It should NOT allow user to view profile: Wrong Token Provided', (done) => {
     chai.request(app)
-      .get('/api/view-profile')
+      .get('/api/users/view-profile')
       .set('Authorization', wrongToken)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -45,7 +45,7 @@ describe('Test for User Account Profile:', () => {
 
   it('It should allow user to edit profile', (done) => {
     chai.request(app)
-      .patch('/api/edit-profile')
+      .patch('/api/users/edit-profile')
       .set('Authorization', loggedInToken, 'Accept', 'application/json')
       .send(userData)
       .end((err, res) => {
@@ -70,7 +70,7 @@ describe('Test for User Account Profile:', () => {
     const userGender = '';
     userData.gender = userGender;
     chai.request(app)
-      .patch('/api/edit-profile')
+      .patch('/api/users/edit-profile')
       .set('Authorization', loggedInToken, 'Accept', 'application/json')
       .send(userData)
       .end((err, res) => {
