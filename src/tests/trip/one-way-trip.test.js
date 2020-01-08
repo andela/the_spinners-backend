@@ -93,6 +93,17 @@ describe('Test one way trip:', () => {
         done();
       });
   });
+  it('Should return status code of 400 on all invalid inputs', (done) => {
+    chai.request(app)
+      .post('/api/one-way-trips')
+      .set('Authorization', loggedInToken)
+      .send({})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.property('message');
+        done();
+      });
+  });
   it('Should return status code of 400 on unavailable location', (done) => {
     chai.request(app)
       .post('/api/one-way-trips')

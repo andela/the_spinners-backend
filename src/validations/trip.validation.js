@@ -53,13 +53,17 @@ async function tripValidation(req, res, next) {
       errorMessages.push(err.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
     });
   }
-  const locations = [req.body.originId, req.body.destinationId];
-  await Promise.all(locations.map(async loc => {
-    const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
-    if (!isLocationExist) {
-      errorMessages.push(`location with id ${loc} is not available`);
-    }
-  }));
+
+  if (req.body.originId && req.body.destinationId) {
+    const locations = [req.body.originId, req.body.destinationId];
+    await Promise.all(locations.map(async loc => {
+      const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
+      if (!isLocationExist) {
+        errorMessages.push(`location with id ${loc} is not available`);
+      }
+    }));
+  }
+
   if (departureDate > returnDate) {
     ResponseService.setError(400, 'Travel date can not be greater than return date');
     return ResponseService.send(res);

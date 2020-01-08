@@ -56,6 +56,18 @@ describe('/POST create return trip', () => {
       });
   });
 
+  it('Should return status code of 400 on all invalid inputs', (done) => {
+    chai.request(app)
+      .post('/api/return-trip')
+      .set('Authorization', loggedInToken)
+      .send({})
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.status.should.be.equal(400);
+        done();
+      });
+  });
+
   it('App should check if trip exists', (done) => {
     chai.request(app)
       .post('/api/return-trip')

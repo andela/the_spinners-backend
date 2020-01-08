@@ -37,13 +37,17 @@ export default async (req, res, next) => {
       errorMessages.push(error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
     });
   }
-  const locations = [req.body.originId, req.body.destinationId];
-  await Promise.all(locations.map(async loc => {
-    const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
-    if (!isLocationExist) {
-      errorMessages.push(`location with id ${loc} is not available`);
-    }
-  }));
+
+  if (req.body.originId && req.body.destinationId) {
+    const locations = [req.body.originId, req.body.destinationId];
+    await Promise.all(locations.map(async loc => {
+      const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
+      if (!isLocationExist) {
+        errorMessages.push(`location with id ${loc} is not available`);
+      }
+    }));
+  }
+
   if (errorMessages.length !== 0) {
     ResponseService.setError(400, errorMessages);
     return ResponseService.send(res);

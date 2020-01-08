@@ -2,6 +2,7 @@ import Joi from '@hapi/joi';
 import ResponseService from '../services/response.service';
 import JwtService from '../services/jwt.service';
 import UserService from '../services/user.service';
+import TripService from '../services/trip.service';
 
 /**
  * class for validations
@@ -76,6 +77,61 @@ class UserValidation {
       ResponseService.setError(404, `Email ${email} does not exists`);
       return ResponseService.send(res);
     }
+    next();
+  }
+
+  /**
+   * @param {req} req
+   * @param {res} res
+   * @param {next} next
+   * @returns {validation} this function validate user comment on request trip
+   *
+  */
+  static async validateUserComment(req, res, next) {
+    const id = req.params.tripId;
+
+    const schema = Joi.object({
+      tripId: Joi.number().integer().max(99999999999).greater(0)
+        .required()
+        .messages({
+          'number.greater': 'Trip ID must be greater than 0',
+          'any.required': 'Trip ID is required',
+          'number.base': 'Trip ID must be a number',
+          'number.unsafe': 'Trip ID must be a safe number',
+          'number.max': 'Trip ID must be less than or equal to 11'
+        }),
+      comment: Joi.string().max(250).required().messages({
+        'string.empty': 'Comment is not allowed to be empty',
+        'string.max': 'Comment length must be less than or equal to 250 characters long',
+        'any.required': 'Comment is required'
+      })
+    }).options({ abortEarly: false });
+
+    const { error } = schema.validate({ ...req.body, ...req.params });
+
+    if (error) {
+      const errMessages = [];
+
+      error.details.forEach((err) => {
+        errMessages.push(err.message);
+      });
+      ResponseService.setError(400, errMessages);
+      return ResponseService.send(res);
+    }
+
+    const findTrip = await TripService.findTripByProperty({ id });
+    const signInUser = JwtService.verifyToken(req.headers.authorization);
+
+    if (!findTrip) {
+      ResponseService.setError(404, `Trip with ID ${id} doesn't exists`);
+      return ResponseService.send(res);
+    }
+
+    if (signInUser.id !== findTrip.userId) {
+      ResponseService.setError(401, 'You are not allowed to comment on this trip request');
+      return ResponseService.send(res);
+    }
+    req.signInUser = signInUser;
     next();
   }
 }
