@@ -33,18 +33,33 @@ class TripService {
   }
 
   /**
- *
- * @static
- * @param {property} property
- * @memberof TripService
- * @returns {object} this function finds all
- */
-  static findAllByProperty(property) {
-    return Trip.findAll({
+   * A method to querry with condition
+   * and count all records
+   * @static
+   * @param {object} property - The condion as an object
+   * @param {number} offset - The offset to be used
+   * @param {number} limit - The limit to be used
+   * @returns {number} The data retrieved
+   * @memberof TripService
+   */
+  static findByPropertyAndCountAll(property, { offset, limit }) {
+    return Trip.findAndCountAll({
       where: {
         ...property
       },
-      attributes: ['userId', 'tripType', 'originId', 'destinationId', 'departureDate', 'returnDate', 'travelReasons', 'accommodationId']
+      attributes: [
+        'userId',
+        'tripType',
+        'originId',
+        'destinationId',
+        'departureDate',
+        'returnDate', 'travelReasons',
+        'accommodationId',
+        'createdAt',
+        'updatedAt'
+      ],
+      offset,
+      limit
     });
   }
 

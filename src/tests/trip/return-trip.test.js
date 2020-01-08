@@ -4,23 +4,22 @@ import app from '../../app';
 import {
   trip,
   badRequest,
-  checkDate
+  checkDate,
+  createTrip
 } from '../fixtures/trip.fixture';
-import { loggedInToken, createUsers, cleanDb } from '../fixtures/users.fixture';
+import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('/POST create return trip', () => {
   before(async () => {
-    await cleanDb();
-  });
-  before(async () => {
     await createUsers();
+    await createTrip();
   });
   it('App should create a return trip', (done) => {
     chai.request(app)
-      .post('/api/return-trip')
+      .post('/api/trips/return')
       .set('Authorization', loggedInToken)
       .send(trip)
       .end((err, res) => {
@@ -33,7 +32,7 @@ describe('/POST create return trip', () => {
 
   it('App should check bad request', (done) => {
     chai.request(app)
-      .post('/api/return-trip')
+      .post('/api/trips/return')
       .set('Authorization', loggedInToken)
       .send({ ...badRequest, travelReasons: '' })
       .end((err, res) => {
@@ -45,7 +44,7 @@ describe('/POST create return trip', () => {
 
   it('App travel and return date', (done) => {
     chai.request(app)
-      .post('/api/return-trip')
+      .post('/api/trips/return')
       .set('Authorization', loggedInToken)
       .send(checkDate)
       .end((err, res) => {
@@ -58,7 +57,7 @@ describe('/POST create return trip', () => {
 
   it('Should return status code of 400 on all invalid inputs', (done) => {
     chai.request(app)
-      .post('/api/return-trip')
+      .post('/api/trips/return')
       .set('Authorization', loggedInToken)
       .send({})
       .end((err, res) => {
@@ -70,7 +69,7 @@ describe('/POST create return trip', () => {
 
   it('App should check if trip exists', (done) => {
     chai.request(app)
-      .post('/api/return-trip')
+      .post('/api/trips/return')
       .set('Authorization', loggedInToken)
       .send(trip)
       .end((err, res) => {
@@ -82,7 +81,7 @@ describe('/POST create return trip', () => {
   });
   it('Should return status code of 400 on unavailable location', (done) => {
     chai.request(app)
-      .post('/api/return-trip')
+      .post('/api/trips/return')
       .set('Authorization', loggedInToken)
       .send({ ...trip, originId: 999 })
       .end((err, res) => {

@@ -13,7 +13,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 201 on successful trip creation', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, departureDate: '2020-05-23' })
       .end((err, res) => {
@@ -29,7 +29,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 409 with message that trip already created', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, departureDate: '2020-05-23' })
       .end((err, res) => {
@@ -40,7 +40,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 400 on invalid input into departure', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, departure: '' })
       .end((err, res) => {
@@ -51,7 +51,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 400 on invalid input into destination', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, destination: '' })
       .end((err, res) => {
@@ -62,7 +62,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 400 on invalid input into travel date', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, travelDate: '' })
       .end((err, res) => {
@@ -73,7 +73,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 400 on invalid input into travel reasons', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, travelReasons: '' })
       .end((err, res) => {
@@ -84,7 +84,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 400 on invalid input into accommodation', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, accommodation: '' })
       .end((err, res) => {
@@ -95,7 +95,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 400 on all invalid inputs', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({})
       .end((err, res) => {
@@ -106,7 +106,7 @@ describe('Test one way trip:', () => {
   });
   it('Should return status code of 400 on unavailable location', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken)
       .send({ ...newTrip, originId: 999 })
       .end((err, res) => {

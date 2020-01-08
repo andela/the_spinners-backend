@@ -1,8 +1,4 @@
 import faker from 'faker';
-import models from '../../models';
-import { loggedInUser } from './users.fixture';
-
-const { Trip } = models;
 
 const comment = faker.lorem.sentence();
 export const newComment = {
@@ -15,21 +11,4 @@ export const badRequest = {
 
 export const noTripFound = {
   comment: faker.lorem.sentence()
-};
-
-const newTrip = {
-  id: faker.random.number({ min: 20, max: 50 }),
-  userId: loggedInUser.id,
-  tripType: 'one-way',
-  departure: faker.address.city(),
-  destination: faker.address.city(),
-  travelDate: faker.date.future(),
-  travelReasons: faker.lorem.sentence(),
-  accommodation: faker.lorem.sentence(),
-};
-
-export const createTrip = async () => {
-  await Trip.destroy({ where: {} });
-  const { dataValues } = await Trip.create(newTrip);
-  return dataValues;
 };

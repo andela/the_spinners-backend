@@ -24,7 +24,7 @@
 
 /**
  * @swagger
- * /api/one-way-trips:
+ * /api/trips/one-way:
  *   post:
  *     tags:
  *       - trips
@@ -100,7 +100,7 @@
 
 /**
  * @swagger
- * /api/return-trip:
+ * /api/trips/return:
  *   post:
  *     tags:
  *       - trips
@@ -159,7 +159,7 @@
 
 /**
  * @swagger
- * /api/requests/{userId}:
+ * /api/trips/requests:
  *   get:
  *     tags:
  *       - trips
@@ -174,8 +174,12 @@
  *         name: Authorization
  *         required: true
  *         type: string
- *       - name: userId
- *         in: path
+ *       - name: page
+ *         in: query
+ *         type: integer
+ *       - name: limit
+ *         in: query
+ *         type: integer
  *         schema:
  *           $ref: '#/definitions/requests'
  *           type: object
@@ -185,8 +189,11 @@
  *       '401':
  *         description: Anauthorized, the ID does not match the signed in user ID
  *       '400':
- *         description: Invalid, ID must contain only numbers,
- *                      User ID length must be less than or equal to 11 characters long
+ *         description: Page must be greater than 0,
+ *                      Limit must be a number,
+ *                      Page must be a number,
+ *                      Page is required,
+ *                      Limit is required
  *       '404':
  *         description: User ID does not exists, You didn\'t create a trip, please create one
  *
@@ -221,7 +228,7 @@
 
 /**
  * @swagger
- * /api/multi-city-trips:
+ * /api/trips/multi-city:
  *   post:
  *     tags:
  *       - trips
@@ -282,7 +289,7 @@
 
 /**
  * @swagger
- * /api/locations:
+ * /api/trips/locations:
  *   get:
  *     tags:
  *       - locations
@@ -319,7 +326,7 @@
 
 /**
  * @swagger
- * /api/trip-requests/{tripId}/comments:
+ * /api/trips/requests/{tripId}/comments:
  *   post:
  *     tags:
  *       - trips
