@@ -1,5 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import faker from 'faker';
 import app from '../../app';
 import { loggedInToken, userWithNoTripToken, loggedInUser, tokenOfNotAllowedManager, createUsers } from '../fixtures/users.fixture';
 import { newComment, badRequest, noTripFound, createTrip } from '../fixtures/comments.fixture';
@@ -8,19 +9,20 @@ chai.should();
 chai.use(chaiHttp);
 
 describe('/POST create comment on trip request', () => {
+  let trip;
   before(async () => {
-    await createTrip();
     await createUsers();
+    trip = await createTrip();
   });
   it('Should allow user to create comments when provided successfully, userId, subjectId, subjectType and comment', (done) => {
     chai.request(app)
-      .post('/api/trip-requests/1/comments')
+      .post(`/api/trip-requests/${trip.id}/comments`)
       .set('Authorization', loggedInToken)
       .send(newComment)
       .end((err, res) => {
         res.body.should.be.an('object');
         res.body.data.should.have.property('userId').equal(loggedInUser.id);
-        res.body.data.should.have.property('subjectId').equal(1);
+        res.body.data.should.have.property('subjectId').equal(trip.id);
         res.body.data.should.have.property('subjectType').equal('Trip');
         res.body.data.should.have.property('comment');
         res.status.should.be.equal(201);
@@ -31,7 +33,7 @@ describe('/POST create comment on trip request', () => {
 
   it('Should check when user do a bad request', (done) => {
     chai.request(app)
-      .post('/api/trip-requests/NaN/comments')
+      .post(`/api/trip-requests/${faker.random.word()}/comments`)
       .set('Authorization', loggedInToken)
       .send(badRequest)
       .end((err, res) => {
@@ -44,7 +46,7 @@ describe('/POST create comment on trip request', () => {
 
   it('Should not allow user to comment when trip ID does not exist', (done) => {
     chai.request(app)
-      .post('/api/trip-requests/99/comments')
+      .post(`/api/trip-requests/${faker.random.number({ min: 51 })}/comments`)
       .set('Authorization', loggedInToken)
       .send(noTripFound)
       .end((err, res) => {
@@ -57,7 +59,7 @@ describe('/POST create comment on trip request', () => {
 
   it('Should not allow unauthorized user to comment', (done) => {
     chai.request(app)
-      .post('/api/trip-requests/1/comments')
+      .post(`/api/trip-requests/${trip.id}/comments`)
       .set('Authorization', userWithNoTripToken)
       .send(newComment)
       .end((err, res) => {
@@ -70,7 +72,7 @@ describe('/POST create comment on trip request', () => {
 
   it('Should not authorize a requester who is not the owner of the trip request to comment', (done) => {
     chai.request(app)
-      .post('/api/trip-requests/1/comments')
+      .post(`/api/trip-requests/${trip.id}/comments`)
       .set('Authorization', userWithNoTripToken)
       .send(newComment)
       .end((err, res) => {
@@ -83,7 +85,7 @@ describe('/POST create comment on trip request', () => {
 
   it('Should not authorize a manager who is not assigned to a user to comment', (done) => {
     chai.request(app)
-      .post('/api/trip-requests/1/comments')
+      .post(`/api/trip-requests/${trip.id}/comments`)
       .set('Authorization', tokenOfNotAllowedManager)
       .send(newComment)
       .end((err, res) => {
