@@ -53,6 +53,7 @@ export const loggedInUser = {
   lastName: faker.name.lastName(),
   email: faker.internet.email(),
   password: BcryptService.hashPassword(userPassword),
+  lineManagerId: 31,
   isVerified: true,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -79,6 +80,37 @@ export const createUser = {
   updatedAt: new Date(),
 };
 
+export const lineManager = {
+  id: 31,
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: realUser,
+  password: BcryptService.hashPassword(userPassword),
+  role: 'manager',
+  isVerified: true,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const notAllowedManager = {
+  id: 32,
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: realUser,
+  password: BcryptService.hashPassword(userPassword),
+  role: 'manager',
+  isVerified: true,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const tokenOfNotAllowedManager = JwtService.generateToken({
+  id: notAllowedManager.id,
+  firstName: notAllowedManager.firstName,
+  lastName: notAllowedManager.lastName,
+  email: notAllowedManager.email,
+});
+
 // create a user who does not have a trip
 export const userWithNoTrip = {
   id: 29,
@@ -86,6 +118,7 @@ export const userWithNoTrip = {
   lastName: faker.name.lastName(),
   email: faker.internet.email(),
   password: BcryptService.hashPassword(userPassword),
+  lineManagerId: 6,
   isVerified: true,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -126,6 +159,8 @@ export const createUsers = async () => {
   await Users.create(activeUser);
   await Users.create(createUser);
   await Users.create({ ...loggedInUser, token: loggedInToken });
+  await Users.create(lineManager);
+  await Users.create({ ...notAllowedManager, token: tokenOfNotAllowedManager });
   await Users.create({ ...userWithNoTrip, token: userWithNoTripToken });
 };
 export const cleanDb = async () => {

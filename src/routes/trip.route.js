@@ -15,6 +15,6 @@ router.post('/return-trip', authMiddleware.checkUserLoggedIn, TripValidation, Tr
 router.get('/requests/:userId', authMiddleware.checkUserLoggedIn, requestValidation, TripController.userTripRequestList); // user request list route
 router.post('/multi-city-trips', authMiddleware.checkUserLoggedIn, multiCityTripValidation, TripController.requestMultiCityTrip);
 router.get('/locations', authMiddleware.checkUserLoggedIn, TripController.viewAvailableLocations);
-router.post('/trips/:tripId/comment', authMiddleware.checkUserLoggedIn, UserValidation.validateUserComment, CommentController.addCommentOnTripRequest); // user comment on request trip route
+router.post('/trip-requests/:tripId/comments', authMiddleware.checkUserLoggedIn, UserValidation.validateUserComment, CommentController.addCommentOnTripRequest); // user comment on request trip route
 
 export default router;

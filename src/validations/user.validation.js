@@ -121,14 +121,18 @@ class UserValidation {
 
     const findTrip = await TripService.findTripByProperty({ id });
     const signInUser = JwtService.verifyToken(req.headers.authorization);
+    // user from the signed in ID to give you all user information
+    const user = await UserService.findUserByProperty({ id: signInUser.id });
 
     if (!findTrip) {
       ResponseService.setError(404, `Trip with ID ${id} doesn't exists`);
       return ResponseService.send(res);
     }
+    // line manager for a user who created a trip
+    const lineManger = await UserService.findUserByProperty({ id: findTrip.userId });
 
-    if (signInUser.id !== findTrip.userId) {
-      ResponseService.setError(401, 'You are not allowed to comment on this trip request');
+    if ((user.role === 'requester' && signInUser.id !== findTrip.userId) || (user.role === 'manager' && lineManger.lineManagerId !== signInUser.id)) {
+      ResponseService.setError(401, 'You are not authorized to perform this activity');
       return ResponseService.send(res);
     }
     req.signInUser = signInUser;
