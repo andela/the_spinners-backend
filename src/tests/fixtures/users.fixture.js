@@ -66,6 +66,36 @@ export const loggedInToken = JwtService.generateToken({
   email: loggedInUser.email,
 });
 
+// create managers for management actions
+export const loggedInManager1 = {
+  id: 199,
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: BcryptService.hashPassword(userPassword),
+  isVerified: true,
+  role: 'manager',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+export const managerToken1 = JwtService.generateToken({
+  id: loggedInManager1.id
+});
+export const loggedInManager2 = {
+  id: 198,
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: BcryptService.hashPassword(userPassword),
+  isVerified: true,
+  role: 'manager',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+export const managerToken2 = JwtService.generateToken({
+  id: loggedInManager2.id
+});
+
 // crete real user to that help receive email
 const realUser = 'icyiiddy@gmail.com';
 
@@ -162,6 +192,8 @@ export const createUsers = async () => {
   await Users.create(lineManager);
   await Users.create({ ...notAllowedManager, token: tokenOfNotAllowedManager });
   await Users.create({ ...userWithNoTrip, token: userWithNoTripToken });
+  await Users.create({ ...loggedInManager1, token: managerToken1 });
+  await Users.create({ ...loggedInManager2, token: managerToken2 });
 };
 export const cleanDb = async () => {
   await Users.destroy({ where: {} });
