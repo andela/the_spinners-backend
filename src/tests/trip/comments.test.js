@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import { loggedInToken, userWithNoTripToken, tokenOfNotAllowedManager, createUsers } from '../fixtures/users.fixture';
+import { loggedInToken, userWithNoTripToken, loggedInUser, tokenOfNotAllowedManager, createUsers } from '../fixtures/users.fixture';
 import { newComment, badRequest, noTripFound, createTrip } from '../fixtures/comments.fixture';
 
 chai.should();
@@ -19,7 +19,7 @@ describe('/POST create comment on trip request', () => {
       .send(newComment)
       .end((err, res) => {
         res.body.should.be.an('object');
-        res.body.data.should.have.property('userId').equal(30);
+        res.body.data.should.have.property('userId').equal(loggedInUser.id);
         res.body.data.should.have.property('subjectId').equal(1);
         res.body.data.should.have.property('subjectType').equal('Trip');
         res.body.data.should.have.property('comment');

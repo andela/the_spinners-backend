@@ -3,6 +3,7 @@ import UserService from '../services/user.service';
 import BcryptService from '../services/bcrypt.service';
 import JwtService from '../services/jwt.service';
 import SendEmailService from '../services/send-email.service';
+import PreferenceService from '../services/preference.service';
 
 /**
  *
@@ -35,6 +36,12 @@ class AuthController {
       const data = {
         id, firstName, lastName, email, role, isVerified
       };
+      // Set default notification
+      await PreferenceService.createPreference({
+        userId: id,
+        isEmailNotification: false,
+        isInAppNotification: true
+      });
       SendEmailService.sendAccVerificationLink(email);
       ResponseService.setSuccess(201, 'User created successfully, Visit Your Email To Activate Account', data);
       return ResponseService.send(res);

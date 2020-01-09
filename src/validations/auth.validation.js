@@ -1,6 +1,7 @@
 import Joi from '@hapi/joi';
 import ResponseService from '../services/response.service';
 import JwtService from '../services/jwt.service';
+import transformErrorHandler from '../helpers/transformErrorHandler';
 
 const signupSchema = Joi.object({
   firstName: Joi.string()
@@ -87,29 +88,14 @@ export const validateToken = (req, res, next) => {
   next();
 };
 
-const validateHandler = (schema, body, res, next) => {
-  const { error } = schema.validate(body);
-
-  if (error) {
-    const errors = [];
-    const { details } = error;
-    details.forEach(({ message }) => {
-      errors.push(message.split('"').join(' '));
-    });
-    ResponseService.setError(400, errors);
-    return ResponseService.send(res);
-  }
-  next();
-};
-
 export const validateSignup = (req, res, next) => {
-  validateHandler(signupSchema, req.body, res, next);
+  transformErrorHandler(signupSchema, req.body, res, next);
 };
 export const validateLogin = (req, res, next) => {
-  validateHandler(loginSchema, req.body, res, next);
+  transformErrorHandler(loginSchema, req.body, res, next);
 };
 export const validateResendVerificationLink = (req, res, next) => {
-  validateHandler(resendAcccActivationLinkSchema, req.body, res, next);
+  transformErrorHandler(resendAcccActivationLinkSchema, req.body, res, next);
 };
 
 export default {
