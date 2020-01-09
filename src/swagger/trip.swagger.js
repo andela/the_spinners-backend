@@ -303,3 +303,50 @@
  *         description: No valid token supplied
  *
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   comments:
+ *     type: object
+ *     properties:
+ *       comment:
+ *         type: string
+ *       required:
+ *         - comment
+ */
+
+
+/**
+ * @swagger
+ * /api/trip-requests/{tripId}/comments:
+ *   post:
+ *     tags:
+ *       - trips
+ *     name: Comment on requests trips
+ *     summary: User should be able to comment on requested trip
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - name: tripId
+ *         in: path
+ *       - name: comment
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/comments'
+ *           type: object
+ *     responses:
+ *       '201':
+ *         description: Your comment was submitted successfully
+ *       '401':
+ *         description: You are not authorized to perform this activity
+ *       '404':
+ *         description: Trip ID doesn't exists
+ *
+ */
