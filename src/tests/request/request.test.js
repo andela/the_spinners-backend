@@ -80,3 +80,46 @@ describe('Test rejecting a request:', () => {
       });
   });
 });
+
+describe('Request approval:', () => {
+  before(async () => {
+    await createUsers();
+    await createRequest();
+  });
+  it('Should return status code of 200 on successful request approval', (done) => {
+    chai.request(app)
+      .patch('/api/requests/199/approve')
+      .set('Authorization', managerToken1)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('status');
+        expect(res.body.data.status).eqls('approved');
+        done();
+      });
+  });
+
+  it('Should return status code of 422 for request which is already approved', (done) => {
+    chai.request(app)
+      .patch('/api/requests/199/approve')
+      .set('Authorization', managerToken1)
+      .end((err, res) => {
+        expect(res).to.have.status(422);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).eqls('This request is already approved');
+        done();
+      });
+  });
+  it('Should get requests to a manager', (done) => {
+    chai.request(app)
+      .get('/api/requests/manager/pending')
+      .set('Authorization', managerToken1)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).eqls('List of pending requests');
+        expect(res.body).to.have.property('data');
+        done();
+      });
+  });
+});

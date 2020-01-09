@@ -46,6 +46,21 @@ class RequestService {
       returning: true
     });
   }
+
+  /**
+   *
+   * @static
+   * @param {property} property
+   * @memberof TripService
+   * @returns {object} this function finds all
+   */
+  static findAllByProperty(property) {
+    return Request.findAll({
+      where: {
+        ...property
+      }
+    });
+  }
 }
 
 

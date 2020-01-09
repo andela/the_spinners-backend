@@ -32,5 +32,9 @@ export default async (req, res, next) => {
     ResponseService.setError(422, 'This request is already rejected');
     return ResponseService.send(res);
   }
+  if (req.route.path === '/:requestId/approve' && isRequestExist.dataValues.status === 'approved') {
+    ResponseService.setError(422, 'This request is already approved');
+    return ResponseService.send(res);
+  }
   next();
 };
