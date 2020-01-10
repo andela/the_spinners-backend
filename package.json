@@ -6,7 +6,9 @@
   "nyc": {
     "exclude": [
       "src/database/*",
-      "src/models"
+      "src/models",
+      "src/helpers/eventEmmiters/emitter.js",
+      "src/tests"
     ],
     "sourceMap": false,
     "instrument": false
@@ -80,6 +82,9 @@
     "sequelize-cli": "^5.5.1",
     "sinon": "^8.0.1",
     "sinon-chai": "^3.3.0",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "socketio-jwt": "^4.5.0",
     "swagger-jsdoc": "^3.4.0",
     "swagger-ui-express": "^4.1.2",
     "test-exclude": "^5.2.3"

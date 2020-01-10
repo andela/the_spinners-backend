@@ -11,6 +11,14 @@ const authMiddleware = {
     }
     next();
   },
+  checkIfUserHaveManager: async (req, res, next) => {
+    const { lineManagerId } = await UserService.findUserByProperty({ email: req.userData.email });
+    if (lineManagerId === null || lineManagerId === undefined) {
+      ResponseService.setError(403, 'You don\'t have manager assigned yet. Please contact Admin');
+      return ResponseService.send(res);
+    }
+    next();
+  },
   checkUserLoggedIn: async (req, res, next) => {
     const token = req.headers.authorization;
 

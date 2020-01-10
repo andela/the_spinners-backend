@@ -1,5 +1,6 @@
 import faker from 'faker';
 import models from '../../models';
+import { loggedInUser } from './users.fixture';
 
 const { Trip } = models;
 
@@ -17,7 +18,7 @@ export const noTripFound = {
 };
 
 const newTrip = {
-  userId: 30,
+  userId: loggedInUser.id,
   tripType: 'one-way',
   departure: faker.address.city(),
   destination: faker.address.city(),

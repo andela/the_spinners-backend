@@ -29,6 +29,23 @@ export default (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
+    Users.hasMany(models.Notifications, {
+      foreignKey: 'userId',
+      targetKey: 'id',
+      onDelete: 'CASCADE',
+    });
+    Users.hasOne(models.Preferences, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+    });
+    Users.hasMany(models.Users, {
+      foreignKey: 'lineManagerId',
+      onDelete: 'CASCADE'
+    });
+    Users.belongsTo(models.Users, {
+      foreignKey: 'lineManagerId',
+      as: 'LineManagerId',
+    });
   };
   return Users;
 };
