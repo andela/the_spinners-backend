@@ -1,5 +1,6 @@
 import RequestService from '../services/request.service';
 import ResponseService from '../services/response.service';
+import emitter from '../helpers/eventEmmiters/emitter';
 
 /**
  *
@@ -27,6 +28,7 @@ class RequestController {
    */
   static async updateRequestStatus(req, res) {
     const [, [{ dataValues }]] = await RequestService.updateRequest({ id: req.params.requestId }, { status: `${req.body.status}` });
+    emitter.emit('request-updated', dataValues);
     ResponseService.setSuccess(200, `Request has successfully ${dataValues.status}`, dataValues);
     return ResponseService.send(res);
   }

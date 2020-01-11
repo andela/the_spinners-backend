@@ -9,7 +9,7 @@ const { Location } = models;
  */
 class LocationService {
   /**
- * find Location
+ * find One Location
  * @static
  * @param {object} property
  * @memberof LocationService
@@ -17,7 +17,20 @@ class LocationService {
  */
   static findLocationByProperty(property) {
     return Location.findOne({
-      where: { ...property }
+      where: property
+    });
+  }
+
+  /**
+* find All Locations
+* @static
+* @param {object} property
+* @memberof LocationService
+* @returns {object} data
+*/
+  static findAllLocationByProperty(property) {
+    return Location.findAll({
+      where: property
     });
   }
 }
