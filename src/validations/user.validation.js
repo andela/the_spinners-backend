@@ -138,6 +138,47 @@ class UserValidation {
     req.signInUser = signInUser;
     next();
   }
+
+  /**
+   *
+   *
+   * @static
+   * @param {req} req
+   * @param {req} res
+   * @param {next} next
+   * @memberof UserValidation
+   * @returns {validation} this function validate delete comment route
+   */
+  static async validateDeleteTripComment(req, res, next) {
+    const schema = Joi.object({
+      tripId: Joi.number().integer().required()
+        .messages({
+          'number.base': 'Trip ID must be a number',
+          'number.unsafe': 'Trip ID must be a safe number',
+          'any.required': 'Trip ID is required'
+        }),
+      commentId: Joi.number().integer().required()
+        .messages({
+          'number.base': 'Comment ID must be a number',
+          'number.unsafe': 'Comment ID must be a safe number',
+          'any.required': 'Comment ID is required'
+        }),
+      subjectType: Joi.string().valid('Trip', 'Accomodation').required()
+        .messages({
+          'any.only': 'Subject Type must be one of [Trip, Accomodation]',
+          'string.empty': 'Subject Type is not allowed to be empty',
+          'any.required': 'Subject Type is required'
+        })
+    }).options({ abortEarly: false });
+
+    const { error } = schema.validate({ ...req.params, ...req.body });
+    if (error) {
+      const errMessages = error.details.map((err) => (err.message));
+      ResponseService.setError(400, errMessages);
+      return ResponseService.send(res);
+    }
+    next();
+  }
 }
 
 export default UserValidation;

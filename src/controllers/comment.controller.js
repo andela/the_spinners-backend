@@ -24,6 +24,23 @@ class CommentController {
     ResponseService.setSuccess(201, 'Your comment was submitted successfully', commentInformation);
     return ResponseService.send(res);
   }
+
+
+  /**
+   *
+   *
+   * @static
+   * @param {req} req
+   * @param {req} res
+   * @memberof CommentController
+   * @returns {object} this function deletes comment on posted on thread
+   */
+  static async deleteComment(req, res) {
+    await CommentService
+      .deleteCommentByProperty({ id: req.params.commentId, subjectType: req.body.subjectType });
+    ResponseService.setSuccess(200, 'Comment was deleted successfully');
+    return ResponseService.send(res);
+  }
 }
 
 export default CommentController;
