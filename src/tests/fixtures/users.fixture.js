@@ -96,6 +96,7 @@ export const userWithoutManager = {
   createdAt: new Date(),
   updatedAt: new Date(),
 };
+
 export const loggedInToken2 = JwtService.generateToken({
   id: userWithoutManager.id,
   firstName: userWithoutManager.firstName,

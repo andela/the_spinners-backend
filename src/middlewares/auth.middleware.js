@@ -40,6 +40,14 @@ const authMiddleware = {
       ResponseService.setError(401, 'No Token supplied');
       return ResponseService.send(res);
     }
+  },
+  checkIfUserIsManager: async (req, res, next) => {
+    const { role } = await UserService.findUserByProperty({ id: req.userData.id });
+    if (role !== 'manager') {
+      ResponseService.setError(403, 'Forbidden. Only Managers can perform this action');
+      return ResponseService.send(res);
+    }
+    next();
   }
 };
 
