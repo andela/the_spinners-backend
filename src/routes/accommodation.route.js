@@ -5,7 +5,7 @@ import bookAccommodationValidation from '../validations/accommodation.validation
 
 const router = express.Router();
 
-router.post('/', authMiddleware.checkUserLoggedIn, bookAccommodationValidation, AccommodationController.createAccommodation);
-router.get('/types', authMiddleware.checkUserLoggedIn, AccommodationController.getAccommodationType);
+router.post('/:accommodationId/book', authMiddleware.checkUserLoggedIn, bookAccommodationValidation, AccommodationController.createBooking);
+router.get('/', authMiddleware.checkUserLoggedIn, AccommodationController.getAccommodations);
 
 export default router;

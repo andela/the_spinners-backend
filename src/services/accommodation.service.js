@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Accommodation, AccommodationType } = models;
+const { Accommodation, Booking } = models;
 
 /**
  *
@@ -12,33 +12,33 @@ class AccommodationService {
          *
          *
          * @static
-         * @param {newAccommodation} newAccommodation
-         * @returns {newAccommodation} @memberof AccommodationService
+         * @param {newBooking} newBooking
+         * @returns {newBooking} @memberof AccommodationService
          */
-  static createAccommodation(newAccommodation) {
-    return Accommodation.create(newAccommodation);
+  static createBooking(newBooking) {
+    return Booking.create(newBooking);
   }
 
   /**
-   * find AccommodationType
+   * find Accommodation
    * @static
    * @param {object} property
    * @memberof AccommodationService
    * @returns {object} data
    */
-  static findAllType() {
-    return AccommodationType.findAll();
+  static findAllAccommodations() {
+    return Accommodation.findAll();
   }
 
   /**
-   * find AccommodationType
+   * find Accommodation
    * @static
    * @param {object} property
    * @memberof AccommodationService
    * @returns {object} data
    */
-  static findTypeByProperty(property) {
-    return AccommodationType.findOne({
+  static findAccommodationByProperty(property) {
+    return Accommodation.findOne({
       where: { ...property }
     });
   }

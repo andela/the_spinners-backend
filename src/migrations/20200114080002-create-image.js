@@ -1,12 +1,15 @@
-export const up = (queryInterface, Sequelize) => queryInterface.createTable('AccommodationImages', {
+export const up = (queryInterface, Sequelize) => queryInterface.createTable('Images', {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: Sequelize.INTEGER
   },
-  accommodationId: {
+  subjectId: {
     type: Sequelize.INTEGER
+  },
+  subjectType: {
+    type: Sequelize.STRING
   },
   imageUrl: {
     type: Sequelize.STRING
@@ -25,4 +28,4 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Acc
  * @class
  * @param {object} queryInterface
  */
-export function down(queryInterface) { return queryInterface.dropTable('AccommodationImages'); }
+export function down(queryInterface) { return queryInterface.dropTable('Images'); }

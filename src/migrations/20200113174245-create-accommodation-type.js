@@ -5,26 +5,8 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Acc
     primaryKey: true,
     type: Sequelize.INTEGER
   },
-  name: {
+  type: {
     type: Sequelize.STRING
-  },
-  category: {
-    type: Sequelize.STRING
-  },
-  rating: {
-    type: Sequelize.INTEGER
-  },
-  locationId: {
-    type: Sequelize.INTEGER
-  },
-  numberOfPeople: {
-    type: Sequelize.INTEGER
-  },
-  numberOfRooms: {
-    type: Sequelize.INTEGER
-  },
-  isAvailable: {
-    type: Sequelize.BOOLEAN,
   },
   createdAt: {
     allowNull: false,
