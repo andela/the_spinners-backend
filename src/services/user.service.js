@@ -41,7 +41,8 @@ class UserService {
    */
   static updateUser(user, userInfo) {
     return Users.update(userInfo, {
-      where: user
+      where: user,
+      returning: true
     });
   }
 }

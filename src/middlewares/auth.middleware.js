@@ -48,6 +48,15 @@ const authMiddleware = {
       return ResponseService.send(res);
     }
     next();
+  },
+  verifyIfUserIsAdmin: async (req, res, next) => {
+    const userToken = req.userData;
+    const userData = await UserService.findUserByProperty({ email: userToken.email });
+    if (userData.role !== 'super_admin') {
+      ResponseService.setError(403, 'Only super admin can reset user role');
+      return ResponseService.send(res);
+    }
+    next();
   }
 };
 
