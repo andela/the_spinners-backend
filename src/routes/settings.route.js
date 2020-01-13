@@ -5,6 +5,6 @@ import { validateUserRole } from '../validations/role.validation';
 
 const router = express.Router();
 
-router.patch('/reset-roles', authMiddleware.checkUserLoggedIn, validateUserRole, authMiddleware.verifyIfUserIsAdmin, SettingsController.changeUserRole);
+router.patch('/roles', authMiddleware.checkUserLoggedIn, validateUserRole, authMiddleware.verifyIfUserIsAdmin, SettingsController.changeUserRole);
 
 export default router;

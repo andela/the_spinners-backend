@@ -13,7 +13,7 @@
 
 /**
  * @swagger
- * /api/users/settings/reset-roles:
+ * /api/users/settings/roles:
  *   patch:
  *     tags:
  *       - User

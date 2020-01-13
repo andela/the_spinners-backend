@@ -15,7 +15,7 @@ export const signupFixtures = {
 
 export const signedUpUserToken = JwtService.generateToken({ email: signupFixtures.email });
 export const unregisteredEmail = {
-  email: 'higustave123@gmail.com'
+  email: faker.internet.email()
 };
 export const unregisteredUserToken = JwtService.generateToken({ email: unregisteredEmail });
 export const signupExpiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhpZ3VzdGF2ZUBnbWFpbC5jb20iLCJpYXQiOjE1NzcxOTg5MjUsImV4cCI6MTU3NzE5ODkyNX0.cAYmYykkBtddmq7YyP3OKVrtVXwCrpxBxhFPJNDUYxE';
@@ -115,6 +115,31 @@ export const lineManager = {
   createdAt: new Date(),
   updatedAt: new Date(),
 };
+export const superAdminTestData = {
+  id: faker.random.number({ min: 1000, max: 1001 }),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+  gender: faker.random.arrayElement(['M', 'F']),
+  birthDate: faker.date.past(19),
+  preferredLanguage: faker.random.arrayElement(['english', 'french']),
+  preferredCurrency: faker.random.arrayElement(['Pound', 'Euro', 'Dollar']),
+  residence: faker.address.country(),
+  department: faker.commerce.department(),
+  role: faker.random.arrayElement(['super_admin']),
+  profilePicture: faker.image.imageUrl(),
+  isVerified: true,
+  createdAt: new Date(),
+  updatedAt: new Date()
+};
+
+export const superAdminToken = JwtService.generateToken({
+  id: superAdminTestData.id,
+  email: superAdminTestData.email,
+  firstName: superAdminTestData.firstName,
+  lastName: superAdminTestData.lastName
+});
 
 export const notAllowedManager = {
   id: 32,
@@ -187,8 +212,25 @@ export const token = JwtService.generateToken({
   id: activeUser.id,
   firstName: activeUser.firstName,
   lastName: activeUser.lastName,
-  email: activeUser.email });
+  email: activeUser.email
+});
+export const unverifiedUser = {
+  id: faker.random.number({ min: 910, max: 911 }),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: BcryptService.hashPassword(userPassword),
+  isVerified: false,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
 
+export const univerifiedUserToken = JwtService.generateToken({
+  id: unverifiedUser.id,
+  firstName: unverifiedUser.firstName,
+  lastName: unverifiedUser.lastName,
+  email: unverifiedUser.email
+});
 export const createUsers = async () => {
   await Users.destroy({ where: {} });
   await Preferences.destroy({ where: {} });
@@ -203,6 +245,8 @@ export const createUsers = async () => {
   await Preferences
     .create({ isEmailNotification: false, isInAppNotification: false, userId: createUser.id });
   await Preferences.create({ ...defaultPreferences, userId: loggedInUser.id });
+  await Users.create({ ...unverifiedUser, token: univerifiedUserToken });
+  await Users.create({ ...superAdminTestData, token: superAdminToken });
 };
 export const cleanDb = async () => {
   await Users.destroy({ where: {} });
@@ -234,12 +278,24 @@ export const OAuthTokens = {
   refreshToken: 'fruyfg78w43gf78w4gfwf8hw43hf89hf8',
 };
 
+const fakerDate = faker.date.past(10, new Date(1990, 0, 1));
+const month = (`0${fakerDate.getMonth() + 1}`).slice(-2);
+const date = (`0${fakerDate.getDate()}`).slice(-2);
+const formattedDate = `${fakerDate.getFullYear()}-${month}-${date}`;
+
 export const userData = {
-  gender: 'M',
-  birthDate: '1990-10-17',
-  preferredLanguage: 'french',
-  preferredCurrency: 'Euro',
-  residence: 'Kigali',
-  department: 'IT',
-  profilePicture: 'https://res.cloudinary.com/higustave/image/upload/v1578147858/jju0kvgyb8a3nrj8j5oz.jpg'
+  gender: faker.random.arrayElement(['M']),
+  birthDate: formattedDate,
+  preferredLanguage: faker.random.arrayElement(['french', 'english']),
+  preferredCurrency: faker.random.arrayElement(['Euro', 'Pound', 'Dollar']),
+  residence: faker.random.arrayElement(['Rwanda', 'Kenya', 'Uganda', 'Burindi']),
+  department: faker.commerce.department(),
+  profilePicture: faker.image.imageUrl()
 };
+
+export const newRoleData = {
+  userEmail: createUser.email,
+  userRole: faker.random.arrayElement(['travel_admin', 'travel_team_member', 'manager', 'requester'])
+};
+
+export const newUserEmail = faker.internet.email();

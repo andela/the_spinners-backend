@@ -20,9 +20,7 @@ class SettingsController {
     const findUser = await UserService.findUserByProperty({ email: userEmail.trim() });
     if (findUser && findUser.role !== 'super_admin') {
       await UserService.updateUser({ email: userEmail.trim() }, { role: userRole.trim() });
-      const data = await UserService.findUserByProperty({ email: userEmail.trim() });
-      const { role } = data;
-      ResponseService.setSuccess(200, 'User role successfully updated', { role });
+      ResponseService.setSuccess(200, 'User role successfully updated', { role: userRole });
       ResponseService.send(res);
     } else {
       ResponseService.setError(404, `User role not updated. ${userEmail.trim()} is either a super admin or Not Registered`);
