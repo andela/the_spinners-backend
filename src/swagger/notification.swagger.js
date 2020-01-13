@@ -55,3 +55,61 @@
  *         description: No Token supplied
  *
  */
+
+/**
+ * @swagger
+ * /api/notifications/mark-all-as-read:
+ *   patch:
+ *     tags:
+ *       - Notification
+ *     name: Mark all notifications as read
+ *     summary: Mark all notifications as read
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *         required: true
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: Your Notifications have been retrieved successfully
+ *       '401':
+ *         description: No Token supplied
+ *
+ */
+
+/**
+ * @swagger
+ * /api/notifications/mark-as-read/{id}:
+ *   patch:
+ *     tags:
+ *       - Notification
+ *     name: Mark notification as read by ID
+ *     summary: Mark one notifications as read
+ *     parameters:
+ *       - name: Authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - name: id
+ *         in: path
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         minimum: 1
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: Your Notifications have been retrieved successfully
+ *       '401':
+ *         description: No Token supplied
+ *
+ */

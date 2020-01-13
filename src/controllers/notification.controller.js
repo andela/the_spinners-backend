@@ -42,5 +42,33 @@ class NotificationController {
     ResponseService.setSuccess(200, 'Your Notifications have been retrieved successfully', data);
     return ResponseService.send(res);
   }
+
+  /**
+   * @param {object} req request
+   * @param {object} res response
+   * @return {function} requests
+   */
+  static async markAllAsRead(req, res) {
+    await NotificationService.updateNotification(
+      { isRead: true },
+      { userId: req.userData.id }
+    );
+    ResponseService.setSuccess(200, 'Notifications successfully marked as read');
+    return ResponseService.send(res);
+  }
+
+  /**
+   * @param {object} req request
+   * @param {object} res response
+   * @return {function} requests
+   */
+  static async markOneAsRead(req, res) {
+    await NotificationService.updateNotification(
+      { isRead: true },
+      { id: req.params.id, userId: req.userData.id }
+    );
+    ResponseService.setSuccess(200, 'Notification successfully marked as read');
+    return ResponseService.send(res);
+  }
 }
 export default NotificationController;
