@@ -54,6 +54,7 @@ class RequestService {
   static updateRequest(requestId, requestInfo) {
     return Request.update(requestInfo, {
       where: requestId,
+      individualHooks: true,
       returning: true
     });
   }

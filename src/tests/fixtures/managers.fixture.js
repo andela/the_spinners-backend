@@ -2,8 +2,9 @@ import faker from 'faker';
 import BcryptService from '../../services/bcrypt.service';
 import JwtService from '../../services/jwt.service';
 import models from '../../models';
+import { defaultPreferences } from './users.fixture';
 
-const { Users } = models;
+const { Users, Preferences } = models;
 
 // create managers for management actions
 export const loggedInManager1 = {
@@ -53,5 +54,7 @@ export const createManagers = async () => {
   const manager1 = await Users.create({ ...loggedInManager1, token: managerToken1 });
   await Users.create({ ...loggedInManager2, token: managerToken2 });
   await Users.create({ ...loggedInNonManager, token: nonManagerToken });
+  await Preferences.create({ ...defaultPreferences, userId: loggedInManager1.id });
+  await Preferences.create({ ...defaultPreferences, userId: loggedInManager2.id });
   return manager1.dataValues;
 };
