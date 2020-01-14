@@ -17,6 +17,19 @@ class RequestController {
     ResponseService.setSuccess(200, 'List request directed to you', requests);
     return ResponseService.send(res);
   }
+
+  /**
+   *
+   * @static
+   * @param {req} req
+   * @param {res} res
+   * @returns {response} @memberof RequestController
+   */
+  static async updateRequestStatus(req, res) {
+    const [, [{ dataValues }]] = await RequestService.updateRequest({ id: req.params.requestId }, { status: `${req.body.status}` });
+    ResponseService.setSuccess(200, `Request has successfully ${dataValues.status}`, dataValues);
+    return ResponseService.send(res);
+  }
 }
 
 export default RequestController;

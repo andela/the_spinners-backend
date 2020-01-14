@@ -30,6 +30,33 @@ class RequestService {
       order: [['status', 'ASC'], ['createdAt', 'DESC']]
     });
   }
+
+  /** find Request
+   * @static
+   * @param {object} property
+   * @memberof AccommodationService
+   * @returns {object} data
+   */
+  static findRequestByProperty(property) {
+    return Request.findOne({
+      where: { ...property }
+    });
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @param {item} requestId request column to be updated
+   * @param {value} requestInfo to be updated
+   * @returns {updated} @memberof RequestService
+   */
+  static updateRequest(requestId, requestInfo) {
+    return Request.update(requestInfo, {
+      where: requestId,
+      returning: true
+    });
+  }
 }
 
 

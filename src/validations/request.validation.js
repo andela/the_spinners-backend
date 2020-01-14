@@ -3,6 +3,7 @@ import ResponseService from '../services/response.service';
 import JwtService from '../services/jwt.service';
 import UserService from '../services/user.service';
 import TripService from '../services/trip.service';
+import RequestService from '../services/request.service';
 
 /**
  * @param {req} req
@@ -10,7 +11,7 @@ import TripService from '../services/trip.service';
  * @param {next} next
  * @returns {validation} this function validate request route
 */
-async function requestValidation(req, res, next) {
+export async function requestValidation(req, res, next) {
   const signInUser = JwtService.verifyToken(req.headers.authorization);
   const { userId } = req.params;
 
@@ -50,4 +51,34 @@ async function requestValidation(req, res, next) {
   next();
 }
 
-export default requestValidation;
+export const validateChangingRequestStatus = async (req, res, next) => {
+  const schema = Joi.object({
+    requestId: Joi.number().required(),
+    status: Joi.string().valid('approved', 'rejected').trim()
+      .messages({
+        'any.only': 'status" must be one of approved or rejected'
+      })
+      .required()
+  }).options({ abortEarly: false });
+
+  const results = schema.validate({ ...req.params, ...req.body });
+  if (results.error) {
+    const errorMessages = results.error.details.map((error) => error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
+    ResponseService.setError(400, errorMessages);
+    return ResponseService.send(res);
+  }
+  const isRequestExist = await RequestService.findRequestByProperty({ id: req.params.requestId });
+  if (!isRequestExist) {
+    ResponseService.setError(404, 'This request does not exist');
+    return ResponseService.send(res);
+  }
+  if (isRequestExist.dataValues.lineManagerId !== req.userData.id) {
+    ResponseService.setError(403, 'Forbidden. you are not line manager of this request');
+    return ResponseService.send(res);
+  }
+  if (req.body.status === isRequestExist.dataValues.status) {
+    ResponseService.setError(422, `This request is already ${req.body.status}`);
+    return ResponseService.send(res);
+  }
+  next();
+};

@@ -4,7 +4,7 @@ import CommentController from '../controllers/comment.controller';
 import oneWayTripValidation from '../validations/one-way-trip.validation';
 import authMiddleware from '../middlewares/auth.middleware';
 import TripValidation from '../validations/trip.validation';
-import requestValidation from '../validations/request.validation';
+import { requestValidation } from '../validations/request.validation';
 import multiCityTripValidation from '../validations/multi-city-trip.validation';
 import UserValidation from '../validations/user.validation';
 

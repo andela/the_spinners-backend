@@ -18,6 +18,7 @@ export const noTripFound = {
 };
 
 const newTrip = {
+  id: faker.random.number({ min: 20, max: 50 }),
   userId: loggedInUser.id,
   tripType: 'one-way',
   departure: faker.address.city(),
@@ -29,5 +30,6 @@ const newTrip = {
 
 export const createTrip = async () => {
   await Trip.destroy({ where: {} });
-  await Trip.create(newTrip);
+  const { dataValues } = await Trip.create(newTrip);
+  return dataValues;
 };
