@@ -1,8 +1,8 @@
 import TripService from '../services/trip.service';
 import ResponseService from '../services/response.service';
-import JwtService from '../services/jwt.service';
 import RequestService from '../services/request.service';
 import UserService from '../services/user.service';
+import { paginationHelper } from '../helpers';
 
 /**
  *
@@ -35,21 +35,20 @@ class TripController {
    * @returns {response} @memberof Trips
    */
   static async requestReturnTrip(req, res) {
-    const signInUser = JwtService.verifyToken(req.headers.authorization);
     const {
-      departure, destination, travelDate, returnDate, travelReasons, accommodation
+      originId, destinationId, departureDate, returnDate, travelReasons, accommodationId
     } = req.body;
 
     const returnTrip = {
       tripId: req.tripId,
-      userId: signInUser.id,
+      userId: req.userData.id,
       tripType: 'return-trip',
-      departure,
-      destination,
-      travelDate,
+      originId,
+      destinationId,
+      departureDate,
       returnDate,
       travelReasons,
-      accommodation,
+      accommodationId,
       status: 'pending'
     };
     await TripService.createTrip(returnTrip);
@@ -63,9 +62,18 @@ class TripController {
    * @returns {requestLists} this function returns user request Lists
   */
   static async userTripRequestList(req, res) {
-    const { userId } = req.params;
-    const trips = await TripService.findAllByProperty({ userId });
-    ResponseService.setSuccess(200, 'List of requested trips', trips);
+    const userId = req.userData.id;
+    const { page, limit } = req.query;
+    const offset = (page - 1) * limit;
+
+    const results = await TripService.findByPropertyAndCountAll({ userId }, { offset, limit });
+
+    ResponseService.setSuccess(200, 'List of requested trips', {
+      pageMeta: paginationHelper({
+        count: results.count, rows: results.rows, offset, limit
+      }),
+      rows: results.rows
+    });
     return ResponseService.send(res);
   }
 

@@ -12,7 +12,7 @@ describe('Test getting locations:', () => {
   });
   it('Should return status code of 200 with all available locations', (done) => {
     chai.request(app)
-      .get('/api/locations')
+      .get('/api/trips/locations')
       .set('Authorization', loggedInToken)
       .end((err, res) => {
         expect(res).to.have.status(200);

@@ -1,7 +1,5 @@
 import Joi from '@hapi/joi';
 import ResponseService from '../services/response.service';
-import JwtService from '../services/jwt.service';
-import UserService from '../services/user.service';
 import TripService from '../services/trip.service';
 import RequestService from '../services/request.service';
 
@@ -12,37 +10,37 @@ import RequestService from '../services/request.service';
  * @returns {validation} this function validate request route
 */
 export async function requestValidation(req, res, next) {
-  const signInUser = JwtService.verifyToken(req.headers.authorization);
-  const { userId } = req.params;
+  const page = parseInt(req.query.page, 10);
+  const limit = parseInt(req.query.limit, 10);
 
   const schema = Joi.object({
-    userId: Joi.string().max(11).regex(/^[0-9]{1,11}$/)
+    page: Joi.number().greater(0).required()
       .messages({
-        'string.max': 'User ID length must be less than or equal to 11 characters long',
-        'string.pattern.base': 'Invalid, ID must contain only numbers'
+        'number.greater': 'Page must be greater than 0',
+        'object.unknown': `${page} is not allowed`,
+        'any.required': 'Page is required',
+        'number.base': 'Page must be a number'
+      }),
+    limit: Joi.number().greater(0).required()
+      .messages({
+        'number.greater': 'Limit must be greater than 0',
+        'object.unknown': `${limit} is not allowed`,
+        'any.required': 'Limit is required',
+        'number.base': 'Limit must be a number'
       })
-  });
+  }).options({ abortEarly: false });
 
-  const { error } = schema.validate(req.params);
+  const { error } = schema.validate(req.query);
   if (error) {
-    ResponseService.setError(400, error.details[0].message);
+    const { details } = error;
+    const errors = details.map(({ message }) => message.replace(/[^a-zA-Z0-9 .-]/g, ''));
+    ResponseService.setError(400, errors);
     return ResponseService.send(res);
   }
 
-  const user = await UserService.findUserByProperty({ id: userId });
   const trip = await TripService.findTripByProperty({
-    userId
+    userId: req.userData.id
   });
-
-  if (!user) {
-    ResponseService.setError(404, 'User ID does not exists');
-    return ResponseService.send(res);
-  }
-
-  if (Number(userId) !== signInUser.id) {
-    ResponseService.setError(401, 'Unauthorized, the ID does not match the signed in user ID');
-    return ResponseService.send(res);
-  }
 
   if (!trip) {
     ResponseService.setError(404, 'You didn\'t create a trip, please create one');

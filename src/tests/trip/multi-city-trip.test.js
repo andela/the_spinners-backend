@@ -13,7 +13,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 201 on successful trip creation', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send(multiCitytrip)
       .end((err, res) => {
@@ -30,7 +30,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 409 with message that trip already created', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send(multiCitytrip)
       .end((err, res) => {
@@ -41,7 +41,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 on invalid input into originId', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([...multiCitytrip, { ...multiCitytrip[0], originId: 'hh' }])
       .end((err, res) => {
@@ -52,7 +52,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 on invalid input into destinationId', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([...multiCitytrip, { ...multiCitytrip[0], destinationId: 'hh' }])
       .end((err, res) => {
@@ -63,7 +63,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 on invalid input into departure date', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([...multiCitytrip, { ...multiCitytrip[0], departureDate: 'hh' }])
       .end((err, res) => {
@@ -74,7 +74,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 on invalid input into travel reasons', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([...multiCitytrip, { ...multiCitytrip[0], travelReasons: 'hh234' }])
       .end((err, res) => {
@@ -85,7 +85,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 on invalid input into accommodation', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([...multiCitytrip, { ...multiCitytrip[0], accommodationId: 'hh' }])
       .end((err, res) => {
@@ -96,7 +96,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 when he enters only one destination for multi city trip', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([{ ...multiCitytrip[0] }])
       .end((err, res) => {
@@ -107,7 +107,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 on unavailable location', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([...multiCitytrip, { ...multiCitytrip[0], originId: 999 }])
       .end((err, res) => {
@@ -118,7 +118,7 @@ describe('Test multi city trip:', () => {
   });
   it('Should return status code of 400 when next destination is not the same as previous origin', (done) => {
     chai.request(app)
-      .post('/api/multi-city-trips')
+      .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
       .send([...multiCitytrip, { ...multiCitytrip[0], destinationId: 3 }])
       .end((err, res) => {

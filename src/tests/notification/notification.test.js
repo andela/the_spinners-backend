@@ -168,7 +168,7 @@ describe('Tests notification preferences', () => {
 
   it('Should not accept requests with no manager', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', loggedInToken2)
       .send({ ...newTrip, travelDate: formattedDate })
       .end((err, res) => {
@@ -181,7 +181,7 @@ describe('Tests notification preferences', () => {
   });
   it('Should return status code of 201 on successful trip creation', (done) => {
     chai.request(app)
-      .post('/api/one-way-trips')
+      .post('/api/trips/one-way')
       .set('Authorization', token)
       .send({ ...newTrip, departureDate: formattedDate })
       .end((err, res) => {
