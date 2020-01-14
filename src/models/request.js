@@ -15,7 +15,7 @@ export default (sequelize, DataTypes) => {
     Request.hasMany(models.Trip, { foreignKey: 'requestId', targetKey: 'id', as: 'trip' });
   };
   Request.afterUpdate((data) => {
-    emitter.emit('request-updated', data);
+    emitter.emit('request-status-updated', data);
   });
   return Request;
 };
