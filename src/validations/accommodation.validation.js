@@ -7,7 +7,7 @@ const Joi = joiBase.extend(joiDate);
 
 export default async (req, res, next) => {
   const schema = Joi.object({
-    typeId: Joi.number(),
+    accommodationId: Joi.number(),
     from: Joi.date().greater('now').utc().format('YYYY-MM-DD')
       .required()
       .messages({
@@ -24,24 +24,21 @@ export default async (req, res, next) => {
       })
   }).options({ abortEarly: false });
 
-  const results = schema.validate({ ...req.body });
-  const errorMessages = [];
+  const results = schema.validate({ ...req.body, ...req.params });
   if (results.error) {
-    results.error.details.forEach((error) => {
-      errorMessages.push(error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
-    });
-  }
-  if (errorMessages.length !== 0) {
+    const errorMessages = results.error.details.map((error) => error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
     Response.setError(400, errorMessages);
     return Response.send(res);
   }
-  const isTypeExist = await AccommodationService.findTypeByProperty({ id: req.body.typeId });
-  if (!isTypeExist) {
-    Response.setError(404, 'this accommodation type id does not exist');
+  const isAccommodationExist = await AccommodationService.findAccommodationByProperty({
+    id: req.params.accommodationId
+  });
+  if (!isAccommodationExist) {
+    Response.setError(404, 'this accommodation id does not exist');
     return Response.send(res);
   }
-  if (!isTypeExist.isAvailable) {
-    Response.setError(422, 'this accommodation type is not available');
+  if (!isAccommodationExist.isAvailable) {
+    Response.setError(422, 'this accommodation is not available');
     return Response.send(res);
   }
   next();

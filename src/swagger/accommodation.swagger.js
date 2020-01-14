@@ -9,7 +9,7 @@
 
 /**
  * @swagger
- * /api/accommodations/types:
+ * /api/accommodations:
  *   get:
  *     tags:
  *       - accommodation
@@ -37,21 +37,18 @@
 *   Accommodation:
 *     type: object
 *     properties:
-*       typeId:
-*         type: integer
 *       from:
 *         type: string
 *       to:
 *         type: string
 *     required:
-*         - typeId
 *         - from
 *         - to
 */
 
 /**
  * @swagger
- * /api/accommodations:
+ * /api/accommodations/{accommodationId}/book:
  *   post:
  *     tags:
  *       - accommodation
@@ -66,6 +63,8 @@
  *         in: header
  *         schema:
  *              type: string
+ *       - name: accommodationId
+ *         in: path
  *       - name: body
  *         in: body
  *         schema:
@@ -78,12 +77,11 @@
  *           to:
  *              type: string
  *         required:
- *              - typeId
  *              - from
  *              - to
  *     responses:
  *       '201':
- *         description: accommodation created successfully
+ *         description: accommodation booked successfully
  *       '400':
  *         description: invalid inputs.
  *       '401':

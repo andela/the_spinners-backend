@@ -15,9 +15,13 @@ class AccommodationController {
            * @param {res} res
            * @returns {response} @memberof AccommodationController
            */
-  static async createAccommodation(req, res) {
-    const { dataValues } = await AccommodationService.createAccommodation({ ...req.body });
-    ResponseService.setSuccess(201, 'Accommodation is successfully created', dataValues);
+  static async createBooking(req, res) {
+    const { dataValues } = await AccommodationService.createBooking({
+      ...req.body,
+      userId: req.userData.id,
+      accommodationId: req.params.accommodationId
+    });
+    ResponseService.setSuccess(201, 'Accommodation is successfully booked', dataValues);
     return ResponseService.send(res);
   }
 
@@ -29,13 +33,13 @@ class AccommodationController {
            * @param {res} res
            * @returns {response} @memberof AccommodationController
            */
-  static async getAccommodationType(req, res) {
-    const accommodationtypes = await AccommodationService.findAllType();
-    const availableAccommodationTypes = accommodationtypes.map((type) => {
-      const { dataValues } = type;
+  static async getAccommodations(req, res) {
+    const accommodations = await AccommodationService.findAllAccommodations();
+    const availableAccommodations = accommodations.map((accommodation) => {
+      const { dataValues } = accommodation;
       return dataValues;
     });
-    ResponseService.setSuccess(200, 'list of available accommodation types', availableAccommodationTypes);
+    ResponseService.setSuccess(200, 'list of available accommodations', availableAccommodations);
     return ResponseService.send(res);
   }
 }
