@@ -76,14 +76,32 @@ class TripService {
     });
   }
 
+  /** find Trips
+  * @static
+  * @param {object} property
+  * @memberof TripService
+  * @returns {object} data
+  */
+  static findAllByProperty(property) {
+    return Trip.findAll({
+      where: {
+        ...property
+      }
+    });
+  }
+
   /** find locations
   * @static
   * @param {object} property
   * @memberof TripService
   * @returns {object} data
   */
-  static findAllLocations() {
-    return Location.findAll();
+  static findAllLocations(property) {
+    return Location.findAll({
+      where: {
+        ...property
+      }
+    });
   }
 
   /**

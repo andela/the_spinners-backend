@@ -60,12 +60,13 @@ export const multiCitytrip = [
 export const newTripComment = {
   id: faker.random.number({ min: 20, max: 50 }),
   userId: loggedInUser.id,
+  tripId: faker.random.number(),
   tripType: 'one-way',
-  departure: faker.address.city(),
-  destination: faker.address.city(),
-  travelDate: faker.date.future(),
+  originId: faker.random.number({ min: 1, max: 2 }),
+  destinationId: faker.random.number({ min: 1, max: 2 }),
+  departureDate: faker.date.future(),
   travelReasons: faker.lorem.sentence(),
-  accommodation: faker.lorem.sentence(),
+  accommodationId: faker.random.number()
 };
 
 const tripComment = {
