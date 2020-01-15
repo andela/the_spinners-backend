@@ -13,7 +13,7 @@ const userRoleSchema = Joi.object({
     }),
   userRole: Joi.string()
     .trim()
-    .valid('travel_admin', 'travel_team_member', 'manager', 'requester')
+    .valid('travel_admin', 'travel_team_member', 'manager', 'requester', 'travel_admin', 'supplier')
     .required()
     .messages({
       'string.base': 'Invalid type, userRole must be a string',

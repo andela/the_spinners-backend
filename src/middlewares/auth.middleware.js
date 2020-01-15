@@ -1,6 +1,8 @@
+import { Op } from 'sequelize';
 import ResponseService from '../services/response.service';
 import UserService from '../services/user.service';
 import JwtService from '../services/jwt.service';
+
 
 const authMiddleware = {
   checkUserExist: async (req, res, next) => {
@@ -54,6 +56,20 @@ const authMiddleware = {
     const userData = await UserService.findUserByProperty({ email: userToken.email });
     if (userData.role !== 'super_admin') {
       ResponseService.setError(403, 'Only super admin can reset user role');
+      return ResponseService.send(res);
+    }
+    next();
+  },
+  verifyPermissions: async (req, res, next) => {
+    const userData = await UserService
+      .findUserByProperty({
+        email: req.userData.email,
+        role: {
+          [Op.or]: ['travel_team_member', 'travel_admin']
+        }
+      });
+    if (!userData) {
+      ResponseService.setError(403, 'Only travel admin and travel team member can create accommodation');
       return ResponseService.send(res);
     }
     next();

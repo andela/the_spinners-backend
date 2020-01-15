@@ -1,6 +1,7 @@
 import models from '../models';
 
-const { Accommodation, Booking } = models;
+
+const { Accommodation, Booking, AccommodationType } = models;
 
 /**
  *
@@ -17,6 +18,23 @@ class AccommodationService {
          */
   static createBooking(newBooking) {
     return Booking.create(newBooking);
+  }
+
+  /**
+   * @static
+   * @param {*} data
+   * @returns {*} newAccomodation
+   * @memberof AccommodationService
+   */
+  static createAccommodationWithInclude(data) {
+    return Accommodation.create(data, {
+      include: ['addOnServices', 'accommodationPictures', 'amenities',
+        {
+          association: 'rooms',
+          include: ['roomPictures']
+        }
+      ]
+    });
   }
 
   /**
@@ -39,7 +57,20 @@ class AccommodationService {
    */
   static findAccommodationByProperty(property) {
     return Accommodation.findOne({
-      where: { ...property }
+      where: property
+    });
+  }
+
+  /**
+   * find Accommodation type
+   * @static
+   * @param {object} type
+   * @memberof AccommodationService
+   * @returns {object} data
+   */
+  static findAccommodationType(type) {
+    return AccommodationType.findOne({
+      where: type
     });
   }
 }

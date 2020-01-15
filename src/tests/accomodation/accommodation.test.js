@@ -2,7 +2,10 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import faker from 'faker';
 import app from '../../app';
-import accommodation from '../fixtures/accommodation.fixture';
+import { booking,
+  createTravelAdmin,
+  travelAdminToken,
+  newAccomodation } from '../fixtures/accommodation.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 
 chai.should();
@@ -16,7 +19,7 @@ describe('Test booking accommodation:', () => {
     chai.request(app)
       .post(`/api/accommodations/${faker.random.number({ min: 1, max: 8 })}/book`)
       .set('Authorization', loggedInToken)
-      .send(accommodation)
+      .send(booking)
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('data');
@@ -32,7 +35,7 @@ describe('Test booking accommodation:', () => {
     chai.request(app)
       .post(`/api/accommodations/${faker.random.word()}/book`)
       .set('Authorization', loggedInToken)
-      .send({ ...accommodation })
+      .send({ ...booking })
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body).to.have.property('message');
@@ -48,7 +51,7 @@ describe('Test booking accommodation:', () => {
     chai.request(app)
       .post(`/api/accommodations/${faker.random.number({ min: 1, max: 8 })}/book`)
       .set('Authorization', loggedInToken)
-      .send({ ...accommodation, to: formattedDate })
+      .send({ ...booking, to: formattedDate })
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body).to.have.property('message');
@@ -60,23 +63,11 @@ describe('Test booking accommodation:', () => {
     chai.request(app)
       .post(`/api/accommodations/${faker.random.number({ min: 15 })}/book`)
       .set('Authorization', loggedInToken)
-      .send({ ...accommodation })
+      .send({ ...booking })
       .end((err, res) => {
         expect(res).to.have.status(404);
         expect(res.body).to.have.property('message');
         expect(res.body.message).eqls('this accommodation id does not exist');
-        done();
-      });
-  });
-  it('Should return status code of 422 if accommodation is not available', (done) => {
-    chai.request(app)
-      .post(`/api/accommodations/${faker.random.number({ min: 9, max: 12 })}/book`)
-      .set('Authorization', loggedInToken)
-      .send({ ...accommodation })
-      .end((err, res) => {
-        expect(res).to.have.status(422);
-        expect(res.body).to.have.property('message');
-        expect(res.body.message).eqls('this accommodation is not available');
         done();
       });
   });
@@ -96,9 +87,105 @@ describe('Test getting accommodations:', () => {
         expect(res.body.data[0]).to.have.property('typeId');
         expect(res.body.data[0]).to.have.property('rating');
         expect(res.body.data[0]).to.have.property('locationId');
-        expect(res.body.data[0]).to.have.property('numberOfPeople');
-        expect(res.body.data[0]).to.have.property('numberOfRooms');
-        expect(res.body.data[0]).to.have.property('isAvailable');
+        done();
+      });
+  });
+});
+
+describe('Create accommmodation', () => {
+  before(async () => {
+    await createTravelAdmin();
+  });
+  it('Should create an accomodation', (done) => {
+    chai.request(app)
+      .post('/api/accommodations')
+      .set('Authorization', travelAdminToken)
+      .send(newAccomodation)
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.property('id');
+        expect(res.body.data).to.have.property('name');
+        expect(res.body.data).to.have.property('typeId');
+        expect(res.body.data).to.have.property('description');
+        expect(res.body.data).to.have.property('locationId');
+        expect(res.body.data).to.have.property('accommodationPictures');
+        expect(res.body.data.accommodationPictures).to.be.an('array');
+        expect(res.body.data.accommodationPictures[0]).to.have.property('id');
+        expect(res.body.data.accommodationPictures[0]).to.have.property('subjectId');
+        expect(res.body.data.accommodationPictures[0]).to.have.property('subjectType');
+        expect(res.body.data.accommodationPictures[0]).to.have.property('imageUrl');
+        expect(res.body.data).to.have.property('addOnServices');
+        expect(res.body.data.addOnServices).to.be.an('array');
+        expect(res.body.data.addOnServices[0]).to.have.property('id');
+        expect(res.body.data.addOnServices[0]).to.have.property('serviceName');
+        expect(res.body.data.addOnServices[0]).to.have.property('price');
+        expect(res.body.data.addOnServices[0]).to.have.property('description');
+        expect(res.body.data.addOnServices[0]).to.have.property('accommodationId');
+        expect(res.body.data).to.have.property('amenities');
+        expect(res.body.data.amenities).to.be.an('array');
+        expect(res.body.data.amenities[0]).to.have.property('id');
+        expect(res.body.data.amenities[0]).to.have.property('amenity');
+        expect(res.body.data.amenities[0]).to.have.property('accommodationId');
+        expect(res.body.data).to.have.property('rooms');
+        expect(res.body.data.rooms).to.be.an('array');
+        expect(res.body.data.rooms[0]).to.have.property('id');
+        expect(res.body.data.rooms[0]).to.have.property('roomType');
+        expect(res.body.data.rooms[0]).to.have.property('numberOfPeople');
+        expect(res.body.data.rooms[0]).to.have.property('roomPictures');
+        expect(res.body.data.rooms[0]).to.have.property('roomPrice');
+        expect(res.body.data.rooms[0]).to.have.property('numberOfRooms');
+        done();
+      });
+  });
+  it('should not allow non travel-admin or suppliers', (done) => {
+    chai.request(app)
+      .post('/api/accommodations')
+      .set('Authorization', loggedInToken)
+      .send(newAccomodation)
+      .end((err, res) => {
+        expect(res).to.have.status(403);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).eqls('Only travel admin and travel team member can create accommodation');
+        done();
+      });
+  });
+  it('should not allow duplicate accommodation', (done) => {
+    chai.request(app)
+      .post('/api/accommodations')
+      .set('Authorization', travelAdminToken)
+      .send(newAccomodation)
+      .end((err, res) => {
+        expect(res).to.have.status(409);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).eqls('This accomodation already exists');
+        done();
+      });
+  });
+  it('Should return status code of 404 if location doesn\'t exist', (done) => {
+    chai.request(app)
+      .post('/api/accommodations')
+      .set('Authorization', travelAdminToken)
+      .send({ ...newAccomodation, locationId: faker.random.number({ min: 10, max: 15 }) })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).eqls('Location Id you specified doesn\'t exists');
+        done();
+      });
+  });
+  it('Should return status code of 403 if accomodation type doesn\'t exist', (done) => {
+    chai.request(app)
+      .post('/api/accommodations')
+      .set('Authorization', travelAdminToken)
+      .send({ ...newAccomodation,
+        locationId: faker.random.number({ min: 1, max: 9 }),
+        typeId: faker.random.number({ min: 10, max: 15 }), })
+      .end((err, res) => {
+        expect(res).to.have.status(403);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).eqls('Accomodation type you specified doesn\'t exists');
         done();
       });
   });
