@@ -42,6 +42,7 @@ export const loggedInNonManager = {
   email: faker.internet.email(),
   password: BcryptService.hashPassword(faker.internet.password()),
   isVerified: true,
+  lineManagerId: loggedInManager1.id,
   role: 'requester',
   createdAt: new Date(),
   updatedAt: new Date(),

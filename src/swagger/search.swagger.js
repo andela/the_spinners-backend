@@ -1,23 +1,36 @@
 /**
  * @swagger
- * /api/search?term={query}&page={page}&limit={limit}:
+ * /api/search?:
  *   get:
  *     tags:
  *       - Search
  *     name: Search the requests
  *     parameters:
- *       - name: authorization
- *         in: header
+ *       - in: header
+ *         name: authorization
  *         required: true
- *       - in: path
- *         name: query
- *         required: true
- *       - in: path
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: departureDate
+ *         schema:
+ *           type: string
+ *       - in: query
  *         name: page
- *         required: true
- *       - in: path
+ *         schema:
+ *           type: string
+ *       - in: query
  *         name: limit
- *         required: true
  *         schema:
  *           type: string
  *     produces:
@@ -26,6 +39,8 @@
  *       - application/json
  *     responses:
  *       '200':
- *         description: search results
+ *         description: Search results
+ *       '404':
+ *         description: Results not found
  *
  */

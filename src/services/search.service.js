@@ -13,12 +13,12 @@ class SearchService {
    *
    *
    * @static
-   * @param {req} term
+   * @param {req} locationName
    * @returns {response} @memberof SearchService
    */
-  static async getLocationIdQuery(term) {
+  static async getLocationIdQuery(locationName) {
     const locations = await TripService.findAllLocations({
-      [Op.or]: [{ country: { [Op.iLike]: `%${term}%` } }, { city: { [Op.iLike]: `%${term}%` } }]
+      [Op.or]: [{ country: { [Op.iLike]: `%${locationName}%` } }, { city: { [Op.iLike]: `%${locationName}%` } }]
     });
     const locationIds = locations.map((location) => {
       const { id } = location.get();
@@ -31,13 +31,13 @@ class SearchService {
  *
  *
  * @static
- * @param {req} term
+ * @param {req} stringDate
  * @returns {response} @memberof SearchService
  */
-  static getDateQuery(term) {
-    const date = Number.isNaN(Date.parse(term)) ? null : new Date(term);
-    const filterByDate = !date ? {} : {
-      departureDate: { [Op.between]: [new Date(`${term} 00:00:00`), new Date(`${term} 23:59:59`)] }
+  static getDateQuery(stringDate) {
+    const date = Number.isNaN(Date.parse(stringDate)) ? null : new Date(stringDate);
+    const filterByDate = !date ? { departureDate: null } : {
+      departureDate: { [Op.between]: [new Date(`${stringDate} 00:00:00`), new Date(`${stringDate} 23:59:59`)] }
     };
     return filterByDate;
   }
@@ -46,37 +46,55 @@ class SearchService {
  *
  *
  * @static
- * @param {req} term
+ * @param {req} statusName
  * @returns {response} @memberof SearchService
  */
-  static getStatusQuery(term) {
-    if (term === 'approved' || term === 'rejected' || term === 'pending') {
+  static getStatusQuery(statusName) {
+    if (['approved', 'rejected', 'pending'].includes(statusName)) {
       const status = {
-        status: term
+        status: statusName
       };
       return status;
     }
-    return {};
+    return { status: null };
   }
 
   /**
  *
  *
  * @static
- * @param {req} userData
- * @param {req} term
+ * @param {req} name
  * @returns {response} @memberof SearchService
  */
-  static async getRequesterQuery(userData, term) {
-    const user = await UserService.findUserByProperty({ id: userData.id });
-    if (user.get().role === 'manager') {
-      const requesters = await UserService.findAllByProperty({
-        [Op.or]: [{ firstName: { [Op.iLike]: `%${term}%` } }, { lastName: { [Op.iLike]: `%${term}%` } }]
-      });
-      const requestersIds = requesters.map((requester) => requester.get().id);
-      return { requesterId: { [Op.in]: requestersIds } };
-    }
-    return {};
+  static async getRequesterQuery(name) {
+    const requesters = await UserService.findAllByProperty({
+      [Op.or]: [{ firstName: { [Op.iLike]: `%${name}%` } }, { lastName: { [Op.iLike]: `%${name}%` } }]
+    });
+    const requestersIds = requesters.map((requester) => requester.get().id);
+    return { requesterId: { [Op.in]: requestersIds } };
+  }
+
+  /**
+ *
+ *
+ * @static
+ * @param {req} location
+ *  @param {object} pagination
+ * @returns {response} @memberof SearchService
+ */
+  static async searchByLocation({ location, pagination }) {
+    const locationIds = await SearchService.getLocationIdQuery(location);
+    const tripsData = await TripService.findAllByProperty({
+      [Op.or]: [{ originId: { [Op.in]: locationIds } }, { destinationId: { [Op.in]: locationIds } }]
+    });
+    const tripIds = tripsData.map((tripData) => {
+      const { tripId } = tripData.get();
+      return tripId;
+    });
+    const requestsData = await RequestService.getAndCountAllRequets({
+      tripId: { [Op.in]: tripIds }
+    }, pagination);
+    return requestsData;
   }
 
   /**
@@ -88,20 +106,47 @@ class SearchService {
  *  @param {object} pagination
  * @returns {response} @memberof SearchService
  */
-  static async searchAll(userData, term, pagination) {
-    const ids = await SearchService.getLocationIdQuery(term);
-    const filterByDate = SearchService.getDateQuery(term);
-    const tripsData = await TripService.findAllByProperty({
-      [Op.or]: [{ originId: { [Op.in]: ids } }, { destinationId: { [Op.in]: ids } }, filterByDate]
-    });
+  static async searchByRequesterName({ userData, name, pagination }) {
+    const user = await UserService.findUserByProperty({ id: userData.id });
+    if (user.get().role === 'manager') {
+      const filterByUser = await SearchService.getRequesterQuery(name);
+      const requestsData = await RequestService.getAndCountAllRequets(filterByUser, pagination);
+      return requestsData;
+    }
+    return { count: 0, rows: [] };
+  }
+
+  /**
+ *
+ *
+ * @static
+ * @param {req} status
+ * @param {object} pagination
+ * @returns {response} @memberof SearchService
+ */
+  static async searchByStatus({ status, pagination }) {
+    const filterByStatus = SearchService.getStatusQuery(status);
+    const requestsData = await RequestService.getAndCountAllRequets(filterByStatus, pagination);
+    return requestsData;
+  }
+
+  /**
+ *
+ *
+ * @static
+ * @param {req} departureDate
+ *  @param {object} pagination
+ * @returns {response} @memberof SearchService
+ */
+  static async searchByDepartureDate({ departureDate, pagination }) {
+    const filterByDate = SearchService.getDateQuery(departureDate);
+    const tripsData = await TripService.findAllByProperty(filterByDate);
     const tripIds = tripsData.map((tripData) => {
       const { tripId } = tripData.get();
       return tripId;
     });
-    const filterByRequester = await SearchService.getRequesterQuery(userData, term);
-    const filterByStatus = SearchService.getStatusQuery(term);
     const requestsData = await RequestService.getAndCountAllRequets({
-      [Op.or]: [{ tripId: { [Op.in]: tripIds } }, filterByStatus, filterByRequester]
+      tripId: { [Op.in]: tripIds }
     }, pagination);
     return requestsData;
   }

@@ -72,11 +72,11 @@ export const newTripComment = {
 const tripComment = {
   userId: loggedInUser.id,
   tripType: 'one-way',
-  departure: faker.address.city(),
-  destination: faker.address.city(),
-  travelDate: faker.date.future(),
+  originId: faker.random.number({ min: 1, max: 2 }),
+  destinationId: faker.random.number({ min: 1, max: 2 }),
+  departureDate: faker.date.future(),
   travelReasons: faker.lorem.sentence(),
-  accommodation: faker.lorem.sentence(),
+  accommodationId: faker.random.number()
 };
 
 export const createTrip = async () => {
