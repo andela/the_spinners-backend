@@ -31,6 +31,29 @@ class CommentMiddleware {
     }
     next();
   }
+
+  /**
+   *
+   *
+   * @static
+   * @param {req} req
+   * @param {res} res
+   * @param {next} next
+   * @returns {validation} This function validate view comments route
+   * @memberof UserValidation
+   */
+  static async validateViewComment(req, res, next) {
+    const comment = await CommentService.findCommentByProperty({
+      userId: req.userData.id,
+      subjectId: req.params.tripId
+    });
+
+    if (!comment) {
+      ResponseService.setError(404, 'Comments not found or does not belong to this trip');
+      return ResponseService.send(res);
+    }
+    next();
+  }
 }
 
 export default CommentMiddleware;

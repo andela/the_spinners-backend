@@ -29,6 +29,16 @@ export const commentToDelete = {
   comment: faker.lorem.sentence()
 };
 
+export const commentToView = {
+  id: faker.random.number({ min: 30, max: 35 }),
+  userId: loggedInUser.id,
+  subjectId: newTripComment.id,
+  subjectType: 'Trip',
+  comment: faker.lorem.sentence(),
+  createdAt: '',
+  updatedAt: '',
+};
+
 export const commentOfOtherUser = {
   ...commentToDelete, subjectId: faker.random.number({ min: 60, max: 65 })
 };
@@ -40,4 +50,5 @@ export const subjectType = {
 export const createComment = async () => {
   await Comments.destroy({ where: {} });
   await Comments.create(commentToDelete);
+  await Comments.create(commentToView);
 };

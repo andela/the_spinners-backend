@@ -26,11 +26,4 @@ export function up(queryInterface, Sequelize) {
  * @param {object} queryInterface
  * @param {object} Sequelize
  */
-export function down(queryInterface) {
-  return queryInterface.sequelize.transaction(t => Promise.all([
-    queryInterface.removeColumn('Requests', 'requesterFname', { transaction: t }),
-    queryInterface.removeColumn('Requests', 'frequesterLname', { transaction: t }),
-    queryInterface.removeColumn('Requests', 'requesterPicture', { transaction: t }),
-    queryInterface.removeColumn('Requests', 'tripType', { transaction: t })
-  ]));
-}
+export function down(queryInterface) { return queryInterface.dropTable('Requests'); }
