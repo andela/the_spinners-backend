@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import LocationService from '../services/location.service';
 import ResponseService from '../services/response.service';
 import AccommodationService from '../services/accommodation.service';
+import BookingService from '../services/booking.service';
 
 
 export const checkIfAccommodationTypeExists = async (req, res, next) => {
@@ -87,3 +88,20 @@ export const checkPermission = async (req, res, next) => {
     ResponseService.send(res);
   }
 };
+
+const accommodationMiddleware = {
+  checkBookingExist: async (req, res, next) => {
+    const findBooking = await BookingService.findBookingByProperty({
+      accommodationId: req.params.accommodationId,
+      roomId: req.params.roomId,
+      userId: req.userData.id
+    });
+    if (!findBooking) {
+      ResponseService.setError(404, 'Accommodation booking not found');
+      return ResponseService.send(res);
+    }
+    next();
+  },
+};
+
+export default accommodationMiddleware;

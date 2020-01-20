@@ -1,8 +1,12 @@
 import express from 'express';
 import authMiddleware from '../middlewares/auth.middleware';
 import AccommodationController from '../controllers/accommodation.controller';
-import { bookAccommodationValidation, createAccommodationValidations } from '../validations/accommodation.validation';
-import { checkIfAccommodationTypeExists,
+import {
+  bookAccommodationValidation,
+  createAccommodationValidations,
+  validateAccommodationReaction
+} from '../validations/accommodation.validation';
+import accommodationMiddleware, { checkIfAccommodationTypeExists,
   checkIfLocationExists,
   avoidDuplicateAccommodation,
   checkPermission,
@@ -26,6 +30,17 @@ router.post(
   checkIfAccommodationTypeExists, checkIfLocationExists,
   AccommodationController.createAccommodation
 );
-
-
+router.patch(
+  '/:accommodationId/rooms/:roomId/react',
+  authMiddleware.checkUserLoggedIn,
+  validateAccommodationReaction,
+  accommodationMiddleware.checkBookingExist,
+  AccommodationController.updateAccommodationReaction
+);
+router.get(
+  '/:accommodationId/rooms/:roomId/reactions-count',
+  authMiddleware.checkUserLoggedIn,
+  accommodationMiddleware.checkBookingExist,
+  AccommodationController.countReactionsOnAccommodation
+);
 export default router;
