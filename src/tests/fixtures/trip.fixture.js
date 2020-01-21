@@ -2,7 +2,7 @@ import faker from 'faker';
 import models from '../../models';
 import { loggedInUser } from './users.fixture';
 
-const { Trip } = models;
+const { Trip, Request } = models;
 
 export const invalidId = faker.lorem.word();
 export const tripIdNotExists = faker.random.number({ min: 200, max: 200 });
@@ -50,7 +50,7 @@ export const multiCitytrip = [
   },
   {
     originId: 2,
-    destinationId: faker.random.number({ min: 1, max: 9 }),
+    destinationId: faker.random.number({ min: 4, max: 9 }),
     departureDate: '2020-07-28',
     travelReasons: faker.lorem.sentence(),
     accommodationId: 5
@@ -58,9 +58,9 @@ export const multiCitytrip = [
 ];
 
 export const newTripComment = {
-  id: faker.random.number({ min: 20, max: 50 }),
+  id: faker.random.number(),
   userId: loggedInUser.id,
-  tripId: faker.random.number(),
+  requestId: faker.random.number(),
   tripType: 'one-way',
   originId: faker.random.number({ min: 1, max: 2 }),
   destinationId: faker.random.number({ min: 1, max: 2 }),
@@ -68,22 +68,20 @@ export const newTripComment = {
   travelReasons: faker.lorem.sentence(),
   accommodationId: faker.random.number()
 };
-
-const tripComment = {
-  userId: loggedInUser.id,
-  tripType: 'one-way',
-  originId: faker.random.number({ min: 1, max: 2 }),
-  destinationId: faker.random.number({ min: 1, max: 2 }),
-  departureDate: faker.date.future(),
-  travelReasons: faker.lorem.sentence(),
-  accommodationId: faker.random.number()
-};
-
 export const createTrip = async () => {
   await Trip.destroy({ where: {} });
-  const { dataValues } = await Trip.create(newTripComment);
-  await Trip.create(tripComment);
+  const request = await Request.create({ requesterId: newTripComment.userId, status: 'pending' });
+  const requestId = request.get().id;
+  const { dataValues } = await Trip.create({ ...newTripComment, requestId });
   return dataValues;
+};
+
+export const formatDate = () => {
+  const fakerDate = new Date(newTripComment.departureDate);
+  const month = (`0${fakerDate.getMonth() + 1}`).slice(-2);
+  const date = (`0${fakerDate.getDate()}`).slice(-2);
+  const formattedDate = `${fakerDate.getFullYear()}-${month}-${date}`;
+  return formattedDate;
 };
 
 export default newTrip;

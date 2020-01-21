@@ -5,7 +5,6 @@ import {
   trip,
   badRequest,
   checkDate,
-  createTrip
 } from '../fixtures/trip.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 
@@ -15,7 +14,6 @@ chai.use(chaiHttp);
 describe('/POST create return trip', () => {
   before(async () => {
     await createUsers();
-    await createTrip();
   });
   it('App should create a return trip', (done) => {
     chai.request(app)

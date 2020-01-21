@@ -82,19 +82,16 @@ class SearchService {
  *  @param {object} pagination
  * @returns {response} @memberof SearchService
  */
-  static async searchByLocation({ location, pagination }) {
+  static async searchByLocation(location) {
     const locationIds = await SearchService.getLocationIdQuery(location);
     const tripsData = await TripService.findAllByProperty({
       [Op.or]: [{ originId: { [Op.in]: locationIds } }, { destinationId: { [Op.in]: locationIds } }]
     });
-    const tripIds = tripsData.map((tripData) => {
-      const { tripId } = tripData.get();
-      return tripId;
+    const requestIds = tripsData.map((tripData) => {
+      const { requestId } = tripData.get();
+      return requestId;
     });
-    const requestsData = await RequestService.getAndCountAllRequets({
-      tripId: { [Op.in]: tripIds }
-    }, pagination);
-    return requestsData;
+    return requestIds;
   }
 
   /**
@@ -106,28 +103,13 @@ class SearchService {
  *  @param {object} pagination
  * @returns {response} @memberof SearchService
  */
-  static async searchByRequesterName({ userData, name, pagination }) {
+  static async searchByRequesterName({ userData, name }) {
     const user = await UserService.findUserByProperty({ id: userData.id });
     if (user.get().role === 'manager') {
       const filterByUser = await SearchService.getRequesterQuery(name);
-      const requestsData = await RequestService.getAndCountAllRequets(filterByUser, pagination);
-      return requestsData;
+      return filterByUser;
     }
-    return { count: 0, rows: [] };
-  }
-
-  /**
- *
- *
- * @static
- * @param {req} status
- * @param {object} pagination
- * @returns {response} @memberof SearchService
- */
-  static async searchByStatus({ status, pagination }) {
-    const filterByStatus = SearchService.getStatusQuery(status);
-    const requestsData = await RequestService.getAndCountAllRequets(filterByStatus, pagination);
-    return requestsData;
+    return {};
   }
 
   /**
@@ -138,15 +120,33 @@ class SearchService {
  *  @param {object} pagination
  * @returns {response} @memberof SearchService
  */
-  static async searchByDepartureDate({ departureDate, pagination }) {
+  static async searchByDepartureDate(departureDate) {
     const filterByDate = SearchService.getDateQuery(departureDate);
     const tripsData = await TripService.findAllByProperty(filterByDate);
-    const tripIds = tripsData.map((tripData) => {
-      const { tripId } = tripData.get();
-      return tripId;
+    const requestIds = tripsData.map((tripData) => {
+      const { requestId } = tripData.get();
+      return requestId;
     });
+    return requestIds;
+  }
+
+  /**
+ *
+ *
+ * @static
+ * @param {req} departureDate
+ *  @param {object} pagination
+ * @returns {response} @memberof SearchService
+ */
+  static async searchAll({ userData, location, name, status, departureDate, pagination }) {
+    const filterByUser = await SearchService.searchByRequesterName({ userData, name });
+    const filterByLocation = await SearchService.searchByLocation(location);
+    const filterByStatus = SearchService.getStatusQuery(status);
+    const filterByDate = await SearchService.searchByDepartureDate(departureDate);
     const requestsData = await RequestService.getAndCountAllRequets({
-      tripId: { [Op.in]: tripIds }
+      [Op.or]: [{ id: { [Op.in]: [...filterByLocation, ...filterByDate] } },
+        filterByUser,
+        filterByStatus]
     }, pagination);
     return requestsData;
   }

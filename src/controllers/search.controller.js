@@ -5,16 +5,16 @@ import { paginationHelper } from '../helpers';
 /**
  *
  *
- * @class searchController
+ * @class SearchController
  */
-class searchController {
+class SearchController {
   /**
    *
    *
    * @static
    * @param {req} req
    * @param {res} res
-   * @returns {response} @memberof searchController
+   * @returns {response} @memberof SearchController
    */
   static async searchRequests(req, res) {
     const { location, name, status, departureDate, page = 1, limit = 20 } = req.query;
@@ -25,20 +25,15 @@ class searchController {
       limit,
       offset
     };
-    let results;
-    if (location) {
-      results = await SearchService.searchByLocation({ location, pagination });
-    }
-    if (name) {
-      results = await SearchService.searchByRequesterName({ userData, name, pagination });
-    }
-    if (status) {
-      results = await SearchService.searchByStatus({ status, pagination });
-    }
-    if (departureDate) {
-      results = await SearchService.searchByDepartureDate({ departureDate, pagination });
-    }
-    if (results === undefined || results.rows.length === 0) {
+    const results = await SearchService.searchAll({
+      userData,
+      location,
+      name,
+      status,
+      departureDate,
+      pagination
+    });
+    if (results.rows.length === 0) {
       ResponseService.setSuccess(404, 'No results found');
       return ResponseService.send(res);
     }
@@ -52,4 +47,4 @@ class searchController {
   }
 }
 
-export default searchController;
+export default SearchController;
