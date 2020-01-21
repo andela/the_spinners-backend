@@ -4,9 +4,15 @@ import CommentController from '../controllers/comment.controller';
 import oneWayTripValidation from '../validations/one-way-trip.validation';
 import authMiddleware from '../middlewares/auth.middleware';
 import TripValidation from '../validations/trip.validation';
-import { requestValidation } from '../validations/request.validation';
+import {
+  requestValidation,
+  editTripRequestValidation
+} from '../validations/request.validation';
 import multiCityTripValidation from '../validations/multi-city-trip.validation';
 import UserValidation from '../validations/user.validation';
+import tripMiddleware from '../middlewares/trip.middleware';
+import requestMiddleware from '../middlewares/request.middleware';
+import { locationValidation } from '../validations/location.validation';
 
 const router = express.Router();
 
@@ -16,5 +22,6 @@ router.post('/multi-city', authMiddleware.checkUserLoggedIn, authMiddleware.chec
 router.get('/requests', authMiddleware.checkUserLoggedIn, requestValidation, TripController.userTripRequestList); // user request list route
 router.get('/locations', authMiddleware.checkUserLoggedIn, TripController.viewAvailableLocations);
 router.post('/requests/:tripId/comments', authMiddleware.checkUserLoggedIn, UserValidation.validateUserComment, CommentController.addCommentOnTripRequest); // user comment on request trip route
+router.patch('/:tripId/requests/:requestId', authMiddleware.checkUserLoggedIn, editTripRequestValidation, locationValidation, tripMiddleware.checkIfTripExist, requestMiddleware.checkIfTripRequestExist, TripController.editOpenTripRequest);
 
 export default router;

@@ -1,6 +1,8 @@
 import faker from 'faker';
 import models from '../../models';
 import { loggedInUser } from './users.fixture';
+import { pendingRequest } from './request.fixture';
+import TripService from '../../services/trip.service';
 
 const { Trip } = models;
 
@@ -13,7 +15,7 @@ export const trip = {
   accommodationId: faker.random.number()
 };
 
-const newTrip = {
+export const newTrip = {
   originId: faker.random.number({ min: 1, max: 9 }),
   destinationId: faker.random.number({ min: 1, max: 9 }),
   departureDate: faker.date.future(),
@@ -82,4 +84,55 @@ export const createTrip = async () => {
   return dataValues;
 };
 
-export default newTrip;
+export const newCorrectlyEditedTrip = {
+  originId: faker.random.number({ min: 2, max: 4 }),
+  destinationId: faker.random.number({ min: 5, max: 9 }),
+  departureDate: faker.random.arrayElement(['2020-10-20', '2020-10-26']),
+  travelReasons: faker.lorem.sentence(),
+  accommodationId: faker.random.number()
+};
+
+export const tripToTest = {
+  id: faker.random.number({ min: 1, max: 1 }),
+  tripType: 'one-way',
+  tripId: pendingRequest.tripId,
+  userId: pendingRequest.requesterId,
+  ...newCorrectlyEditedTrip
+};
+
+export const createTrips = async () => {
+  const testTrip = { ...tripToTest };
+  await Trip.destroy({ where: {} });
+  const { dataValues } = await TripService.createTrip(testTrip);
+  return dataValues;
+};
+
+export const newInCorrectlyEditedTrip = {
+  ...newCorrectlyEditedTrip,
+  travelReasons: ''
+};
+
+export const newInCorrectLocationTrip = {
+  ...newCorrectlyEditedTrip,
+  originId: faker.random.number({ min: 15, max: 19 }),
+  destinationId: faker.random.number({ min: 40, max: 45 }),
+};
+
+export const newSameLocationsTrip = {
+  ...newCorrectlyEditedTrip,
+  originId: faker.random.number({ min: 1, max: 1 }),
+  destinationId: faker.random.number({ min: 1, max: 1 })
+};
+
+export const invalidUserId = faker.random.number({ min: 10000000, max: 10209307 });
+
+export const invalidTripId = faker.random.number({ min: 40000, max: 50000 });
+
+export default {
+  newTrip,
+  createTrips,
+  newCorrectlyEditedTrip,
+  tripToTest,
+  invalidUserId,
+  invalidTripId
+};

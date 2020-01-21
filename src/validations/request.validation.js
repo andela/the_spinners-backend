@@ -1,7 +1,10 @@
-import Joi from '@hapi/joi';
+import joiBase from '@hapi/joi';
+import joiDate from '@hapi/joi-date';
 import ResponseService from '../services/response.service';
 import TripService from '../services/trip.service';
 import RequestService from '../services/request.service';
+
+const Joi = joiBase.extend(joiDate);
 
 /**
  * @param {req} req
@@ -79,4 +82,44 @@ export const validateChangingRequestStatus = async (req, res, next) => {
     return ResponseService.send(res);
   }
   next();
+};
+/**
+ * @param {req} req
+ * @param {res} res
+ * @param {next} next
+ * @returns {returns} return values
+*/
+export async function editTripRequestValidation(req, res, next) {
+  const schema = Joi.object({
+    originId: Joi.number().required(),
+    destinationId: Joi.number().required(),
+    departureDate: Joi.date().greater('now').utc().format('YYYY-MM-DD')
+      .messages({
+        'date.greater': 'Departure date should be greater than today\'s date',
+        'date.format': 'Departure date must be in YYYY-MM-DD format'
+      })
+      .required(),
+    travelReasons: Joi.string().min(5).trim()
+      .messages({
+        'string.empty': 'Travel reasons is not allowed to be empty',
+        'string.min': 'Travel reasons must be at least 5 characters long'
+      })
+      .required(),
+    accommodationId: Joi.number().required()
+  }).options({ abortEarly: false });
+
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    const errorMessages = error.details.map((err) => (err.message.replace(/[^a-zA-Z0-9 .-]/g, '')));
+    ResponseService.setError(400, errorMessages);
+    ResponseService.send(res);
+  }
+  next();
+}
+
+export default {
+  requestValidation,
+  editTripRequestValidation,
+  validateChangingRequestStatus
 };

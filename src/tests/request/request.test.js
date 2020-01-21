@@ -3,8 +3,8 @@ import chaiHttp from 'chai-http';
 import faker from 'faker';
 import app from '../../app';
 import { managerToken1, managerToken2, nonManagerToken, createManagers } from '../fixtures/managers.fixture';
-import { createUsers } from '../fixtures/users.fixture';
-import createRequests from '../fixtures/request.fixture';
+import { createUsers, cleanDb } from '../fixtures/users.fixture';
+import { createRequests } from '../fixtures/request.fixture';
 
 chai.should();
 chai.use(chaiHttp);
@@ -33,6 +33,8 @@ describe('Test getting request to a manager:', () => {
 describe('Test approving or rejecting a request:', () => {
   let request;
   before(async () => {
+    await cleanDb();
+    await createManagers();
     request = await createRequests();
   });
   it('Should return status code of 200 on successful request rejection', (done) => {

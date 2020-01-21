@@ -357,3 +357,75 @@
  *         description: Trip ID doesn't exists
  *
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   Edit Pending Trip Request:
+ *     type: object
+ *     properties:
+ *       originId:
+ *         type: integer
+ *       destinationId:
+ *         type: integer
+ *       departureDate:
+ *         type: string
+ *       returnDate:
+ *         type: string
+ *       travelReasons:
+ *         type: string
+ *       accommodationId:
+ *         type: integer
+ */
+
+/**
+ * @swagger
+ * /api/trips/{tripId}/requests/{requestId}:
+ *   patch:
+ *     tags:
+ *       - trips
+ *     name: Edit Trip Request
+ *     summary: User should be able edit open(pending) trip request
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - name: id
+ *         in: path
+ *         required: true
+ *       - name: tripId
+ *         in: path
+ *         required: true
+ *       - name: body
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/Edit Open Trip Request'
+ *           type: object
+ *           properties:
+ *             originId:
+ *               type: integer
+ *             destinationId:
+ *               type: integer
+ *             departureDate:
+ *               type: string
+ *             returnDate:
+ *               type: string
+ *             travelReasons:
+ *               type: string
+ *             accommodationId:
+ *               type: integer
+ *     responses:
+ *       '200':
+ *             description: Trip Updated Successfully
+ *       '400':
+ *             description: Bad request.
+ *       '403':
+ *             description: Forbiden.
+ *       '404':
+ *             description: Pending Trip Request Not Found
+ */

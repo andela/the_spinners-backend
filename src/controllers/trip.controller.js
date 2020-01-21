@@ -1,7 +1,6 @@
 import TripService from '../services/trip.service';
 import ResponseService from '../services/response.service';
 import RequestService from '../services/request.service';
-import UserService from '../services/user.service';
 import { paginationHelper } from '../helpers';
 
 /**
@@ -23,6 +22,7 @@ class TripController {
       ...req.body, tripId: req.tripId, userId: req.userData.id, tripType: 'one-way', status: 'pending'
     });
     const { updatedAt, createdAt, ...newTrip } = dataValues;
+    await RequestService.createRequest({ requesterId: req.userData.id, tripId: dataValues.tripId, status: 'pending' });
     ResponseService.setSuccess(201, 'Trip is successfully created', newTrip);
     return ResponseService.send(res);
   }
@@ -52,6 +52,7 @@ class TripController {
       status: 'pending'
     };
     await TripService.createTrip(returnTrip);
+    await RequestService.createRequest({ requesterId: req.userData.id, tripId: returnTrip.tripId, status: 'pending' });
     ResponseService.setSuccess(201, 'Trip created successfully', returnTrip);
     return ResponseService.send(res);
   }
@@ -91,8 +92,7 @@ class TripController {
       const { updatedAt, createdAt, ...newTrip } = dataValues;
       return newTrip;
     });
-    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
-    const { dataValues } = await RequestService.createRequest({ requesterId: newMultiCityTrip[0].userId, tripId: req.tripId, status: 'pending', lineManagerId });
+    const { dataValues } = await RequestService.createRequest({ requesterId: newMultiCityTrip[0].userId, tripId: req.tripId, status: 'pending' });
     const { updatedAt, createdAt, ...newRequest } = dataValues;
     ResponseService.setSuccess(201, 'Trip request is successfully created', { newTrip: newTripArray, newRequest });
     return ResponseService.send(res);
@@ -115,6 +115,26 @@ class TripController {
     });
     ResponseService.setSuccess(200, 'List of all available locations', availableLocations);
     return ResponseService.send(res);
+  }
+
+  /**
+ *
+ *
+ * @static
+ * @param {req} req
+ * @param {res} res
+ * @returns {response} @memberof Trips
+ */
+  static async editOpenTripRequest(req, res) {
+    const { userData } = req;
+    const userId = userData.id;
+    const { tripId } = req.params;
+    const [, [{ dataValues }]] = await TripService.updateTrip(
+      { userId, tripId },
+      { ...req.body }
+    );
+    ResponseService.setSuccess(200, 'Trip Updated Successfully', dataValues);
+    ResponseService.send(res);
   }
 }
 

@@ -5,7 +5,8 @@ import {
   trip,
   badRequest,
   checkDate,
-  createTrip
+  createTrip,
+  fakeTrip
 } from '../fixtures/trip.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 
@@ -83,7 +84,7 @@ describe('/POST create return trip', () => {
     chai.request(app)
       .post('/api/trips/return')
       .set('Authorization', loggedInToken)
-      .send({ ...trip, originId: 999 })
+      .send(fakeTrip)
       .end((err, res) => {
         res.body.should.be.an('object');
         res.status.should.be.equal(400);
