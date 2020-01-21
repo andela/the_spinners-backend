@@ -231,6 +231,7 @@ export const univerifiedUserToken = JwtService.generateToken({
   lastName: unverifiedUser.lastName,
   email: unverifiedUser.email
 });
+
 export const createUsers = async () => {
   await Users.destroy({ where: {} });
   await Preferences.destroy({ where: {} });
