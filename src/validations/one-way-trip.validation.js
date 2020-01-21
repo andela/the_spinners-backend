@@ -1,5 +1,6 @@
 import joiBase from '@hapi/joi';
 import joiDate from '@hapi/joi-date';
+import { Op } from 'sequelize';
 import ResponseService from '../services/response.service';
 import TripService from '../services/trip.service';
 import LocationService from '../services/location.service';
@@ -31,33 +32,27 @@ export default async (req, res, next) => {
   }).options({ abortEarly: false });
 
   const results = schema.validate({ ...req.body });
-  const errorMessages = [];
   if (results.error) {
-    results.error.details.forEach((error) => {
-      errorMessages.push(error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
-    });
-  }
-
-  if (req.body.originId && req.body.destinationId) {
-    const locations = [req.body.originId, req.body.destinationId];
-    await Promise.all(locations.map(async loc => {
-      const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
-      if (!isLocationExist) {
-        errorMessages.push(`location with id ${loc} is not available`);
-      }
-    }));
-  }
-
-  if (errorMessages.length !== 0) {
+    const errorMessages = results.error.details.map((error) => error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
     ResponseService.setError(400, errorMessages);
     return ResponseService.send(res);
   }
-  const tripId = `${req.userData.id}${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}${req.body.destinationId}`;
-  const tripExist = await TripService.findTripByProperty({ tripId });
+  const locations = [req.body.originId, req.body.destinationId];
+  await Promise.all(locations.map(async loc => {
+    const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
+    if (!isLocationExist) {
+      ResponseService.setError(400, `location with id ${loc} is not available`);
+      return ResponseService.send(res);
+    }
+  }));
+  const tripExist = await TripService.findTripByProperty({
+    originId: req.body.originId,
+    destinationId: req.body.destinationId,
+    departureDate: { [Op.between]: [new Date(`${req.body.departureDate}T00:00:00.000Z`), new Date(`${req.body.departureDate}T23:59:59.999Z`)] }
+  });
   if (tripExist) {
     ResponseService.setError(409, 'This trip request was already created');
     return ResponseService.send(res);
   }
-  req.tripId = tripId;
   next();
 };

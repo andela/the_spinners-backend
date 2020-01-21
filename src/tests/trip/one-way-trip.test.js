@@ -19,11 +19,11 @@ describe('Test one way trip:', () => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('data');
-        expect(res.body.data).to.have.property('id');
-        expect(res.body.data).to.have.property('originId').equal(newTrip.originId);
-        expect(res.body.data).to.have.property('destinationId').equal(newTrip.destinationId);
-        expect(res.body.data).to.have.property('travelReasons').equal(newTrip.travelReasons);
-        expect(res.body.data).to.have.property('accommodationId').equal(newTrip.accommodationId);
+        expect(res.body.data.newTrip).to.have.property('id');
+        expect(res.body.data.newTrip).to.have.property('originId').equal(newTrip.originId);
+        expect(res.body.data.newTrip).to.have.property('destinationId').equal(newTrip.destinationId);
+        expect(res.body.data.newTrip).to.have.property('travelReasons').equal(newTrip.travelReasons);
+        expect(res.body.data.newTrip).to.have.property('accommodationId').equal(newTrip.accommodationId);
         done();
       });
   });

@@ -3,7 +3,7 @@ import emitter from '../helpers/eventEmmiters/emitter';
 export default (sequelize, DataTypes) => {
   const Trip = sequelize.define('Trip', {
     tripType: DataTypes.STRING,
-    tripId: DataTypes.BIGINT,
+    requestId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     originId: DataTypes.INTEGER,
     destinationId: DataTypes.INTEGER,

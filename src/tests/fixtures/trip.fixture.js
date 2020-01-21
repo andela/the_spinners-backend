@@ -19,7 +19,7 @@ export const trip = {
 const newTrip = {
   originId: faker.random.number({ min: 1, max: 9 }),
   destinationId: faker.random.number({ min: 1, max: 9 }),
-  departureDate: faker.date.future(),
+  departureDate: '2020-02-03',
   travelReasons: faker.lorem.sentence(),
   accommodationId: faker.random.number()
 };

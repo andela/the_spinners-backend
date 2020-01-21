@@ -1,5 +1,6 @@
 import joiBase from '@hapi/joi';
 import joiDate from '@hapi/joi-date';
+import { Op } from 'sequelize';
 import ResponseService from '../services/response.service';
 import TripService from '../services/trip.service';
 import LocationService from '../services/location.service';
@@ -13,10 +14,6 @@ const Joi = joiBase.extend(joiDate);
  * @returns {returns} this is the function for validation
 */
 async function tripValidation(req, res, next) {
-  const {
-    departureDate,
-    returnDate,
-  } = req.body;
   const schema = Joi.object({
     originId: Joi.number()
       .required(),
@@ -25,14 +22,14 @@ async function tripValidation(req, res, next) {
     departureDate: Joi.date().greater('now').utc().format('YYYY-MM-DD')
       .required()
       .messages({
-        'date.greater': 'Date should be greater than today\'s date',
+        'date.greater': 'departure date should be greater than today\'s date',
         'date.format': 'Date must be in YYYY-MM-DD format',
         'any.required': 'Travel date is required'
       }),
-    returnDate: Joi.date().greater('now').utc().format('YYYY-MM-DD')
+    returnDate: Joi.date().greater(Joi.ref('departureDate')).utc().format('YYYY-MM-DD')
       .required()
       .messages({
-        'date.greater': 'Date should be greater than today\'s date',
+        'any.ref': 'return date should be greater than departure date',
         'date.format': 'Date must be in YYYY-MM-DD format',
         'any.required': 'Return date is required'
       }),
@@ -45,41 +42,29 @@ async function tripValidation(req, res, next) {
       }),
     accommodationId: Joi.number()
   });
-
   const { error } = schema.validate(req.body);
-  const errorMessages = [];
   if (error) {
-    error.details.forEach((err) => {
-      errorMessages.push(err.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
-    });
-  }
-
-  if (req.body.originId && req.body.destinationId) {
-    const locations = [req.body.originId, req.body.destinationId];
-    await Promise.all(locations.map(async loc => {
-      const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
-      if (!isLocationExist) {
-        errorMessages.push(`location with id ${loc} is not available`);
-      }
-    }));
-  }
-
-  if (departureDate > returnDate) {
-    ResponseService.setError(400, 'Travel date can not be greater than return date');
-    return ResponseService.send(res);
-  }
-  if (errorMessages.length !== 0) {
+    const errorMessages = error.details.map((err) => err.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
     ResponseService.setError(400, errorMessages);
     return ResponseService.send(res);
   }
-
-  const tripId = `${req.userData.id}${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}${req.body.destinationId}`;
-  const existTrip = await TripService.findTripByProperty({ tripId });
-  if (existTrip) {
+  const locations = [req.body.originId, req.body.destinationId];
+  await Promise.all(locations.map(async loc => {
+    const isLocationExist = await LocationService.findLocationByProperty({ id: loc });
+    if (!isLocationExist) {
+      ResponseService.setError(400, `location with id ${loc} is not available`);
+      return ResponseService.send(res);
+    }
+  }));
+  const tripExist = await TripService.findTripByProperty({
+    originId: req.body.originId,
+    destinationId: req.body.destinationId,
+    departureDate: { [Op.between]: [new Date(`${req.body.departureDate}T00:00:00.000Z`), new Date(`${req.body.departureDate}T23:59:59.999Z`)] }
+  });
+  if (tripExist) {
     ResponseService.setError(409, 'Trip request already created');
     return ResponseService.send(res);
   }
-  req.tripId = tripId;
   next();
 }
 

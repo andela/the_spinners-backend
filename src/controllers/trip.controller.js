@@ -19,11 +19,13 @@ class TripController {
    * @returns {response} @memberof Trips
    */
   static async requestOneWayTrip(req, res) {
-    const { dataValues } = await TripService.createTrip({
-      ...req.body, tripId: req.tripId, userId: req.userData.id, tripType: 'one-way', status: 'pending'
+    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
+    const newRequest = await RequestService.createRequest({ requesterId: req.userData.id, status: 'pending', lineManagerId });
+
+    const newTrip = await TripService.createTrip({
+      ...req.body, requestId: newRequest.get().id, userId: req.userData.id, tripType: 'one-way', status: 'pending'
     });
-    const { updatedAt, createdAt, ...newTrip } = dataValues;
-    ResponseService.setSuccess(201, 'Trip is successfully created', newTrip);
+    ResponseService.setSuccess(201, 'Trip is successfully created', { newTrip, newRequest });
     return ResponseService.send(res);
   }
 
@@ -35,24 +37,13 @@ class TripController {
    * @returns {response} @memberof Trips
    */
   static async requestReturnTrip(req, res) {
-    const {
-      originId, destinationId, departureDate, returnDate, travelReasons, accommodationId
-    } = req.body;
+    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
+    const newRequest = await RequestService.createRequest({ requesterId: req.userData.id, status: 'pending', lineManagerId });
 
-    const returnTrip = {
-      tripId: req.tripId,
-      userId: req.userData.id,
-      tripType: 'return-trip',
-      originId,
-      destinationId,
-      departureDate,
-      returnDate,
-      travelReasons,
-      accommodationId,
-      status: 'pending'
-    };
-    await TripService.createTrip(returnTrip);
-    ResponseService.setSuccess(201, 'Trip created successfully', returnTrip);
+    const returnTrip = await TripService.createTrip({
+      ...req.body, requestId: newRequest.get().id, userId: req.userData.id, tripType: 'return-trip', status: 'pending'
+    });
+    ResponseService.setSuccess(201, 'Trip created successfully', { newTrip: returnTrip, newRequest });
     return ResponseService.send(res);
   }
 
@@ -84,16 +75,16 @@ class TripController {
   * @returns {response} @memberof Trips
   */
   static async requestMultiCityTrip(req, res) {
-    const newMultiCityTrip = req.body.map((trip) => ({ ...trip, tripId: req.tripId, userId: req.userData.id, tripType: 'multi-city' }));
+    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
+    const newRequest = await RequestService.createRequest({ requesterId: req.userData.id, status: 'pending', lineManagerId });
+
+    const newMultiCityTrip = req.body.map((trip) => ({ ...trip, userId: req.userData.id, requestId: newRequest.get().id, tripType: 'multi-city' }));
     const newTrips = await TripService.createMultiCityTrip(newMultiCityTrip);
     const newTripArray = newTrips.map((trip) => {
       const { dataValues } = trip;
       const { updatedAt, createdAt, ...newTrip } = dataValues;
       return newTrip;
     });
-    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
-    const { dataValues } = await RequestService.createRequest({ requesterId: newMultiCityTrip[0].userId, tripId: req.tripId, status: 'pending', lineManagerId });
-    const { updatedAt, createdAt, ...newRequest } = dataValues;
     ResponseService.setSuccess(201, 'Trip request is successfully created', { newTrip: newTripArray, newRequest });
     return ResponseService.send(res);
   }
