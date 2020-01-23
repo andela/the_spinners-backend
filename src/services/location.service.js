@@ -20,6 +20,19 @@ class LocationService {
       where: { ...property }
     });
   }
+
+  /**
+ * find Location
+ * @static
+ * @param {object} property
+ * @memberof LocationService
+ * @returns {object} data
+ */
+  static findLocationsByProperty(property) {
+    return Location.findAll({
+      where: { ...property }
+    });
+  }
 }
 
 

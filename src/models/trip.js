@@ -3,7 +3,7 @@ import emitter from '../helpers/eventEmmiters/emitter';
 export default (sequelize, DataTypes) => {
   const Trip = sequelize.define('Trip', {
     tripType: DataTypes.STRING,
-    tripId: DataTypes.BIGINT,
+    requestId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     originId: DataTypes.INTEGER,
     destinationId: DataTypes.INTEGER,
@@ -16,6 +16,7 @@ export default (sequelize, DataTypes) => {
     Trip.belongsTo(models.Users, { foreignKey: 'userId', targetKey: 'id' });
     Trip.belongsTo(models.Location, { foreignKey: 'originId', targetKey: 'id' });
     Trip.belongsTo(models.Location, { foreignKey: 'destinationId', targetKey: 'id' });
+    Trip.belongsTo(models.Request, { foreignKey: 'requestId', targetKey: 'id' });
   };
   Trip.afterCreate(({ dataValues }) => {
     emitter.emit('request-created', dataValues);
