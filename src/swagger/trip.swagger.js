@@ -357,3 +357,55 @@
  *         description: Trip ID doesn't exists
  *
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   deleteComment:
+ *     type: object
+ *     properties:
+ *       subjectType:
+ *         type: string
+ *       required:
+ *         - subjectType
+ */
+
+
+/**
+ * @swagger
+ * /api/trips/{tripId}/comments/{commentId}:
+ *   delete:
+ *     tags:
+ *       - trips
+ *     name: Delete comment
+ *     summary: User should be able to delete comment posted on thread
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - name: tripId
+ *         required: true
+ *         in: path
+ *       - name: commentId
+ *         required: true
+ *         in: path
+ *       - name: subjectType
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/deleteComment'
+ *           type: object
+ *     responses:
+ *       '200':
+ *         description: Comment was deleted
+ *       '401':
+ *         description: You are not authorized to perform this activity,
+ *                      The comment you want to delete doesn't belong to the trip
+ *       '404':
+ *         description: Trip ID doesn't exists, Comment ID doesn't exists
+ *
+ */

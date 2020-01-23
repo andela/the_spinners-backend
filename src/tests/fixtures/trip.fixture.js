@@ -4,6 +4,9 @@ import { loggedInUser } from './users.fixture';
 
 const { Trip } = models;
 
+export const invalidId = faker.lorem.word();
+export const tripIdNotExists = faker.random.number({ min: 200, max: 200 });
+
 export const trip = {
   originId: faker.random.number({ min: 1, max: 9 }),
   destinationId: faker.random.number({ min: 1, max: 9 }),
@@ -54,7 +57,7 @@ export const multiCitytrip = [
   }
 ];
 
-const newTripComment = {
+export const newTripComment = {
   id: faker.random.number({ min: 20, max: 50 }),
   userId: loggedInUser.id,
   tripType: 'one-way',
