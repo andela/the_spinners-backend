@@ -34,7 +34,8 @@ class SettingsController {
    * @returns {response} @memberof SettingsController
   */
   static async assignRequesterToManager(req, res) {
-    const { userId, lineManagerId } = req.params;
+    const { userId } = req.params;
+    const { lineManagerId } = req.body;
     const [, [{ dataValues }]] = await UserService.updateUser({ id: userId }, { lineManagerId });
     ResponseService.setSuccess(200, 'Requester is successfully assigned to a manager', { lineManagerId: dataValues.lineManagerId });
     ResponseService.send(res);

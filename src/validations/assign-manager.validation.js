@@ -8,7 +8,7 @@ export default async (req, res, next) => {
     lineManagerId: Joi.number().required()
   }).options({ abortEarly: false });
 
-  const { error } = schema.validate(req.params);
+  const { error } = schema.validate({ ...req.params, ...req.body });
   if (error) {
     const { details } = error;
     const errors = details.map(({ message }) => message.replace(/[^a-zA-Z0-9 .-]/g, ''));
@@ -16,7 +16,7 @@ export default async (req, res, next) => {
     return ResponseService.send(res);
   }
   const requester = await UserService.findUserByProperty({ id: req.params.userId });
-  const manager = await UserService.findUserByProperty({ id: req.params.lineManagerId });
+  const manager = await UserService.findUserByProperty({ id: req.body.lineManagerId });
   if (!requester || !manager) {
     ResponseService.setError(404, 'This user does not exist');
     return ResponseService.send(res);

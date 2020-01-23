@@ -50,15 +50,8 @@ export const nonManagerToken = JwtService.generateToken({
   id: loggedInNonManager.id
 });
 export const loggedInNonManager2 = {
-  id: faker.random.number(),
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.email(),
-  password: BcryptService.hashPassword(faker.internet.password()),
-  isVerified: true,
-  role: 'requester',
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  ...loggedInNonManager,
+  id: faker.random.number()
 };
 export const nonManagerToken2 = JwtService.generateToken({
   id: loggedInNonManager2.id

@@ -84,8 +84,9 @@ describe('Test assigning requester to manager', () => {
   });
   it('Should return 200 response when super-adimn assign requester to manager', (done) => {
     chai.request(app)
-      .patch(`/api/users/settings/${loggedInNonManager.id}/line-manager/${loggedInManager1.id}`)
+      .patch(`/api/users/${loggedInNonManager.id}`)
       .set('Authorization', superAdminToken1)
+      .send({ lineManagerId: loggedInManager1.id })
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.have.property('data');
@@ -95,8 +96,9 @@ describe('Test assigning requester to manager', () => {
   });
   it('Should return status code 400 when userId or lineManagerId has invalid data type', (done) => {
     chai.request(app)
-      .patch(`/api/users/settings/${faker.random.word()}/line-manager/${faker.random.word()}`)
+      .patch(`/api/users/${faker.random.word()}`)
       .set('Authorization', superAdminToken1)
+      .send({ lineManagerId: faker.random.word() })
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body).to.have.have.property('message');
@@ -106,8 +108,9 @@ describe('Test assigning requester to manager', () => {
   });
   it('Should return status code 400 when provided userId or lineManagerId of user who does not exist', (done) => {
     chai.request(app)
-      .patch(`/api/users/settings/${faker.random.number()}/line-manager/${faker.random.number()}`)
+      .patch(`/api/users/${faker.random.number()}`)
       .set('Authorization', superAdminToken1)
+      .send({ lineManagerId: faker.random.number() })
       .end((err, res) => {
         expect(res).to.have.status(404);
         expect(res.body).to.have.have.property('message');
@@ -117,8 +120,9 @@ describe('Test assigning requester to manager', () => {
   });
   it('Should return status code 400 when provided lineManagerId of user who is not a manager', (done) => {
     chai.request(app)
-      .patch(`/api/users/settings/${loggedInNonManager.id}/line-manager/${loggedInNonManager2.id}`)
+      .patch(`/api/users/${loggedInNonManager.id}`)
       .set('Authorization', superAdminToken1)
+      .send({ lineManagerId: loggedInNonManager2.id })
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body).to.have.have.property('message');

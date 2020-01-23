@@ -54,7 +54,7 @@
 
 /**
  * @swagger
- * /api/users/settings/{userId}/line-manager/{lineManagerId}:
+ * /api/users/{userId}:
  *   patch:
  *     tags:
  *       - User
@@ -73,11 +73,14 @@
  *         required: true
  *         schema:
  *           type: integer
- *       - in: path
- *         name: lineManagerId
+ *       - in: body
+ *         name: body
  *         required: true
  *         schema:
- *           type: integer
+ *           type: object
+ *           properties:
+ *             lineManagerId:
+ *               type: integer
  *     responses:
  *       '200':
  *             description: Requester is successfully assigned to a manager.
