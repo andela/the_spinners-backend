@@ -42,6 +42,25 @@ class AccommodationController {
     ResponseService.setSuccess(200, 'list of available accommodations', availableAccommodations);
     return ResponseService.send(res);
   }
+
+  /**
+   * @static
+   * @param {*} req
+   * @param {*} res
+   * @returns {*} created Accomodation
+   * @memberof AccommodationController
+   */
+  static async createAccommodation(req, res) {
+    // Get total rooms
+    const totalRooms = req.body.rooms.map(item => item.numberOfRooms)
+      .reduce((prev, next) => prev + next);
+
+    const newAccommodation = await AccommodationService
+      .createAccommodationWithInclude({ ...req.body, totalRooms, availableRooms: totalRooms });
+
+    ResponseService.setSuccess(201, 'Accommodation is successfully created', newAccommodation);
+    return ResponseService.send(res);
+  }
 }
 
 export default AccommodationController;
