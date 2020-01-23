@@ -54,6 +54,16 @@
           "ClassDeclaration": true
         }
       }
+    ],
+    "prefer-destructuring": [
+      "error",
+      {
+        "array": false,
+        "object": false
+      },
+      {
+        "enforceForRenamedProperties": false
+      }
     ]
   },
   "parser": "babel-eslint",

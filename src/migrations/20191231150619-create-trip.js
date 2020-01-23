@@ -8,8 +8,8 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Tri
   tripType: {
     type: Sequelize.STRING
   },
-  requestId: {
-    type: Sequelize.INTEGER
+  tripId: {
+    type: Sequelize.BIGINT
   },
   userId: {
     type: Sequelize.INTEGER

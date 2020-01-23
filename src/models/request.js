@@ -8,6 +8,7 @@ export default (sequelize, DataTypes) => {
   }, {});
   Request.associate = (models) => {
     Request.belongsTo(models.Users, { foreignKey: 'requesterId', targetKey: 'id' });
+    Request.hasMany(models.Trip, { foreignKey: 'requestId' });
   };
   Request.afterUpdate((data) => {
     emitter.emit('request-updated', data);

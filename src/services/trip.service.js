@@ -33,6 +33,19 @@ class TripService {
   }
 
   /**
+ *
+ * @static
+ * @param {object} property
+ * @memberof TripService
+ * @returns {object} @memberof TripService
+ */
+  static findTripsByProperty(property) {
+    return Trip.findAll({
+      where: { ...property }
+    });
+  }
+
+  /**
    * A method to querry with condition
    * and count all records
    * @static
