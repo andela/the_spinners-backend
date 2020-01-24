@@ -21,7 +21,7 @@ export const unreadNotification = {
   requestId: faker.random.number({ min: 1, max: 40 })
 };
 export const notification2 = {
-  id: faker.random.number({ min: 176, max: 180 }),
+  id: faker.random.number({ min: 181, max: 200 }),
   userId: loggedInUser.id,
   message: faker.lorem.sentence(),
   isRead: false,

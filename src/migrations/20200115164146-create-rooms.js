@@ -7,12 +7,7 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Roo
     type: Sequelize.INTEGER
   },
   accommodationId: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: { // Room belongsTo Accommodation 1:1
-      model: 'Accommodation',
-      key: 'id'
-    }
+    type: Sequelize.INTEGER
   },
   roomType: {
     type: Sequelize.STRING

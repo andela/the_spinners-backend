@@ -1,7 +1,7 @@
 import models from '../models';
 
 
-const { Accommodation, Booking, AccommodationType } = models;
+const { Accommodation, Booking, AccommodationType, Rooms } = models;
 
 /**
  *
@@ -51,6 +51,18 @@ class AccommodationService {
   /**
    * find Accommodation
    * @static
+   * @param {object} primaryKey
+   * @param {object} includeConditions
+   * @memberof AccommodationService
+   * @returns {object} data
+   */
+  static findAccommodationWithInclude(primaryKey, includeConditions) {
+    return Accommodation.findByPk(primaryKey, includeConditions);
+  }
+
+  /**
+   * find Accommodation
+   * @static
    * @param {object} property
    * @memberof AccommodationService
    * @returns {object} data
@@ -71,6 +83,35 @@ class AccommodationService {
   static findAccommodationType(type) {
     return AccommodationType.findOne({
       where: type
+    });
+  }
+
+  /**
+   * Update
+   * @static
+   * @param {object} condition
+   * @param {object} data
+   * @memberof AccommodationService
+   * @returns {object} data
+   */
+  static updateRoom(condition, data) {
+    return Rooms.update(data, {
+      where: condition,
+      returning: true
+    });
+  }
+
+
+  /**
+   * Update
+   * @static
+   * @param {object} property
+   * @memberof AccommodationService
+   * @returns {object} data
+   */
+  static findBookingByProperty(property) {
+    return Booking.findAll({
+      where: property
     });
   }
 }

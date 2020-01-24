@@ -5,7 +5,9 @@ export default (sequelize, DataTypes) => {
       references: {
         model: 'Accommodation',
         key: 'id',
-      }
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     amenity: DataTypes.STRING
   }, {});

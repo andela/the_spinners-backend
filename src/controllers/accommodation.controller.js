@@ -19,8 +19,14 @@ class AccommodationController {
     const { dataValues } = await AccommodationService.createBooking({
       ...req.body,
       userId: req.userData.id,
-      accommodationId: req.params.accommodationId
+      accommodationId: req.params.accommodationId,
+      roomId: req.params.roomId,
+      availableRooms: req.availableRooms - 1
     });
+    await AccommodationService.updateRoom(
+      { accommodationId: req.params.accommodationId, id: req.params.roomId },
+      { availableRooms: req.availableRooms - 1 }
+    );
     ResponseService.setSuccess(201, 'Accommodation is successfully booked', dataValues);
     return ResponseService.send(res);
   }
@@ -51,12 +57,20 @@ class AccommodationController {
    * @memberof AccommodationController
    */
   static async createAccommodation(req, res) {
-    // Get total rooms
+    // Assign available rooms to certain type of room
+    const addedAvailableRooms = req.body.rooms.map((item) => {
+      const room = { ...item };
+      room.availableRooms = item.numberOfRooms;
+      return room;
+    });
+    req.body.rooms = addedAvailableRooms;
+
+    // Get total rooms for an accommodation
     const totalRooms = req.body.rooms.map(item => item.numberOfRooms)
       .reduce((prev, next) => prev + next);
 
     const newAccommodation = await AccommodationService
-      .createAccommodationWithInclude({ ...req.body, totalRooms, availableRooms: totalRooms });
+      .createAccommodationWithInclude({ ...req.body, totalRooms, allAvailableRooms: totalRooms });
 
     ResponseService.setSuccess(201, 'Accommodation is successfully created', newAccommodation);
     return ResponseService.send(res);

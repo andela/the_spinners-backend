@@ -1,7 +1,6 @@
 import joiBase from '@hapi/joi';
 import joiDate from '@hapi/joi-date';
 import Response from '../services/response.service';
-import AccommodationService from '../services/accommodation.service';
 import transformErrorHandler from '../helpers/transformErrorHandler';
 
 const Joi = joiBase.extend(joiDate);
@@ -9,6 +8,7 @@ const Joi = joiBase.extend(joiDate);
 export const bookAccommodationValidation = async (req, res, next) => {
   const schema = Joi.object({
     accommodationId: Joi.number(),
+    roomId: Joi.number(),
     from: Joi.date().greater('now').utc().format('YYYY-MM-DD')
       .required()
       .messages({
@@ -29,13 +29,6 @@ export const bookAccommodationValidation = async (req, res, next) => {
   if (results.error) {
     const errorMessages = results.error.details.map((error) => error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
     Response.setError(400, errorMessages);
-    return Response.send(res);
-  }
-  const isAccommodationExist = await AccommodationService.findAccommodationByProperty({
-    id: req.params.accommodationId
-  });
-  if (!isAccommodationExist) {
-    Response.setError(404, 'this accommodation id does not exist');
     return Response.send(res);
   }
   next();
