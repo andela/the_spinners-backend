@@ -5,7 +5,8 @@ import app from '../../app';
 import { booking,
   createTravelAdmin,
   travelAdminToken,
-  newAccomodation } from '../fixtures/accommodation.fixture';
+  newAccomodation,
+  crateMultipleAccommodations } from '../fixtures/accommodation.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 
 chai.should();
@@ -14,10 +15,11 @@ chai.use(chaiHttp);
 describe('Test booking accommodation:', () => {
   before(async () => {
     await createUsers();
+    await crateMultipleAccommodations();
   });
   it('Should return status code of 201 on successful accommodation booking', (done) => {
     chai.request(app)
-      .post(`/api/accommodations/${faker.random.number({ min: 1, max: 8 })}/book`)
+      .post('/api/accommodations/1/rooms/1/book')
       .set('Authorization', loggedInToken)
       .send(booking)
       .end((err, res) => {
@@ -31,9 +33,21 @@ describe('Test booking accommodation:', () => {
         done();
       });
   });
+  it('Should not allow duplicate booking at the same time', (done) => {
+    chai.request(app)
+      .post('/api/accommodations/1/rooms/1/book')
+      .set('Authorization', loggedInToken)
+      .send(booking)
+      .end((err, res) => {
+        expect(res).to.have.status(409);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).eqls('You have an existing booking in this time period');
+        done();
+      });
+  });
   it('Should return status code of 400 for invalid accommodationId value type', (done) => {
     chai.request(app)
-      .post(`/api/accommodations/${faker.random.word()}/book`)
+      .post(`/api/accommodations/${faker.random.word()}/rooms/${faker.random.number({ min: 1, max: 8 })}/book`)
       .set('Authorization', loggedInToken)
       .send({ ...booking })
       .end((err, res) => {
@@ -49,7 +63,7 @@ describe('Test booking accommodation:', () => {
     const date = (`0${fakerDate.getDate()}`).slice(-2);
     const formattedDate = `${fakerDate.getFullYear()}-${month}-${date}`;
     chai.request(app)
-      .post(`/api/accommodations/${faker.random.number({ min: 1, max: 8 })}/book`)
+      .post(`/api/accommodations/1/rooms/${faker.random.number({ min: 1, max: 3 })}/book`)
       .set('Authorization', loggedInToken)
       .send({ ...booking, to: formattedDate })
       .end((err, res) => {
@@ -59,15 +73,15 @@ describe('Test booking accommodation:', () => {
         done();
       });
   });
-  it('Should return status code of 404 if accommodationId does not exist', (done) => {
+  it('Should return status code of 404 if accommodationId/ Room Id does not exist', (done) => {
     chai.request(app)
-      .post(`/api/accommodations/${faker.random.number({ min: 15 })}/book`)
+      .post(`/api/accommodations/${faker.random.number({ min: 15 })}/rooms/${faker.random.number({ min: 30, max: 40 })}/book`)
       .set('Authorization', loggedInToken)
       .send({ ...booking })
       .end((err, res) => {
         expect(res).to.have.status(404);
         expect(res.body).to.have.property('message');
-        expect(res.body.message).eqls('this accommodation id does not exist');
+        expect(res.body.message).eqls('The accommodation Id or room id are not available');
         done();
       });
   });
@@ -175,7 +189,7 @@ describe('Create accommmodation', () => {
         done();
       });
   });
-  it('Should return status code of 403 if accomodation type doesn\'t exist', (done) => {
+  it('Should return status code of 404 if accomodation type doesn\'t exist', (done) => {
     chai.request(app)
       .post('/api/accommodations')
       .set('Authorization', travelAdminToken)
@@ -183,7 +197,7 @@ describe('Create accommmodation', () => {
         locationId: faker.random.number({ min: 1, max: 9 }),
         typeId: faker.random.number({ min: 10, max: 15 }), })
       .end((err, res) => {
-        expect(res).to.have.status(403);
+        expect(res).to.have.status(404);
         expect(res.body).to.have.property('message');
         expect(res.body.message).eqls('Accomodation type you specified doesn\'t exists');
         done();

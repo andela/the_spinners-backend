@@ -4,7 +4,7 @@ import JwtService from '../../services/jwt.service';
 import models from '../../models';
 import { defaultPreferences } from './users.fixture';
 
-const { Users, Preferences } = models;
+const { Users, Preferences, Accommodation } = models;
 
 const fakerDate1 = faker.date.future(2);
 const month1 = (`0${fakerDate1.getMonth() + 1}`).slice(-2);
@@ -55,6 +55,18 @@ const generateRoom = () => {
   };
   return room;
 };
+
+const generateRoom2 = () => {
+  const room = {
+    roomType: faker.commerce.productName(),
+    numberOfPeople: faker.random.number({ min: 1, max: 6 }),
+    roomPictures: [generateImage('Room'), generateImage('Room'), generateImage('Room')],
+    roomPrice: faker.finance.amount(),
+    numberOfRooms: faker.random.number({ min: 1, max: 100 }),
+    availableRooms: faker.random.number({ min: 1, max: 100 })
+  };
+  return room;
+};
 const generateAddOn = () => {
   const addOn = {
     serviceName: faker.commerce.productName(),
@@ -78,8 +90,49 @@ export const newAccomodation = {
   accommodationPictures: [generateImage('Accommodation'), generateImage('Accommodation'), generateImage('Accommodation')],
   addOnServices: [generateAddOn(), generateAddOn()],
   amenities: [generateAmenity(), generateAmenity()],
-  rooms: [generateRoom(), generateRoom(), generateRoom()]
+  rooms: [generateRoom(), generateRoom(), generateRoom()],
 };
+
+export const generateAccomodation = async () => {
+  const accommodation = {
+    name: faker.commerce.productName(),
+    typeId: faker.random.number({ min: 1, max: 5 }),
+    locationId: faker.random.number({ min: 1, max: 9 }),
+    description: faker.lorem.sentence(),
+    accommodationPictures: [generateImage('Accommodation'), generateImage('Accommodation'), generateImage('Accommodation')],
+    addOnServices: [generateAddOn(), generateAddOn()],
+    amenities: [generateAmenity(), generateAmenity()],
+    rooms: [generateRoom2(), generateRoom2(), generateRoom2()],
+    allAvailableRooms: faker.random.number({ min: 1, max: 90 }),
+    totalRooms: faker.random.number({ min: 1, max: 90 })
+  };
+  return accommodation;
+};
+export const createAccommodation = async () => {
+  await Accommodation.create(await generateAccomodation(), {
+    include: ['addOnServices', 'accommodationPictures', 'amenities',
+      {
+        association: 'rooms',
+        include: ['roomPictures']
+      }
+    ]
+  });
+};
+export const crateMultipleAccommodations = async () => {
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  await createAccommodation();
+  return 0;
+};
+
 
 export const createTravelAdmin = async () => {
   await Users.create({ ...travelAdmin, token: travelAdminToken });
