@@ -46,6 +46,16 @@ class UserService {
   }
 
   /**
+ * find all users
+ * @static
+ * @memberof UserService
+ * @returns {object} data
+ */
+  static getAllUsers() {
+    return Users.findAll();
+  }
+
+  /**
    *
    *
    * @static
