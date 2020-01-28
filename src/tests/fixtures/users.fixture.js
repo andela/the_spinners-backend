@@ -248,6 +248,10 @@ export const createUsers = async () => {
   await Users.create({ ...unverifiedUser, token: univerifiedUserToken });
   await Users.create({ ...superAdminTestData, token: superAdminToken });
 };
+export const createUserWithNoTrip = async () => {
+  await Users.create({ ...userWithNoTrip, userWithNoTripToken });
+};
+
 export const cleanDb = async () => {
   await Users.destroy({ where: {} });
 };

@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import newTrip from '../fixtures/trip.fixture';
+import { newTrip } from '../fixtures/trip.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 import cleanAllTables from '../fixtures/database.fixture';
 

@@ -451,3 +451,28 @@
  *         description: Not comments found for you
  *
  */
+
+/**
+ * @swagger
+ * /api/trips/destinations/most-traveled:
+ *   get:
+ *     tags:
+ *       - trips
+ *     name: Most traveled destinations
+ *     summary: A user or a manager should be able to view most traveled destinations
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *           type: string
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: List of most traveled destinations
+ *       '401':
+ *         description: No valid token supplied
+ *
+ */

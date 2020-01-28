@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable function-paren-newline */
+import { Op } from 'sequelize';
 import TripService from '../services/trip.service';
 import ResponseService from '../services/response.service';
 import RequestService from '../services/request.service';
 import UserService from '../services/user.service';
 import { paginationHelper } from '../helpers';
+import LocationService from '../services/location.service';
+
 /**
  *
  *
@@ -206,6 +209,35 @@ class TripController {
     const updatedTrip = await TripService.findTripByProperty({ id: tripId });
     ResponseService.setSuccess(200, 'Trip Updated successfully', updatedTrip);
     ResponseService.send(res);
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @param {req} req
+   * @param {res} res
+   * @returns {response} @memberof Trips
+   */
+  static async mostTraveledDestinations(req, res) {
+    const destinationData = await TripService.findMostTraveleddestinations();
+    const destinationIds = destinationData.map(({ destinationId }) => destinationId);
+    const nonDuplicates = Array.from(new Set(destinationIds));
+    const locationsData = await LocationService.findLocationsByProperty({
+      id: { [Op.in]: nonDuplicates }
+    });
+    const gg = locationsData.map(location => {
+      const count = destinationIds.filter(id => id === location.get().id).length;
+      const { country, city } = location.get();
+      return { city, country, count };
+    });
+    const sortedValues = gg.sort((a, b) => {
+      if (a.count < b.count) return 1;
+      if (a.count === b.count && a.city > b.city) return 1;
+      return -1;
+    });
+    ResponseService.setSuccess(200, 'List of most traveled destinations', sortedValues);
+    return ResponseService.send(res);
   }
 }
 

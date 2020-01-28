@@ -2,11 +2,13 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import faker from 'faker';
 import app from '../../app';
-import { booking,
+import {
+  booking,
   createTravelAdmin,
   travelAdminToken,
   newAccomodation,
-  crateMultipleAccommodations } from '../fixtures/accommodation.fixture';
+  crateMultipleAccommodations
+} from '../fixtures/accommodation.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 import cleanAllTables from '../fixtures/database.fixture';
 
@@ -195,7 +197,8 @@ describe('Create accommmodation', () => {
     chai.request(app)
       .post('/api/accommodations')
       .set('Authorization', travelAdminToken)
-      .send({ ...newAccomodation,
+      .send({
+        ...newAccomodation,
         locationId: faker.random.number({ min: 1, max: 9 }),
         typeId: faker.random.number({ min: 10000000000, max: 15000000000 }), })
       .end((err, res) => {
