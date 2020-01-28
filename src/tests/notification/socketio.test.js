@@ -142,7 +142,7 @@ describe('Chat Server', () => {
           client3.emit('authenticate', { token: loggedInToken2 });
           client3.on('authenticated', () => {
             client3.emit('new-user', chatUser3);
-            NotificationService.sendNotifications('managerEmail', message);
+            NotificationService.sendInAppNotifications('managerEmail', message);
             client3.emit('private message', message);
           });
         });

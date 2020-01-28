@@ -1,8 +1,9 @@
-import TripNotification from '../../services/trip-notification.service';
+import NotificationService from '../../services/notification.service';
 
 const NotificationListeners = () => {
-  TripNotification.sendTripNotification();
-  TripNotification.requestUpdateNotification();
+  NotificationService.sendTripNotification();
+  NotificationService.requestUpdateNotification();
+  NotificationService.sendCommentNotification();
 };
 
 export default NotificationListeners;

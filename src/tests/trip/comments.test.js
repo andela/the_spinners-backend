@@ -2,9 +2,20 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import faker from 'faker';
 import app from '../../app';
-import { loggedInToken, userWithNoTripToken, loggedInUser, tokenOfNotAllowedManager, createUsers } from '../fixtures/users.fixture';
-import { newComment, badRequest, noTripFound } from '../fixtures/comments.fixture';
-import { createTrip } from '../fixtures/trip.fixture';
+import {
+  userWithNoTripToken,
+  tokenOfNotAllowedManager,
+  createUsers
+} from '../fixtures/users.fixture';
+import { newComment,
+  createTrips,
+  badRequest,
+  noTripFound,
+  requester,
+  createRequester,
+  requesterToken
+} from '../fixtures/comments.fixture';
+import { createManagers, managerToken1, loggedInManager1 } from '../fixtures/managers.fixture';
 
 chai.should();
 chai.use(chaiHttp);
@@ -13,16 +24,35 @@ describe('/POST create comment on trip request', () => {
   let trip;
   before(async () => {
     await createUsers();
-    trip = await createTrip();
+    await createManagers();
+    await createRequester();
+    trip = await createTrips();
   });
   it('Should allow user to create comments when provided successfully, userId, subjectId, subjectType and comment', (done) => {
     chai.request(app)
       .post(`/api/trips/requests/${trip.id}/comments`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(newComment)
       .end((err, res) => {
         res.body.should.be.an('object');
-        res.body.data.should.have.property('userId').equal(loggedInUser.id);
+        res.body.data.should.have.property('userId').equal(requester.id);
+        res.body.data.should.have.property('subjectId').equal(trip.id);
+        res.body.data.should.have.property('subjectType').equal('Trip');
+        res.body.data.should.have.property('comment');
+        res.status.should.be.equal(201);
+        res.body.should.have.property('message').equal('Your comment was submitted successfully');
+        done();
+      });
+  });
+
+  it('Should allow Manager to create comments when provided successfully, userId, subjectId, subjectType and comment', (done) => {
+    chai.request(app)
+      .post(`/api/trips/requests/${trip.id}/comments`)
+      .set('Authorization', managerToken1)
+      .send(newComment)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.body.data.should.have.property('userId').equal(loggedInManager1.id);
         res.body.data.should.have.property('subjectId').equal(trip.id);
         res.body.data.should.have.property('subjectType').equal('Trip');
         res.body.data.should.have.property('comment');
@@ -35,7 +65,7 @@ describe('/POST create comment on trip request', () => {
   it('Should check when user do a bad request', (done) => {
     chai.request(app)
       .post(`/api/trips/requests/${faker.random.word()}/comments`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(badRequest)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -48,7 +78,7 @@ describe('/POST create comment on trip request', () => {
   it('Should not allow user to comment when trip ID does not exist', (done) => {
     chai.request(app)
       .post(`/api/trips/requests/${faker.random.number({ min: 51 })}/comments`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(noTripFound)
       .end((err, res) => {
         res.body.should.be.an('object');

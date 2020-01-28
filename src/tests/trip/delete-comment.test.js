@@ -1,16 +1,19 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import { loggedInToken, userWithNoTripToken } from '../fixtures/users.fixture';
+import { userWithNoTripToken } from '../fixtures/users.fixture';
 import {
   commentIdNotExists,
   commentIdOfOtherUser,
   commentToDelete,
   commentOfOtherUser,
   subjectType,
+  requesterToken,
+  invalidId,
+  tripIdNotExists,
+  createTrips,
   createComment
 } from '../fixtures/comments.fixture';
-import { invalidId, tripIdNotExists, createTrip } from '../fixtures/trip.fixture';
 
 chai.should();
 chai.use(chaiHttp);
@@ -18,13 +21,13 @@ chai.use(chaiHttp);
 describe('/DELETE delete comment posted on trip request', () => {
   let trip;
   before(async () => {
+    trip = await createTrips();
     await createComment();
-    trip = await createTrip();
   });
   it('Should delete a comment posted on thread', (done) => {
     chai.request(app)
       .delete(`/api/trips/${trip.id}/comments/${commentToDelete.id}`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(subjectType)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -37,7 +40,7 @@ describe('/DELETE delete comment posted on trip request', () => {
   it('Should not delete a comment that was deleted before', (done) => {
     chai.request(app)
       .delete(`/api/trips/${trip.id}/comments/${commentToDelete.id}`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(subjectType)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -50,7 +53,7 @@ describe('/DELETE delete comment posted on trip request', () => {
   it('Should check if user passed invalid trip ID or comment ID into the route', (done) => {
     chai.request(app)
       .delete(`/api/trips/${invalidId}/comments/${commentToDelete.id}`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(subjectType)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -64,7 +67,7 @@ describe('/DELETE delete comment posted on trip request', () => {
   it('Should not allow to delete comment of the trip that does not exists', (done) => {
     chai.request(app)
       .delete(`/api/trips/${tripIdNotExists}/comments/${commentToDelete.id}`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(subjectType)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -77,7 +80,7 @@ describe('/DELETE delete comment posted on trip request', () => {
   it('Should not allow to delete comment that does not exists', (done) => {
     chai.request(app)
       .delete(`/api/trips/${trip.id}/comments/${commentIdNotExists}`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(subjectType)
       .end((err, res) => {
         res.body.should.be.an('object');
@@ -103,7 +106,7 @@ describe('/DELETE delete comment posted on trip request', () => {
   it('Should not authorize user to delete comment of other trip request', (done) => {
     chai.request(app)
       .delete(`/api/trips/${trip.id}/comments/${commentOfOtherUser.id}`)
-      .set('Authorization', loggedInToken)
+      .set('Authorization', requesterToken)
       .send(subjectType)
       .end((err, res) => {
         res.body.should.be.an('object');
