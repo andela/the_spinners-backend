@@ -7,7 +7,8 @@ import {
   commentIdOfOtherUser,
   commentToDelete,
   commentOfOtherUser,
-  subjectType
+  subjectType,
+  createComment
 } from '../fixtures/comments.fixture';
 import { invalidId, tripIdNotExists, createTrip } from '../fixtures/trip.fixture';
 
@@ -17,6 +18,7 @@ chai.use(chaiHttp);
 describe('/DELETE delete comment posted on trip request', () => {
   let trip;
   before(async () => {
+    await createComment();
     trip = await createTrip();
   });
   it('Should delete a comment posted on thread', (done) => {

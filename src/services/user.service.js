@@ -45,6 +45,21 @@ class UserService {
       returning: true
     });
   }
+
+  /**
+ *
+ * @static
+ * @param {property} property
+ * @memberof UserService
+ * @returns {object} this function finds all
+ */
+  static findAllByProperty(property) {
+    return Users.findAll({
+      where: {
+        ...property
+      }
+    });
+  }
 }
 
 export default UserService;

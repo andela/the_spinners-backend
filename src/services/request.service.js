@@ -26,8 +26,22 @@ class RequestService {
    */
   static async getAllRequets(param) {
     return Request.findAll({
-      where: param,
+      where: { ...param },
       order: [['status', 'ASC'], ['createdAt', 'DESC']]
+    });
+  }
+
+  /**
+   * Gets all request .
+   * @param {object} param condition
+   * @returns {object} The requests object.
+   */
+  static async getAndCountAllRequets(param, { offset, limit }) {
+    return Request.findAndCountAll({
+      where: { ...param },
+      order: [['status', 'ASC'], ['createdAt', 'DESC']],
+      offset,
+      limit
     });
   }
 

@@ -13,7 +13,6 @@ const createRequests = async () => {
   const pendingRequest = {
     id: faker.random.number({ min: 1, max: 5 }),
     requesterId: loggedInManager2.id,
-    tripId: faker.random.number(),
     status: 'pending',
     lineManagerId: manager1.id
   };

@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import faker from 'faker';
 import app from '../../app';
 import { loggedInToken, userWithNoTripToken, loggedInUser, tokenOfNotAllowedManager, createUsers } from '../fixtures/users.fixture';
-import { newComment, badRequest, noTripFound, createComment } from '../fixtures/comments.fixture';
+import { newComment, badRequest, noTripFound } from '../fixtures/comments.fixture';
 import { createTrip } from '../fixtures/trip.fixture';
 
 chai.should();
@@ -13,7 +13,6 @@ describe('/POST create comment on trip request', () => {
   let trip;
   before(async () => {
     await createUsers();
-    await createComment();
     trip = await createTrip();
   });
   it('Should allow user to create comments when provided successfully, userId, subjectId, subjectType and comment', (done) => {

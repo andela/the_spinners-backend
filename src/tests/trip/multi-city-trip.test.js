@@ -120,7 +120,7 @@ describe('Test multi city trip:', () => {
     chai.request(app)
       .post('/api/trips/multi-city')
       .set('Authorization', loggedInToken)
-      .send([...multiCitytrip, { ...multiCitytrip[0], destinationId: 3 }])
+      .send([...multiCitytrip, { ...multiCitytrip[1], destinationId: 1 }])
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body).to.have.property('message');
