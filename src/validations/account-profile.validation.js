@@ -16,7 +16,7 @@ const accountProfileSchema = Joi.object({
     }),
   birthDate: Joi.date().less('2002-01-01').utc().format('YYYY-MM-DD')
     .messages({
-      'date.less': 'Birth date must not be in the past and Not less than 2002-01-01',
+      'date.less': 'You must be 18 years old',
       'date.format': 'Birth date must have format YYYY-MM-DD'
     }),
   preferredLanguage: Joi.string()

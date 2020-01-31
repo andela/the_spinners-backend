@@ -252,6 +252,7 @@ export const cleanDb = async () => {
   await Users.destroy({ where: {} });
 };
 
+
 export const googleFacebookUser = {
   id: 7,
   firstName: 'userfirstname',
