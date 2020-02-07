@@ -5,6 +5,7 @@ import app from '../../app';
 import { loggedInToken, userWithNoTripToken, loggedInUser, tokenOfNotAllowedManager, createUsers } from '../fixtures/users.fixture';
 import { newComment, badRequest, noTripFound } from '../fixtures/comments.fixture';
 import { createTrip } from '../fixtures/trip.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
@@ -12,6 +13,7 @@ chai.use(chaiHttp);
 describe('/POST create comment on trip request', () => {
   let trip;
   before(async () => {
+    await cleanAllTables();
     await createUsers();
     trip = await createTrip();
   });

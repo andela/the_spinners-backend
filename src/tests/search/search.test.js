@@ -5,12 +5,14 @@ import app from '../../app';
 import { managerToken1, nonManagerToken, loggedInManager2 } from '../fixtures/managers.fixture';
 import createRequests from '../fixtures/request.fixture';
 import { createTrip, formatDate } from '../fixtures/trip.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('Test searching requests:', () => {
   before(async () => {
+    await cleanAllTables();
     await createRequests();
     await createTrip();
   });

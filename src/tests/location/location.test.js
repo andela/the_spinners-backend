@@ -2,12 +2,14 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('Test getting locations:', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('Should return status code of 200 with all available locations', (done) => {

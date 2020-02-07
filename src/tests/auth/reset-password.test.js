@@ -8,12 +8,14 @@ import {
   createUsers,
   wrongToken,
 } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('/PUT reset password', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('App should reset password', (done) => {

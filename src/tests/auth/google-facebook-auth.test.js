@@ -8,10 +8,10 @@ import {
   googleProfile,
   facebookProfile,
   OAuthTokens,
-  cleanDb
 } from '../fixtures/users.fixture';
 import googleAuthMiddleware from '../../middlewares/google-auth.middleware';
 import facebookAuthMiddleware from '../../middlewares/facebook-auth.middleware';
+import cleanAllTables from '../fixtures/database.fixture';
 
 
 chai.use(sinonHttp);
@@ -21,7 +21,7 @@ describe('Test Google and Facebook authentication:', () => {
   const resp = httpMocks.createResponse();
   const { accessToken, refreshToken } = OAuthTokens;
   before(async () => {
-    await cleanDb();
+    await cleanAllTables();
   });
   afterEach(() => {
     sinon.restore();

@@ -2,10 +2,12 @@ import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
 import app from '../../app';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.use(chaiHttp);
 describe('Tests for user logout', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('Should logout a user', (done) => {

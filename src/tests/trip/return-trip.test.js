@@ -7,12 +7,14 @@ import {
   checkDate,
 } from '../fixtures/trip.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('/POST create return trip', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('App should create a return trip', (done) => {

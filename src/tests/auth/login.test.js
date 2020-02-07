@@ -11,11 +11,13 @@ import {
   loggedInToken,
   createUsers
 } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.use(chaiHttp);
 
 describe('Tests for user login', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('should login a user', (done) => {

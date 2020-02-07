@@ -10,11 +10,13 @@ import {
   loggedInToken2,
   token,
 } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.use(chaiHttp);
 
 describe('Mark all notifications as read', () => {
   beforeEach(async () => {
+    await cleanAllTables();
     await createUsers();
     await createNotifications();
   });
@@ -44,6 +46,7 @@ describe('Mark all notifications as read', () => {
 
 describe('Mark notifications as read', () => {
   beforeEach(async () => {
+    await cleanAllTables();
     await createUsers();
     await createNotifications();
   });
@@ -99,6 +102,7 @@ describe('Tests notification preferences', () => {
   const date = (`0${fakerDate.getDate()}`).slice(-2);
   const formattedDate = `${fakerDate.getFullYear()}-${month}-${date}`;
   beforeEach(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('Should get all notification of a logged in user', (done) => {

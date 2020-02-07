@@ -2,12 +2,14 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
 import { loggedInToken, createUsers, wrongToken, userData } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.use(chaiHttp);
 chai.should();
 
 describe('Test for User Account Profile:', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('It should allow user to view profile', (done) => {

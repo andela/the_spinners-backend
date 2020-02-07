@@ -8,12 +8,14 @@ import { booking,
   newAccomodation,
   crateMultipleAccommodations } from '../fixtures/accommodation.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('Test booking accommodation:', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
     await crateMultipleAccommodations();
   });

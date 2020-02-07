@@ -6,16 +6,16 @@ import {
   signedUpUserToken,
   signupExpiredToken,
   unregisteredEmail,
-  wrongToken,
-  cleanDb
+  wrongToken
 } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.use(chaiHttp);
 chai.should();
 
 describe('Test for User Signup:', () => {
   before(async () => {
-    await cleanDb();
+    await cleanAllTables();
   });
   it('It should create a new user', (done) => {
     chai.request(app)

@@ -7,16 +7,17 @@ import {
   createUsers,
   newRoleData,
   loggedInToken,
-  newUserEmail,
-  cleanDb
+  newUserEmail
 } from '../fixtures/users.fixture';
 import { loggedInManager1, loggedInNonManager, loggedInNonManager2, superAdminToken1, createManagers } from '../fixtures/managers.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.use(chaiHttp);
 chai.should();
 
 describe('Test for super admin reset user role:', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('It should allow Super-Admin user to reset user role', (done) => {
@@ -79,7 +80,7 @@ describe('Test for super admin reset user role:', () => {
 
 describe('Test assigning requester to manager', () => {
   before(async () => {
-    await cleanDb();
+    await cleanAllTables();
     await createManagers();
   });
   it('Should return 200 response when super-adimn assign requester to manager', (done) => {

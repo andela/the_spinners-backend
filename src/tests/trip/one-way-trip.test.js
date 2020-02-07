@@ -3,12 +3,14 @@ import chaiHttp from 'chai-http';
 import app from '../../app';
 import newTrip from '../fixtures/trip.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('Test one way trip:', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('Should return status code of 201 on successful trip creation', (done) => {
