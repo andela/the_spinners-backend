@@ -1,14 +1,15 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import { loggedInToken, userWithNoTripToken, createUsers } from '../fixtures/users.fixture';
+import { loggedInToken, userWithNoTripToken } from '../fixtures/users.fixture';
+import { createTrip2 } from '../fixtures/trip.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('/Get view requested trips ', () => {
   before(async () => {
-    await createUsers();
+    await createTrip2();
   });
   it('Should get requested trip', (done) => {
     chai.request(app)

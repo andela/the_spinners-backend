@@ -7,12 +7,14 @@ import {
   createUsers,
   wrongEmail
 } from '../fixtures/users.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('/GET find user', () => {
   before(async () => {
+    await cleanAllTables();
     await createUsers();
   });
   it('App should find a user who exists', (done) => {

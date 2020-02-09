@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../app';
-import { loggedInToken, userWithNoTripToken } from '../fixtures/users.fixture';
+import { loggedInToken, userWithNoTripToken, createUsers } from '../fixtures/users.fixture';
 import {
   commentIdNotExists,
   commentIdOfOtherUser,
@@ -11,6 +11,7 @@ import {
   createComment
 } from '../fixtures/comments.fixture';
 import { invalidId, tripIdNotExists, createTrip } from '../fixtures/trip.fixture';
+import cleanAllTables from '../fixtures/database.fixture';
 
 chai.should();
 chai.use(chaiHttp);
@@ -18,6 +19,8 @@ chai.use(chaiHttp);
 describe('/DELETE delete comment posted on trip request', () => {
   let trip;
   before(async () => {
+    await cleanAllTables();
+    await createUsers();
     await createComment();
     trip = await createTrip();
   });
