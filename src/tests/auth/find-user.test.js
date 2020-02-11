@@ -25,7 +25,7 @@ describe('/GET find user', () => {
         res.body.should.be.an('object');
         res.status.should.be.equal(200);
         res.body.should.have.property('message')
-          .equal('Check your email address, copy the token and follow instruction');
+          .equal('Check your email and follow instructions');
         done();
       });
   });

@@ -4,6 +4,7 @@ import BcryptService from '../services/bcrypt.service';
 import JwtService from '../services/jwt.service';
 import SendEmailService from '../services/send-email.service';
 import PreferenceService from '../services/preference.service';
+import emailNotification from '../helpers/mails/email-notification.mail';
 
 /**
  *
@@ -155,9 +156,10 @@ class AuthController {
     const { email } = user;
     const token = JwtService.generateToken({ email });
     const emailSubject = 'Request reset password';
-    const emailBody = `Copy this token: <br><strong style="color:blue">${token}</strong><br> and include it in the header of <strong style="color:green">/api/resetpassword<strong> route.`;
-    SendEmailService.sendGridEmail(email, token, emailSubject, emailBody);
-    ResponseService.setSuccess(200, 'Check your email address, copy the token and follow instruction');
+    const notification = `<p>Click on the link below</p><br/><a style="background-color:#0074D9; display:block; width:50%; color: white; text-align:center; text-decoration:none;" href="https://snippers-backend-stage.herokuapp.com/reset-password?token=${token}">RESET PASSWORD</a>`;
+    const emailBody = emailNotification(user.firstName, notification);
+    SendEmailService.sendGridEmail(email, emailSubject, emailBody);
+    ResponseService.setSuccess(200, 'Check your email and follow instructions');
     ResponseService.send(res);
   }
 
