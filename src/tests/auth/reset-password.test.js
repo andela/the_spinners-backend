@@ -49,7 +49,7 @@ describe('/PUT reset password', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.status.should.be.equal(403);
-        res.body.should.have.property('message').equal('Please check if the token is correct and try again to access this route');
+        res.body.should.have.property('message').equal('Access denied, check your email and try again');
         done();
       });
   });

@@ -32,7 +32,7 @@ class UserValidation {
     const auth = JwtService.verifyToken(req.token);
 
     if (auth.name) {
-      ResponseService.setError(403, 'Please check if the token is correct and try again to access this route');
+      ResponseService.setError(403, 'Access denied, check your email and try again');
       return ResponseService.send(res);
     }
 
