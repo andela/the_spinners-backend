@@ -156,7 +156,7 @@ class AuthController {
     const { email } = user;
     const token = JwtService.generateToken({ email });
     const emailSubject = 'Request reset password';
-    const notification = `<p>Click on the link below</p><br/><a style="background-color:#0074D9; display:block; width:50%; color: white; text-align:center; text-decoration:none;" href="https://snippers-backend-stage.herokuapp.com/reset-password?token=${token}">RESET PASSWORD</a>`;
+    const notification = `<p>Click on the link below</p><br/><a style="background-color:#0074D9; display:block; width:50%; color: white; text-align:center; text-decoration:none;" href="https://spinners-frontend-stage.herokuapp.com/reset-password?token=${token}">RESET PASSWORD</a>`;
     const emailBody = emailNotification(user.firstName, notification);
     SendEmailService.sendGridEmail(email, emailSubject, emailBody);
     ResponseService.setSuccess(200, 'Check your email and follow instructions');
