@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import ResponseService from '../services/response.service';
 import UserService from '../services/user.service';
 import BcryptService from '../services/bcrypt.service';
@@ -5,6 +6,8 @@ import JwtService from '../services/jwt.service';
 import SendEmailService from '../services/send-email.service';
 import PreferenceService from '../services/preference.service';
 import emailNotification from '../helpers/mails/email-notification.mail';
+
+dotenv.config();
 
 /**
  *
@@ -187,8 +190,7 @@ class AuthController {
   static async googleFacebookAuthHandler(req, res) {
     const token = JwtService.generateToken({ id: req.user.id });
     await UserService.updateUser({ id: req.user.id }, { token });
-    ResponseService.setSuccess(200, `Successfully logged in with your ${req.user.provider} account`, { token });
-    return ResponseService.send(res);
+    return res.redirect(`${process.env.FRONTEND_URL}/facebook/redirect?token=${token}`);
   }
 }
 
