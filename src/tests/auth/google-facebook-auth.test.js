@@ -27,8 +27,8 @@ describe('Test Google and Facebook authentication:', () => {
     sinon.restore();
   });
   it('Should return status code 200 on successiful login with google or facebook', async () => {
-    const res = await AuthController.googleFacebookAuthHandler({ user: googleFacebookUser }, resp);
-    expect(res.statusCode).to.equal(200);
+    await AuthController.googleFacebookAuthHandler({ user: googleFacebookUser }, resp);
+    expect(resp.finished).to.equal(true);
   });
   it('should return data from google user profile', async () => {
     const callBack = sinon.spy();
