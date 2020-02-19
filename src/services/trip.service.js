@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Trip, Location } = models;
+const { Trip, Location, Request } = models;
 
 /**
  *
@@ -63,6 +63,7 @@ class TripService {
       attributes: [
         'userId',
         'tripType',
+        'requestId',
         'originId',
         'destinationId',
         'departureDate',
@@ -71,6 +72,10 @@ class TripService {
         'createdAt',
         'updatedAt'
       ],
+      include: [{
+        model: Request,
+        as: 'request',
+      }],
       offset,
       limit
     });

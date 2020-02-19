@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
     Trip.belongsTo(models.Users, { foreignKey: 'userId', targetKey: 'id' });
     Trip.belongsTo(models.Location, { foreignKey: 'originId', targetKey: 'id' });
     Trip.belongsTo(models.Location, { foreignKey: 'destinationId', targetKey: 'id' });
-    Trip.belongsTo(models.Request, { foreignKey: 'requestId', targetKey: 'id' });
+    Trip.belongsTo(models.Request, { foreignKey: 'requestId', targetKey: 'id', as: 'request' });
   };
   Trip.afterCreate(({ dataValues }) => {
     emitter.emit('request-created', dataValues);
