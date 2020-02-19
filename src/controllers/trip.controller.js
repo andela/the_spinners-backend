@@ -58,7 +58,6 @@ class TripController {
     const offset = (page - 1) * limit;
 
     const results = await TripService.findByPropertyAndCountAll({ userId }, { offset, limit });
-
     ResponseService.setSuccess(200, 'List of requested trips', {
       pageMeta: paginationHelper({
         count: results.count, rows: results.rows, offset, limit
