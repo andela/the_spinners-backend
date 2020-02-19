@@ -45,13 +45,12 @@ class TripNotification {
         .findUserByProperty({ id: request.userId });
       const message = `New ${request.tripType} trip have been Requested by ${firstName} ${lastName}`;
 
-      const data = await NotificationService.createNotification({
+      const notificationData = await NotificationService.createNotification({
         requestId: request.id,
         message,
         type: 'new_request',
         userId: id,
       });
-      const { isRead, updateAt, createdAt, ...notificationData } = data.dataValues;
 
       const unsubscribeUrl = `https://${process.env.BASE_URL}/api/notifications`;
       const msg = tripEmailBody(managerNames, message, unsubscribeUrl, request);
