@@ -1,5 +1,6 @@
 import ResponseService from '../services/response.service';
 import UserService from '../services/user.service';
+import { paginationHelper } from '../helpers';
 /**
  *
  *
@@ -39,6 +40,28 @@ class SettingsController {
     const [, [{ dataValues }]] = await UserService.updateUser({ id: userId }, { lineManagerId });
     ResponseService.setSuccess(200, 'Requester is successfully assigned to a manager', { lineManagerId: dataValues.lineManagerId });
     ResponseService.send(res);
+  }
+
+  /**
+  * super_admin can view all user's roles
+  * @static
+  * @description GET /api/settings/view-users-roles
+  * @param {object} req request object
+  * @param {object} res response object
+  * @memberof UserRoleSettingsController
+  * @returns {object} ResponseService
+  */
+  static async ListUsersRoles(req, res) {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (page - 1) * limit;
+    const results = await UserService.findAllUsersRoles({ offset, limit });
+    ResponseService.setSuccess(200, 'List of users and their respective roles', {
+      pageMeta: paginationHelper({
+        count: results.count, rows: results.rows, offset, limit
+      }),
+      rows: results.rows
+    });
+    return ResponseService.send(res);
   }
 }
 export default SettingsController;

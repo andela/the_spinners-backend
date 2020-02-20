@@ -60,6 +60,31 @@ class UserService {
       }
     });
   }
+
+  /**
+*
+* @static
+* @param {property} property
+* @memberof UserService
+* @returns {object} this function finds all
+*/
+  static findAllUsersRoles({ offset, limit }) {
+    return Users.findAndCountAll({
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'role',
+        'profilePicture'
+      ],
+      offset,
+      limit,
+      order: [
+        ['id', 'DESC']
+      ]
+    });
+  }
 }
 
 export default UserService;
