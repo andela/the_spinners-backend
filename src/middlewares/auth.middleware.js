@@ -60,6 +60,15 @@ const authMiddleware = {
     }
     next();
   },
+  verifyIfUserIsAdminById: async (req, res, next) => {
+    const tokenData = req.userData;
+    const userData = await UserService.findUserByProperty({ id: tokenData.id });
+    if (userData.role !== 'super_admin') {
+      ResponseService.setError(403, 'You are not a super admin.Action not performed');
+      return ResponseService.send(res);
+    }
+    next();
+  },
   verifyPermissions: async (req, res, next) => {
     const userData = await UserService
       .findUserByProperty({

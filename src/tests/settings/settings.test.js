@@ -132,3 +132,53 @@ describe('Test assigning requester to manager', () => {
       });
   });
 });
+
+describe('Test for super admin view users roles:', () => {
+  before(async () => {
+    await createUsers();
+  });
+  it('It should return status code 200 once a super admin successfully views users roles', (done) => {
+    chai.request(app)
+      .get('/api/users/settings/view-users-roles?page=1&limit=1')
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('List of users and their respective roles');
+        res.body.should.have.property('data');
+        res.body.data.should.have.property('pageMeta');
+        res.body.data.pageMeta.should.be.an('object');
+        res.body.data.should.have.property('rows');
+        res.body.data.rows.should.be.an('array');
+        res.body.data.rows[0].should.have.property('firstName');
+        res.body.data.rows[0].should.have.property('lastName');
+        res.body.data.rows[0].should.have.property('email');
+        res.body.data.rows[0].should.have.property('role');
+        done();
+      });
+  });
+
+  it('It should return status code 403: A non super admin user trying to view users roles', (done) => {
+    chai.request(app)
+      .get('/api/users/settings/view-users-roles?page=1&limit=1')
+      .set('Authorization', loggedInToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(403);
+        res.body.should.have.property('message').equal('You are not a super admin.Action not performed');
+        done();
+      });
+  });
+
+  it('It should return status code 404: No data available', (done) => {
+    chai.request(app)
+      .get('/api/users/settings/view-users-roles?page=20&limit=10')
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(404);
+        res.body.should.have.property('message').equal('No data available');
+        done();
+      });
+  });
+});

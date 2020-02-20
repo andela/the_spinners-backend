@@ -94,3 +94,51 @@
  *             description: User not found
  *
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   Super Admin View Users Roles:
+ *     type: object
+ *
+ */
+
+/**
+ * @swagger
+ * /api/users/settings/view-users-roles:
+ *   get:
+ *     tags:
+ *       - User
+ *     name: Set or Reset User Role
+ *     summary: Edit User Role By Super Admin
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - name: page
+ *         in: query
+ *         type: integer
+ *       - name: limit
+ *         in: query
+ *         type: integer
+ *         schema:
+ *           $ref: '#/definitions/Super Admin View Users Roles'
+ *           type: object
+ *     responses:
+ *       '200':
+ *             description: List of users and their respective roles.
+ *       '400':
+ *             description: Bad request.
+ *       '401':
+ *             description: No Token Supplied.
+ *       '403':
+ *             description: Forbiden.
+ *       '404':
+ *             description: No data available
+ *
+ */
