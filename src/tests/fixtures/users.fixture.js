@@ -270,7 +270,12 @@ export const facebookProfile = {
   _json: {
     first_ame: 'userfirstname',
     last_name: 'userlastname',
-    email: 'facebookuser@gmail.com'
+    email: 'facebookuser@gmail.com',
+    picture: {
+      data: {
+        url: 'ufhuierhfierhfiuhreiufheiru'
+      }
+    }
   }
 };
 export const OAuthTokens = {
