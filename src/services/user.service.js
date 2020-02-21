@@ -32,6 +32,20 @@ class UserService {
   }
 
   /**
+ * find user property with include
+ * @static
+ * @param {object} property
+ * @memberof UserService
+ * @returns {object} data
+ */
+  static findUserByPropertyWithInclude(property) {
+    return Users.findOne({
+      where: property,
+      include: ['preferences']
+    });
+  }
+
+  /**
    *
    *
    * @static
