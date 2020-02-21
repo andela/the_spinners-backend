@@ -11,6 +11,7 @@ export default async (accessToken, refreshToken, profile, done) => {
       lastName: googleProfile.family_name,
       email: googleProfile.email,
       password: BcryptService.hashPassword(Math.random().toString(36)),
+      profilePicture: googleProfile.picture,
       isVerified: true
     };
     const { dataValues } = await UserService.addUser(userdata);

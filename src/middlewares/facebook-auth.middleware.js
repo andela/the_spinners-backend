@@ -11,6 +11,7 @@ export default async (accessToken, refreshToken, profile, done) => {
       lastName: facebookProfile.last_name,
       email: facebookProfile.email,
       password: BcryptService.hashPassword(Math.random().toString(36)),
+      profilePicture: facebookProfile.picture.data.url,
       isVerified: true
     };
     const { dataValues } = await UserService.addUser(userdata);
