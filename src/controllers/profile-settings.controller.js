@@ -18,7 +18,8 @@ class ProfileSettingsController {
   */
   static async viewProfile(req, res) {
     const userToken = JwtService.verifyToken(req.token);
-    const registeredUser = await UserService.findUserByProperty({ email: userToken.email });
+    const registeredUser = await UserService
+      .findUserByPropertyWithInclude({ email: userToken.email });
     const {
       password,
       token,

@@ -36,7 +36,9 @@ export default (sequelize, DataTypes) => {
     });
     Users.hasOne(models.Preferences, {
       foreignKey: 'userId',
+      as: 'preferences',
       onDelete: 'CASCADE',
+      hooks: true
     });
     Users.hasMany(models.Users, {
       foreignKey: 'lineManagerId',
