@@ -183,7 +183,7 @@ describe('Create accommmodation', () => {
     chai.request(app)
       .post('/api/accommodations')
       .set('Authorization', travelAdminToken)
-      .send({ ...newAccomodation, locationId: faker.random.number({ min: 10, max: 15 }) })
+      .send({ ...newAccomodation, locationId: faker.random.number({ min: 1022 }) })
       .end((err, res) => {
         expect(res).to.have.status(404);
         expect(res.body).to.have.property('message');
