@@ -78,12 +78,40 @@ class UserService {
   /**
 *
 * @static
+* @param {role} role
 * @param {property} property
 * @memberof UserService
 * @returns {object} this function finds all
 */
-  static findAllUsersRoles({ offset, limit }) {
+  static findAllRequesters(role, { offset, limit }) {
     return Users.findAndCountAll({
+      where: role,
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'role',
+        'profilePicture'
+      ],
+      offset,
+      limit,
+      order: [
+        ['id', 'DESC']
+      ]
+    });
+  }
+
+  /**
+* @static
+* @param {role} role
+* @param {property} property
+* @memberof UserService
+* @returns {object} this function finds all
+*/
+  static findAllManagers(role, { offset, limit }) {
+    return Users.findAndCountAll({
+      where: role,
       attributes: [
         'id',
         'firstName',
