@@ -92,7 +92,8 @@ class UserService {
         'lastName',
         'email',
         'role',
-        'profilePicture'
+        'profilePicture',
+        'lineManagerId'
       ],
       offset,
       limit,
