@@ -69,7 +69,7 @@ describe('Test searching requests:', () => {
   });
   it('Should return status code of 200 on with search results when search by location', (done) => {
     chai.request(app)
-      .get('/api/search?location=rwanda')
+      .get('/api/search?location=Andorra')
       .set('Authorization', nonManagerToken)
       .end((err, res) => {
         expect(res).to.have.status(200);

@@ -11,7 +11,7 @@ const today = new Date();
 const desiredDeparture = new Date();
 desiredDeparture.setDate(today.getDate() + 2);
 const desiredReturn = new Date();
-desiredReturn.setDate(desiredDeparture.getDate() + 5);
+desiredReturn.setMonth(today.getMonth() + 2);
 
 const newDate = (date) => {
   const dd = String(date.getDate()).padStart(2, '0');
@@ -19,6 +19,7 @@ const newDate = (date) => {
   const yyyy = date.getFullYear();
   return `${yyyy}-${mm}-${dd}`;
 };
+
 export const trip = {
   originId: faker.random.number({ min: 1, max: 9 }),
   destinationId: faker.random.number({ min: 1, max: 9 }),
@@ -74,8 +75,8 @@ export const newTripComment = {
   userId: loggedInUser.id,
   requestId: faker.random.number(),
   tripType: 'one-way',
-  originId: faker.random.number({ min: 1, max: 2 }),
-  destinationId: faker.random.number({ min: 1, max: 2 }),
+  originId: faker.random.number({ min: 1, max: 1 }),
+  destinationId: faker.random.number({ min: 1, max: 1 }),
   departureDate: faker.date.future(),
   travelReasons: faker.lorem.sentence(),
   accommodationId: faker.random.number()
