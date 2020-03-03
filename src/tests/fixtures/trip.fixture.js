@@ -55,7 +55,7 @@ export const checkDate = {
 };
 export const multiCitytrip = [
   {
-    originId: faker.random.number({ min: 1, max: 9 }),
+    originId: 1,
     destinationId: 2,
     departureDate: '2020-07-25',
     travelReasons: faker.lorem.sentence(),
@@ -63,7 +63,7 @@ export const multiCitytrip = [
   },
   {
     originId: 2,
-    destinationId: faker.random.number({ min: 4, max: 9 }),
+    destinationId: 3,
     departureDate: '2020-07-28',
     travelReasons: faker.lorem.sentence(),
     accommodationId: 5
