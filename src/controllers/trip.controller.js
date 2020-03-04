@@ -1,9 +1,9 @@
+/* eslint-disable function-paren-newline */
 import TripService from '../services/trip.service';
 import ResponseService from '../services/response.service';
 import RequestService from '../services/request.service';
 import UserService from '../services/user.service';
 import { paginationHelper } from '../helpers';
-
 /**
  *
  *
@@ -19,9 +19,22 @@ class TripController {
    * @returns {response} @memberof Trips
    */
   static async requestOneWayTrip(req, res) {
-    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
-    const newRequest = await RequestService.createRequest({ requesterId: req.userData.id, status: 'pending', lineManagerId });
-
+    const {
+      id,
+      lineManagerId,
+      firstName: requesterFname,
+      lastName: requesterLname,
+      profilePicture: requesterPicture
+    } = await UserService.findUserByProperty(req.userData.id);
+    const newRequest = await RequestService.createRequest({
+      requesterId: id,
+      requesterFname,
+      requesterLname,
+      requesterPicture,
+      status: 'pending',
+      tripType: 'One Way',
+      lineManagerId
+    });
     const newTrip = await TripService.createTrip({
       ...req.body, requestId: newRequest.get().id, userId: req.userData.id, tripType: 'one-way', status: 'pending'
     });
@@ -37,9 +50,22 @@ class TripController {
    * @returns {response} @memberof Trips
    */
   static async requestReturnTrip(req, res) {
-    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
-    const newRequest = await RequestService.createRequest({ requesterId: req.userData.id, status: 'pending', lineManagerId });
-
+    const {
+      id,
+      lineManagerId,
+      firstName: requesterFname,
+      lastName: requesterLname,
+      profilePicture: requesterPicture
+    } = await UserService.findUserByProperty(req.userData.id);
+    const newRequest = await RequestService.createRequest({
+      requesterId: id,
+      status: 'pending',
+      lineManagerId,
+      requesterFname,
+      requesterLname,
+      requesterPicture,
+      tripType: 'Return Trip',
+    });
     const returnTrip = await TripService.createTrip({
       ...req.body, requestId: newRequest.get().id, userId: req.userData.id, tripType: 'return-trip', status: 'pending'
     });
@@ -56,7 +82,6 @@ class TripController {
     const userId = req.userData.id;
     const { page, limit } = req.query;
     const offset = (page - 1) * limit;
-
     const results = await TripService.findByPropertyAndCountAll({ userId }, { offset, limit });
     ResponseService.setSuccess(200, 'List of requested trips', {
       pageMeta: paginationHelper({
@@ -74,9 +99,22 @@ class TripController {
   * @returns {response} @memberof Trips
   */
   static async requestMultiCityTrip(req, res) {
-    const { lineManagerId } = await UserService.findUserByProperty(req.userData.id);
-    const newRequest = await RequestService.createRequest({ requesterId: req.userData.id, status: 'pending', lineManagerId });
-
+    const {
+      id,
+      lineManagerId,
+      firstName: requesterFname,
+      lastName: requesterLname,
+      profilePicture: requesterPicture
+    } = await UserService.findUserByProperty(req.userData.id);
+    const newRequest = await RequestService.createRequest({
+      requesterId: id,
+      requesterFname,
+      requesterLname,
+      requesterPicture,
+      status: 'pending',
+      tripType: 'Multi City',
+      lineManagerId
+    });
     const newMultiCityTrip = req.body.map((trip) => ({ ...trip, userId: req.userData.id, requestId: newRequest.get().id, tripType: 'multi-city' }));
     const newTrips = await TripService.createMultiCityTrip(newMultiCityTrip);
     const newTripArray = newTrips.map((trip) => {
