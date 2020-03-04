@@ -89,6 +89,14 @@ export const createTrip = async () => {
   return dataValues;
 };
 
+export const sameLocationTrip = {
+  originId: faker.random.number({ min: 1, max: 1 }),
+  destinationId: faker.random.number({ min: 1, max: 1 }),
+  departureDate: '2020-12-20',
+  returnDate: '2020-12-31',
+  travelReasons: faker.lorem.sentence(),
+  accommodationId: faker.random.number()
+};
 
 const generatedTrip = {
   id: faker.random.number({ min: 100000, max: 100020 }),
