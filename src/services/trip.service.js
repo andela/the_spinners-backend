@@ -61,6 +61,7 @@ class TripService {
         ...property
       },
       attributes: [
+        'id',
         'userId',
         'tripType',
         'requestId',

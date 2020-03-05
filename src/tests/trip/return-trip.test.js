@@ -5,6 +5,7 @@ import {
   trip,
   badRequest,
   checkDate,
+  sameLocationTrip
 } from '../fixtures/trip.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 import cleanAllTables from '../fixtures/database.fixture';
@@ -26,6 +27,19 @@ describe('/POST create return trip', () => {
         res.body.should.be.an('object');
         res.status.should.be.equal(201);
         res.body.should.have.property('message').equal('Trip created successfully');
+        done();
+      });
+  });
+
+  it('Should return an error when trip has same location', (done) => {
+    chai.request(app)
+      .post('/api/trips/return')
+      .set('Authorization', loggedInToken)
+      .send(sameLocationTrip)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.status.should.be.equal(400);
+        res.body.should.have.property('message').equal('Origin and destination must be different');
         done();
       });
   });
