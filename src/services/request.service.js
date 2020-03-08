@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Request } = models;
+const { Request, Trip } = models;
 
 /**
  *
@@ -27,7 +27,11 @@ class RequestService {
   static async getAllRequets(param) {
     return Request.findAll({
       where: { ...param },
-      order: [['status', 'ASC'], ['createdAt', 'DESC']]
+      order: [['status', 'ASC'], ['createdAt', 'DESC']],
+      include: [{
+        model: Trip,
+        as: 'trip',
+      }]
     });
   }
 
