@@ -11,6 +11,7 @@ export default (sequelize, DataTypes) => {
     // associations can be defined here
     Comments.belongsTo(models.Users, { foreignKey: 'userId', targetKey: 'id' });
     Comments.belongsTo(models.Trip, { foreignKey: 'subjectId', targetKey: 'id' });
+    Comments.belongsTo(models.Accommodation, { foreignKey: 'subjectId', as: 'accommodation' });
   };
   return Comments;
 };

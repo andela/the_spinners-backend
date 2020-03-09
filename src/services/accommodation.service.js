@@ -1,7 +1,7 @@
 import models from '../models';
 
 
-const { Accommodation, Booking, AccommodationType, Rooms } = models;
+const { Accommodation, Booking, AccommodationType, Rooms, Users } = models;
 
 /**
  *
@@ -45,7 +45,13 @@ class AccommodationService {
    * @returns {object} data
    */
   static findAllAccommodations() {
-    return Accommodation.findAll();
+    return Accommodation.findAll({ include: ['addOnServices', 'accommodationPictures', 'amenities',
+      { association: 'accommodationComments', include: { model: Users, attributes: ['firstName', 'lastName', 'profilePicture'] } },
+      {
+        association: 'rooms',
+        include: ['roomPictures']
+      }
+    ] });
   }
 
   /**
