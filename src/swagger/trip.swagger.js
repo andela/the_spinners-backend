@@ -409,3 +409,45 @@
  *         description: Trip ID doesn't exists, Comment ID doesn't exists
  *
  */
+
+/**
+ * @swagger
+ * /api/trips/request/{tripId}/comments:
+ *   get:
+ *     tags:
+ *       - trips
+ *     name: View all comments
+ *     summary: User should be able to view his comments posted on requested trip
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *       - in: path
+ *         name: tripId
+ *       - name: page
+ *         in: query
+ *         type: integer
+ *       - name: limit
+ *         in: query
+ *         type: integer
+ *         schema:
+ *           $ref: '#/definitions/viewComments'
+ *           type: object
+ *     responses:
+ *       '200':
+ *         description: List all comments
+ *       '400':
+ *         description: Page must be greater than 0,
+ *                      Limit must be a number,
+ *                      Page must be a number,
+ *                      Page is required,
+ *                      Limit is required
+ *       '404':
+ *         description: Not comments found for you
+ *
+ */
