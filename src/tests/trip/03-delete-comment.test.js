@@ -72,7 +72,7 @@ describe('/DELETE delete comment posted on trip request', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.status.should.be.equal(404);
-        res.body.should.have.property('message').equal('Trip ID does not exists or you does not belong to the trip ID');
+        res.body.should.have.property('message');
         done();
       });
   });
@@ -85,7 +85,7 @@ describe('/DELETE delete comment posted on trip request', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.status.should.be.equal(404);
-        res.body.should.have.property('message').equal('Comment ID does not exists or does not belong to the trip ID');
+        res.body.should.have.property('message');
         done();
       });
   });
@@ -98,7 +98,7 @@ describe('/DELETE delete comment posted on trip request', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.status.should.be.equal(404);
-        res.body.should.have.property('message').equal('Trip ID does not exists or you does not belong to the trip ID');
+        res.body.should.have.property('message');
         done();
       });
   });

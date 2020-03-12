@@ -22,7 +22,13 @@ class CommentController {
       comment
     };
     await CommentService.createComment(commentInformation);
-    ResponseService.setSuccess(201, 'Your comment was submitted successfully', commentInformation);
+    ResponseService.setSuccess(201, 'Your comment was submitted successfully', {
+      ...commentInformation,
+      User: {
+        firstName: req.signInUser.firstName,
+        lastName: req.signInUser.lastName
+      }
+    });
     return ResponseService.send(res);
   }
 
@@ -57,7 +63,7 @@ class CommentController {
     const results = await CommentService
       .findByPropertyAndCountAll(
         {
-          userId: req.userData.id,
+          // userId: req.userData.id,
           subjectId: req.params.tripId
         },
         {

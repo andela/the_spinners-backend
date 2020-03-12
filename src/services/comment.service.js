@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Comments } = models;
+const { Comments, Users } = models;
 
 /**
  * class of different comments
@@ -47,6 +47,10 @@ class CommentService {
   static findByPropertyAndCountAll(property, { offset, limit }) {
     return Comments.findAndCountAll({
       where: property,
+      include: {
+        model: Users,
+        attributes: ['firstName', 'lastName', 'profilePicture']
+      },
       order: [
         ['id', 'DESC']
       ],
