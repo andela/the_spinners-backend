@@ -86,6 +86,7 @@ export const newAccomodation = {
   name: faker.commerce.productName(),
   typeId: faker.random.number({ min: 1, max: 5 }),
   locationId: faker.random.number({ min: 1, max: 9 }),
+  rating: faker.random.number({ min: 1, max: 5 }),
   description: faker.lorem.sentence(),
   accommodationPictures: [generateImage('Accommodation'), generateImage('Accommodation'), generateImage('Accommodation')],
   addOnServices: [generateAddOn(), generateAddOn()],

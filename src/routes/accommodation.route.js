@@ -20,8 +20,8 @@ router.post(
 router.get('/', authMiddleware.checkUserLoggedIn, AccommodationController.getAccommodations);
 router.post(
   '/',
-  authMiddleware.checkUserLoggedIn, createAccommodationValidations,
-  authMiddleware.verifyPermissions,
+  authMiddleware.checkUserLoggedIn, authMiddleware.verifyPermissions,
+  createAccommodationValidations,
   avoidDuplicateAccommodation,
   checkIfAccommodationTypeExists, checkIfLocationExists,
   AccommodationController.createAccommodation

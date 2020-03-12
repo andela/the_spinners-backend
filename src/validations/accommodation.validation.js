@@ -52,6 +52,13 @@ export const createAccommodationValidations = async (req, res, next) => {
         'string.empty': 'Please enter your accomodation description',
         'any.required': 'description is required'
       }),
+    rating: Joi.number()
+      .max(5)
+      .required()
+      .messages({
+        'number.max': 'rating must be less than or equal to 5',
+        'any.required': 'rating is required'
+      }),
     typeId: Joi.number()
       .min(1)
       .required()
