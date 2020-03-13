@@ -45,12 +45,26 @@ class AccommodationService {
    * @returns {object} data
    */
   static findAllAccommodations() {
-    return Accommodation.findAll({ include: ['addOnServices', 'accommodationPictures', 'amenities',
-      { association: 'accommodationComments', include: { model: Users, attributes: ['firstName', 'lastName', 'profilePicture'] } },
-      {
-        association: 'rooms',
-        include: ['roomPictures']
+    return Accommodation.findAll({ include: ['addOnServices', {
+      association: 'accommodationPictures',
+      where: {
+        subjectType: 'accommodation'
       }
+    }, 'amenities',
+    { association: 'accommodationComments',
+      include: { model: Users, attributes: ['firstName', 'lastName', 'profilePicture'] },
+    },
+    {
+      association: 'rooms',
+      include: [
+        {
+          association: 'roomPictures',
+          where: {
+            subjectType: 'room'
+          }
+        }
+      ]
+    }
     ] });
   }
 
