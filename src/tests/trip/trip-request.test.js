@@ -38,7 +38,7 @@ describe('/Get view requested trips ', () => {
 
   it('Should get requested trip of the next page', (done) => {
     chai.request(app)
-      .get('/api/trips/requests?page=2&limit=1')
+      .get('/api/trips/requests?page=1&limit=1')
       .set('Authorization', loggedInToken)
       .end((err, res) => {
         res.body.should.be.an('object');

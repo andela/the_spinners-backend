@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable function-paren-newline */
 import TripService from '../services/trip.service';
 import ResponseService from '../services/response.service';
@@ -143,6 +145,67 @@ class TripController {
     });
     ResponseService.setSuccess(200, 'List of all available locations', availableLocations);
     return ResponseService.send(res);
+  }
+
+  /**
+*
+*
+* @static
+* @param {currentTrip} currentTrip
+* @param {id} id
+* @param {origin} origin
+* @param {destination} destination
+* @returns {object} This function updates origin(s) and destination(s)
+* @memberof TripController
+*/
+  static async updateOriginOrDestination(currentTrip, id, origin, destination) {
+    const sameTripRequestMulticityTrips = await TripService.findAllByProperty({
+      requestId: currentTrip.requestId
+    });
+    const previousTrip = sameTripRequestMulticityTrips.find(prevTrip => prevTrip.id === currentTrip.id - 1);
+    if (previousTrip && origin && previousTrip.originId !== origin) {
+      await TripService.updateTrip(
+        { id: currentTrip.id - 1 },
+        { destinationId: origin }
+      );
+    }
+    const nextTrip = sameTripRequestMulticityTrips.find(nexTrip => nexTrip.id === currentTrip.id + 1);
+    if (nextTrip && destination && nextTrip.destinationId !== destination) {
+      await TripService.updateTrip(
+        { id: currentTrip.id + 1 },
+        { originId: destination }
+      );
+    }
+  }
+
+  /**
+ *
+ *
+ * @static
+ * @param {req} req
+ * @param {res} res
+ * @returns {response} @memberof TripController
+ */
+  static async updateOpenTripRequest(req, res) {
+    const tripId = parseInt(req.params.tripId, 10);
+    const currentTrip = req.currentTrip;
+    if (currentTrip.tripType === 'multi-city') {
+      await TripController.updateOriginOrDestination(
+        req.currentTrip,
+        tripId,
+        req.body.originId,
+        req.body.destinationId
+      );
+    }
+    await Promise.all(Object.keys(req.body).map(async (key, index) => {
+      await TripService.updateTrip(
+        { id: tripId },
+        { [key]: (Object.values(req.body)[index]) }
+      );
+    }));
+    const updatedTrip = await TripService.findTripByProperty({ id: tripId });
+    ResponseService.setSuccess(200, 'Trip Updated successfully', updatedTrip);
+    ResponseService.send(res);
   }
 }
 

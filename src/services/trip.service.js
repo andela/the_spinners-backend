@@ -120,6 +120,22 @@ class TripService {
   static createMultiCityTrip(newTrip) {
     return Trip.bulkCreate(newTrip);
   }
+
+  /**
+   *
+   *
+   * @static
+   * @param {item} tripId trip column to be updated
+   * @param {value} newTripInfo to be updated
+   * @returns {updated} @memberof TripService
+   */
+  static updateTrip(tripId, newTripInfo) {
+    return Trip.update(newTripInfo, {
+      where: tripId,
+      individualHooks: true,
+      returning: true
+    });
+  }
 }
 
 

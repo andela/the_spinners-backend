@@ -20,5 +20,14 @@ router.get('/locations', authMiddleware.checkUserLoggedIn, TripController.viewAv
 router.post('/requests/:tripId/comments', authMiddleware.checkUserLoggedIn, UserValidation.validateUserComment, CommentController.addCommentOnTripRequest); // user comment on request trip route
 router.delete('/:tripId/comments/:commentId', authMiddleware.checkUserLoggedIn, UserValidation.validateDeleteTripComment, CommentMiddleware.checkCommentExist, CommentController.deleteComment); // user deletes comment route
 router.get('/request/:tripId/comments', authMiddleware.checkUserLoggedIn, CommentMiddleware.validateViewComment, CommentController.viewCommentPostedOnTripRequest); // user view comment posted on the thread
+router.patch('/:tripId/edit',
+  authMiddleware.checkUserLoggedIn,
+  TripMiddleware.checkTripExist,
+  TripMiddleware.checkOriginDestinationEquality,
+  TripMiddleware.checkReturnDate,
+  TripMiddleware.checkTripOrigin,
+  TripMiddleware.checkTripDestination,
+  TripMiddleware.checkRequestStatus,
+  TripController.updateOpenTripRequest);
 
 export default router;
