@@ -6,6 +6,7 @@ import accommodationRoute from './accommodation.route';
 import notificationRoute from './notification.route';
 import managerRoute from './manager.route';
 import searchRoute from './search.route';
+import chatRoute from './chat.route';
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.use('/api/users', profileSettingsRoute);
 app.use('/api/notifications', notificationRoute);
 app.use('/api/manager', managerRoute);
 app.use('/api/search', searchRoute);
+app.use('/api/chat', chatRoute);
 
 export default app;
