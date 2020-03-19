@@ -197,7 +197,7 @@ describe('Create accommmodation', () => {
       .set('Authorization', travelAdminToken)
       .send({ ...newAccomodation,
         locationId: faker.random.number({ min: 1, max: 9 }),
-        typeId: faker.random.number({ min: 10, max: 15 }), })
+        typeId: faker.random.number({ min: 10000000000, max: 15000000000 }), })
       .end((err, res) => {
         expect(res).to.have.status(404);
         expect(res.body).to.have.property('message');

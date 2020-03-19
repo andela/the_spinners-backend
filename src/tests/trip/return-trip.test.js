@@ -14,10 +14,6 @@ chai.should();
 chai.use(chaiHttp);
 
 describe('/POST create return trip', () => {
-  before(async () => {
-    await cleanAllTables();
-    await createUsers();
-  });
   it('App should create a return trip', (done) => {
     chai.request(app)
       .post('/api/trips/return')
