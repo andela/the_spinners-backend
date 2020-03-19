@@ -43,6 +43,10 @@ class RequestService {
   static async getAndCountAllRequets(param, { offset, limit }) {
     return Request.findAndCountAll({
       where: { ...param },
+      include: {
+        model: Trip,
+        as: 'trip'
+      },
       order: [['status', 'ASC'], ['createdAt', 'DESC']],
       offset,
       limit
