@@ -45,7 +45,7 @@ class TripMiddleware {
  */
   static async checkOriginDestinationEquality(req, res, next) {
     const { originId, destinationId } = req.body;
-    if (originId === destinationId) {
+    if (originId === destinationId && originId !== undefined && destinationId !== undefined) {
       ResponseService.setError(400, 'Origin and destination must be different');
       return ResponseService.send(res);
     }
