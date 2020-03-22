@@ -102,6 +102,27 @@ const accommodationMiddleware = {
     }
     next();
   },
+  checkIfLikeUnlikeAreSame: async (req, res, next) => {
+    let like;
+    let unlike;
+    if (req.body.like === 'yes') {
+      like = true;
+    } else {
+      like = false;
+    }
+    if (req.body.unlike === 'yes') {
+      unlike = true;
+    } else {
+      unlike = false;
+    }
+    if ((like === unlike)) {
+      ResponseService.setError(400, 'Like and unlike must have different values');
+      ResponseService.send(res);
+    }
+    next();
+    like = req.like;
+    unlike = req.unlike;
+  },
 };
 
 export default accommodationMiddleware;

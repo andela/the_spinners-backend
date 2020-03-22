@@ -35,6 +35,7 @@ router.patch(
   authMiddleware.checkUserLoggedIn,
   validateAccommodationReaction,
   accommodationMiddleware.checkBookingExist,
+  accommodationMiddleware.checkIfLikeUnlikeAreSame,
   AccommodationController.updateAccommodationReaction
 );
 router.get(

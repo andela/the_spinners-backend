@@ -90,35 +90,20 @@ class AccommodationController {
      * @returns {response} @memberof AccommodationController
      */
   static async updateAccommodationReaction(req, res) {
-    let like;
-    let unlike;
-    if (req.body.like === 'yes') {
-      like = true;
-    } else {
-      like = false;
-    }
-    if (req.body.unlike === 'yes') {
-      unlike = true;
-    } else {
-      unlike = false;
-    }
-    if ((like === true && unlike === true) || (like === false && unlike === false)) {
-      ResponseService.setError(400, 'Like and unlike must have different values');
-      ResponseService.send(res);
-    } else {
-      const { accommodationId, roomId } = req.params;
-      const userId = req.userData.id;
-      const reactionRecord = await LikesService.findReactionRecordByProperty({
-        accommodationId, userId, roomId
-      });
-      if ((reactionRecord.like) === true && like === true) like = false;
-      if (reactionRecord.unlike === true && unlike === true) unlike = false;
-      const [, [{ dataValues }]] = await LikesService.updateALike({
-        accommodationId, userId, roomId
-      }, { like, unlike });
-      ResponseService.setSuccess(200, 'Reaction updated successfully', dataValues);
-      ResponseService.send(res);
-    }
+    let like = req.like;
+    let unlike = req.unlike;
+    const { accommodationId, roomId } = req.params;
+    const userId = req.userData.id;
+    const reactionRecord = await LikesService.findReactionRecordByProperty({
+      accommodationId, userId, roomId
+    });
+    if (like === true && (reactionRecord.like) === like) like = !reactionRecord.like;
+    if (unlike === true && reactionRecord.unlike === unlike) unlike = !reactionRecord.unlike;
+    const [, [{ dataValues }]] = await LikesService.updateALike({
+      accommodationId, userId, roomId
+    }, { like, unlike });
+    ResponseService.setSuccess(200, 'Reaction updated successfully', dataValues);
+    ResponseService.send(res);
   }
 
   /**
