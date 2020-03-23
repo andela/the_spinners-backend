@@ -13,7 +13,9 @@ export default (sequelize, DataTypes) => {
     numberOfPeople: DataTypes.INTEGER,
     numberOfRooms: DataTypes.INTEGER,
     availableRooms: DataTypes.INTEGER,
-    roomPrice: DataTypes.DECIMAL(10, 2)
+    roomPrice: DataTypes.DECIMAL(10, 2),
+    likesCount: DataTypes.INTEGER,
+    dislikesCount: DataTypes.INTEGER
   }, {});
   Rooms.associate = (models) => {
     // associations can be defined here

@@ -90,20 +90,101 @@ class AccommodationController {
      * @returns {response} @memberof AccommodationController
      */
   static async updateAccommodationReaction(req, res) {
-    let like = req.like;
-    let unlike = req.unlike;
-    const { accommodationId, roomId } = req.params;
-    const userId = req.userData.id;
-    const reactionRecord = await LikesService.findReactionRecordByProperty({
-      accommodationId, userId, roomId
-    });
-    if (like === true && (reactionRecord.like) === like) like = !reactionRecord.like;
-    if (unlike === true && reactionRecord.unlike === unlike) unlike = !reactionRecord.unlike;
-    const [, [{ dataValues }]] = await LikesService.updateALike({
-      accommodationId, userId, roomId
-    }, { like, unlike });
-    ResponseService.setSuccess(200, 'Reaction updated successfully', dataValues);
-    ResponseService.send(res);
+    let like = req.likeValue;
+    let unlike = req.unlikeValue;
+    if (like !== undefined && unlike !== undefined) {
+      const { accommodationId, roomId } = req.params;
+      const userId = req.userData.id;
+      const reactionRecord = await LikesService.findReactionRecordByProperty({
+        accommodationId, userId, roomId
+      });
+      const bookedRoom = await AccommodationService.findRoomByProperty(
+        { id: roomId, accommodationId }
+      );
+      let bookedRoomLikesCounts;
+      let bookedRoomDisLikesCounts;
+      if (bookedRoom) {
+        bookedRoomLikesCounts = bookedRoom.likesCount;
+        bookedRoomDisLikesCounts = bookedRoom.dislikesCount;
+      }
+      if (like === true && (reactionRecord.like) === like) {
+        like = !reactionRecord.like;
+        await AccommodationService.updateRoom(
+          {
+            id: roomId,
+            accommodationId
+          },
+          {
+            likesCount: bookedRoomLikesCounts - 1
+          }
+        );
+      }
+
+      if (like === true && (reactionRecord.like) !== like) {
+        await AccommodationService.updateRoom(
+          {
+            id: roomId,
+            accommodationId
+          },
+          {
+            likesCount: bookedRoomLikesCounts + 1
+          }
+        );
+      }
+
+      if (like !== true && (reactionRecord.like) !== like) {
+        await AccommodationService.updateRoom(
+          {
+            id: roomId,
+            accommodationId
+          },
+          {
+            likesCount: bookedRoomLikesCounts - 1
+          }
+        );
+      }
+      if (unlike === true && (reactionRecord.unlike) === unlike) {
+        unlike = !reactionRecord.unlike;
+        await AccommodationService.updateRoom(
+          {
+            id: roomId,
+            accommodationId
+          },
+          {
+            dislikesCount: bookedRoomDisLikesCounts - 1
+          }
+        );
+      }
+
+      if (unlike === true && (reactionRecord.unlike) !== unlike) {
+        await AccommodationService.updateRoom(
+          {
+            id: roomId,
+            accommodationId
+          },
+          {
+            dislikesCount: bookedRoomDisLikesCounts + 1
+          }
+        );
+      }
+
+      if (unlike !== true && (reactionRecord.unlike) !== unlike) {
+        await AccommodationService.updateRoom(
+          {
+            id: roomId,
+            accommodationId
+          },
+          {
+            dislikesCount: bookedRoomDisLikesCounts - 1
+          }
+        );
+      }
+      const [, [{ dataValues }]] = await LikesService.updateALike({
+        accommodationId, userId, roomId
+      }, { like, unlike });
+      ResponseService.setSuccess(200, 'Reaction updated successfully', dataValues);
+      ResponseService.send(res);
+    }
   }
 
   /**

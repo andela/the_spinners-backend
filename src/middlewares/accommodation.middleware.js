@@ -42,17 +42,18 @@ export const checkAvailability = async (req, res, next) => {
   const searchResult = await AccommodationService
     .findAccommodationWithInclude(
       req.params.accommodationId,
-      { include: [
-        {
-          association: 'rooms',
-          where: {
-            id: req.params.roomId,
-            availableRooms: {
-              [Op.gt]: 0
+      {
+        include: [
+          {
+            association: 'rooms',
+            where: {
+              id: req.params.roomId,
+              availableRooms: {
+                [Op.gt]: 0
+              }
             }
           }
-        }
-      ]
+        ]
       }
     );
 
@@ -68,7 +69,8 @@ export const checkAvailability = async (req, res, next) => {
 
 export const checkPermission = async (req, res, next) => {
   const searchResult = await AccommodationService
-    .findBookingByProperty({ userId: req.userData.id,
+    .findBookingByProperty({
+      userId: req.userData.id,
       roomId: req.params.roomId,
       [Op.or]: [{
         from: {
@@ -91,12 +93,15 @@ export const checkPermission = async (req, res, next) => {
 
 const accommodationMiddleware = {
   checkBookingExist: async (req, res, next) => {
-    const findBooking = await BookingService.findBookingByProperty({
+    const bookingData = await BookingService.findBookingByProperty({
       accommodationId: req.params.accommodationId,
       roomId: req.params.roomId,
       userId: req.userData.id
     });
-    if (!findBooking) {
+    if (bookingData) {
+      req.bookingData = bookingData;
+    }
+    if (!bookingData) {
       ResponseService.setError(404, 'Accommodation booking not found');
       return ResponseService.send(res);
     }
@@ -115,13 +120,15 @@ const accommodationMiddleware = {
     } else {
       unlike = false;
     }
-    if ((like === unlike)) {
+    if (like !== unlike) {
+      req.likeValue = like;
+      req.unlikeValue = unlike;
+    }
+    if ((like === true && unlike === true) || (like === false && unlike === false)) {
       ResponseService.setError(400, 'Like and unlike must have different values');
       ResponseService.send(res);
     }
     next();
-    like = req.like;
-    unlike = req.unlike;
   },
 };
 

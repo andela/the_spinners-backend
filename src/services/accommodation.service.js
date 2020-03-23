@@ -107,6 +107,19 @@ class AccommodationService {
   }
 
   /**
+ * find ~Room
+ * @static
+ * @param {object} property
+ * @memberof AccommodationService
+ * @returns {object} data
+ */
+  static findRoomByProperty(property) {
+    return Rooms.findOne({
+      where: property
+    });
+  }
+
+  /**
    * Update
    * @static
    * @param {object} condition
