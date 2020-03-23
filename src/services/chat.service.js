@@ -1,8 +1,9 @@
 import { Op } from 'sequelize';
 import models from '../models';
+// eslint-disable-next-line import/no-cycle
 import { users } from '../helpers/eventEmmiters/socket';
 
-const { Chat } = models;
+const { Chat, Users } = models;
 
 /**
  * @class ChatService
@@ -20,10 +21,11 @@ export default class ChatService {
 
   /**
    * Get messages.
-   * @param {object} param notification
-   * @returns {object} The notification object.
+   * @param {object} param param
+   * @param {object} unreadCounter unreadCounter
+   * @returns {object} messages.
    */
-  static async getMessages(param) {
+  static async getMessages(param, unreadCounter) {
     const results = await Chat.findAll({
       where: param,
       order: [['isRead', 'ASC'], ['createdAt', 'ASC']]
@@ -31,7 +33,7 @@ export default class ChatService {
 
     const unread = await Chat.count({
       where: {
-        ...param,
+        ...unreadCounter,
         isRead: false
       }
     });
@@ -42,14 +44,12 @@ export default class ChatService {
   }
 
   /**
-   * @param {object} receiver
-   * @param {object} sender
-   * @param {object} message
+   * @param {object} newMessage
    * @return {function} send messages to connected client
    */
-  static async sendMessage(receiver, sender, message) {
-    if (!users[receiver]) return 0;
-    users[receiver].emit('private message', { sender, message });
+  static async sendMessage(newMessage) {
+    if (!users[newMessage.receiver]) return 0;
+    users[newMessage.receiver].emit('newMessage', newMessage);
   }
 
   /**
@@ -65,6 +65,21 @@ export default class ChatService {
     return Chat.update({ isRead: true }, {
       where: { [Op.and]: [{ sender }, { receiver }] },
       // where: { sender: senderId },
+      returning: true
+    });
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @param {*} email
+   * @return {object} updated message
+   * @memberof ChatService
+   */
+  static async updateLastActivity(email) {
+    return Users.update({ lastActivity: new Date() }, {
+      where: { email },
       returning: true
     });
   }

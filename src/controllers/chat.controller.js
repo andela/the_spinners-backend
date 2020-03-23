@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { users, io } from '../helpers/eventEmmiters/socket';
+import { users } from '../helpers/eventEmmiters/socket';
 import ResponseService from '../services/response.service';
 import ChatService from '../services/chat.service';
 import UserService from '../services/user.service';
@@ -14,7 +14,7 @@ class ChatController {
    */
   static async saveMessage(req, res) {
     const newMessage = await ChatService.saveMessage({ ...req.body, sender: req.userData.email });
-    ChatService.sendMessage(req.body.receiver, req.userData.email, req.body.message);
+    ChatService.sendMessage(newMessage.get());
 
     ResponseService.setSuccess(200, 'message added successfully', newMessage);
     ResponseService.send(res);
@@ -46,7 +46,7 @@ class ChatController {
     const message = await ChatService.getMessages({
       [Op.or]: [{ receiver: req.userData.email, sender: chatUser },
         { sender: req.userData.email, receiver: chatUser }]
-    });
+    }, { receiver: req.userData.email, sender: chatUser });
 
     ResponseService.setSuccess(200, 'messages fetched successfully', message);
     ResponseService.send(res);
@@ -68,7 +68,8 @@ class ChatController {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        profilePicture: user.profilePicture
+        profilePicture: user.profilePicture,
+        lastActivity: user.lastActivity
       };
 
       const onlineUser = users[user.email];
@@ -83,9 +84,6 @@ class ChatController {
 
     const sortedUsers = chatUsers.sort((a, b) => a.isOnline.toString()
       .localeCompare(b.isOnline.toString())).reverse();
-
-    io.emit('updateUsersList', sortedUsers);
-
     ResponseService.setSuccess(200, 'All users', sortedUsers);
     return ResponseService.send(res);
   }
