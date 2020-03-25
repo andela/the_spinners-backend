@@ -6,6 +6,7 @@ import ResponseService from '../services/response.service';
 import RequestService from '../services/request.service';
 import UserService from '../services/user.service';
 import { paginationHelper } from '../helpers';
+import emitter from '../helpers/eventEmmiters/emitter';
 /**
  *
  *
@@ -204,6 +205,7 @@ class TripController {
       );
     }));
     const updatedTrip = await TripService.findTripByProperty({ id: tripId });
+    emitter.emit('request-updated', updatedTrip);
     ResponseService.setSuccess(200, 'Trip Updated successfully', updatedTrip);
     ResponseService.send(res);
   }

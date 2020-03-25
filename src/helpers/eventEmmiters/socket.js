@@ -9,6 +9,7 @@ const users = {};
 const startSocket = (server) => {
   io.attach(server);
   let userName;
+  let disconnect;
   io.sockets
     .on('connection', socketioJwt.authorize({ // Verify authorization for token
       secret: process.env.SECRET_KEY,
@@ -17,15 +18,23 @@ const startSocket = (server) => {
     .on('authenticated', (socket) => {
       socket.emit('success', socket.decoded_token); // Emit success message for front-end
       socket.on('new-user', (user) => { // save a new user for future needs
+        if (users[user.email]) {
+          disconnect = false;
+        }
         userName = user.email;
         users[user.email] = socket;
         socket.broadcast.emit('user-connected', user);
       });
       socket.on('disconnect', async () => {
-        const response = await ChatService.updateLastActivity(userName);
-        const { lastActivity } = response[1][0];
-        socket.broadcast.emit('user-disconnected', { userEmail: userName, lastActivity });
-        delete users[userName];
+        disconnect = true;
+        setTimeout(async () => {
+          if (disconnect) {
+            const response = await ChatService.updateLastActivity(userName);
+            const { lastActivity } = response[1][0];
+            socket.broadcast.emit('user-disconnected', { userEmail: userName, lastActivity });
+            delete users[userName];
+          }
+        }, 10000);
       });
     });
 };
