@@ -1,7 +1,7 @@
 import emitter from '../helpers/eventEmmiters/emitter';
 import NotificationService from './notification.service';
 import UserService from './user.service';
-import tripEmailBody from '../helpers/mails/trip-notification.email';
+import { tripEmailBody, tripUpdateTemplate } from '../helpers/mails/trip-notification.email';
 import requestActionEmailTemplate from '../helpers/mails/request-action.email';
 import SendEmailService from './send-email.service';
 import PreferenceService from './preference.service';
@@ -67,7 +67,7 @@ class TripNotification {
    * @memberof TripNotification
    */
   static async requestUpdateNotification() {
-    await emitter.on('request-updated', async (request) => {
+    await emitter.on('request-status-updated', async (request) => {
       const { firstName, lastName, email, id } = await UserService.findUserByProperty({
         id: request.requesterId
       });
@@ -88,9 +88,34 @@ class TripNotification {
 
       const unsubscribeUrl = `https://${process.env.BASE_URL}/api/notifications`;
       const msg = requestActionEmailTemplate(userNames, message, unsubscribeUrl, request);
-      const emailSubject = `New travel request by ${firstName} ${lastName}`;
+      const emailSubject = message;
 
       this.sendNotifications(email, userPreferences, msg, emailSubject, notificationData);
+    });
+    await emitter.on('request-updated', async (request) => {
+      const {
+        id,
+        managerEmail,
+        managerPreferences,
+        managerNames
+      } = await this.findManagerToNotify(request);
+
+      // Find requestor Names
+      const { firstName, lastName } = await UserService
+        .findUserByProperty({ id: request.userId });
+      const message = `Trip by ${firstName} ${lastName} have been edited`;
+
+      const notificationData = await NotificationService.createNotification({
+        requestId: request.id,
+        message,
+        type: 'request_update',
+        userId: id,
+      });
+
+      const unsubscribeUrl = `https://${process.env.BASE_URL}/api/notifications`;
+      const msg = tripUpdateTemplate(managerNames, message, unsubscribeUrl);
+      const emailSubject = message;
+      this.sendNotifications(managerEmail, managerPreferences, msg, emailSubject, notificationData);
     });
   }
 
