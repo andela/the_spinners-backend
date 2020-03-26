@@ -2,7 +2,7 @@ import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
 import faker from 'faker';
 import app from '../../app';
-import newTrip from '../fixtures/trip.fixture';
+import { newTrip } from '../fixtures/trip.fixture';
 import { createNotifications, unreadNotification, readNotification } from '../fixtures/notification.fixtures';
 import {
   loggedInToken,

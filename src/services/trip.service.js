@@ -136,6 +136,18 @@ class TripService {
       returning: true
     });
   }
+
+  /** find locations
+  * @static
+  * @param {object} destination
+  * @memberof TripService
+  * @returns {object} data
+  */
+  static findMostTraveleddestinations() {
+    return Trip.findAll({
+      attributes: ['destinationId']
+    });
+  }
 }
 
 

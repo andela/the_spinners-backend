@@ -30,7 +30,7 @@ export const trip = {
   accommodationId: 5
 };
 
-const newTrip = {
+export const newTrip = {
   originId: faker.random.number({ min: 1, max: 9 }),
   destinationId: faker.random.number({ min: 1, max: 9 }),
   departureDate: faker.date.future(),
@@ -64,7 +64,49 @@ export const multiCitytrip = [
   },
   {
     originId: 2,
+    destinationId: 9,
+    departureDate: '2020-07-28',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 5
+  },
+  {
+    originId: 9,
     destinationId: 3,
+    departureDate: '2020-07-28',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 5
+  },
+  {
+    originId: 3,
+    destinationId: 2,
+    departureDate: '2020-07-28',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 5
+  },
+  {
+    originId: 2,
+    destinationId: 5,
+    departureDate: '2020-07-25',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 3
+  },
+  {
+    originId: 5,
+    destinationId: 3,
+    departureDate: '2020-07-28',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 5
+  },
+  {
+    originId: 3,
+    destinationId: 5,
+    departureDate: '2020-07-28',
+    travelReasons: faker.lorem.sentence(),
+    accommodationId: 5
+  },
+  {
+    originId: 5,
+    destinationId: 1,
     departureDate: '2020-07-28',
     travelReasons: faker.lorem.sentence(),
     accommodationId: 5
@@ -277,4 +319,10 @@ export const formatDate = () => {
   return formattedDate;
 };
 
-export default newTrip;
+export const createMultiCityTrip = async () => {
+  await Trip.destroy({ where: {} });
+  await Trip.bulkCreate(multiCitytrip);
+};
+export const cleanDb = async () => {
+  await Trip.destroy({ where: {} });
+};

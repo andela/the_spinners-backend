@@ -29,5 +29,7 @@ router.patch('/:tripId/edit',
   TripMiddleware.checkTripDestination,
   TripMiddleware.checkRequestStatus,
   TripController.updateOpenTripRequest);
+router.delete('/:tripId/comments/:commentId', authMiddleware.checkUserLoggedIn, UserValidation.validateDeleteTripComment, TripMiddleware.checkTripExist, CommentMiddleware.checkCommentExist, CommentController.deleteComment); // user deletes comment route
+router.get('/destinations/most-traveled', authMiddleware.checkUserLoggedIn, TripController.mostTraveledDestinations);
 
 export default router;
