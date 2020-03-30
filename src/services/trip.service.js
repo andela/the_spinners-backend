@@ -136,6 +136,26 @@ class TripService {
       returning: true
     });
   }
+
+  /**
+   * A method to querry with condition
+   * and count all records
+   * @static
+   * @param {object} property - The condion as an object
+   * @param {number} offset - The offset to be used
+   * @param {number} limit - The limit to be used
+   * @returns {number} The data retrieved
+   * @memberof TripService
+   */
+  static findAndCountAllTrips(property) {
+    return Trip.count({
+      where: {
+        ...property
+      },
+      group: 'tripType',
+      attributes: ['tripType']
+    });
+  }
 }
 
 

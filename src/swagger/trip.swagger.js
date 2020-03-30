@@ -451,3 +451,39 @@
  *         description: Not comments found for you
  *
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   tripStats:
+ *     type: object
+ */
+
+/**
+ * @swagger
+ * /api/trips/stats:
+ *   get:
+ *     tags:
+ *       - trips
+ *     name: Trip Stats
+ *     summary: User should be able to view trip stats
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         type: string
+ *         schema:
+ *           $ref: '#/definitions/tripStats'
+ *           type: object
+ *     responses:
+ *       '200':
+ *         description: Your created trip stats
+ *       '401':
+ *         description: Unauthorized access. Invalid token,
+ *                      Unauthorized access. Invalid token for this user,
+ *                      No Token supplied
+ */
