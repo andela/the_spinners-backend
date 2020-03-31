@@ -29,5 +29,6 @@ router.patch('/:tripId/edit',
   TripMiddleware.checkTripDestination,
   TripMiddleware.checkRequestStatus,
   TripController.updateOpenTripRequest);
+router.get('/stats', authMiddleware.checkUserLoggedIn, TripController.getStats);
 
 export default router;

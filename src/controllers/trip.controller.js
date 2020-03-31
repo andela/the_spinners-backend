@@ -209,6 +209,21 @@ class TripController {
     ResponseService.setSuccess(200, 'Trip Updated successfully', updatedTrip);
     ResponseService.send(res);
   }
+
+  /**
+   *
+   *
+   * @static
+   * @param {*} req
+   * @param {*} res
+   * @memberof TripController
+   * @returns {object} this function returns the statics of the trip
+   */
+  static async getStats(req, res) {
+    const stats = await TripService.findAndCountAllTrips({ userId: req.userData.id });
+    ResponseService.setSuccess(200, 'Your created trip stats', stats);
+    ResponseService.send(res);
+  }
 }
 
 export default TripController;
