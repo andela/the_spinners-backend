@@ -1,5 +1,3 @@
-import emitter from '../helpers/eventEmmiters/emitter';
-
 export default (sequelize, DataTypes) => {
   const Request = sequelize.define('Request', {
     requesterId: DataTypes.INTEGER,
@@ -14,8 +12,5 @@ export default (sequelize, DataTypes) => {
     Request.belongsTo(models.Users, { foreignKey: 'requesterId', targetKey: 'id' });
     Request.hasMany(models.Trip, { foreignKey: 'requestId', targetKey: 'id', as: 'trip' });
   };
-  Request.afterUpdate((data) => {
-    emitter.emit('request-status-updated', data);
-  });
   return Request;
 };

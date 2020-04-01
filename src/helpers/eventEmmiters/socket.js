@@ -25,6 +25,15 @@ const startSocket = (server) => {
         users[user.email] = socket;
         socket.broadcast.emit('user-connected', user);
       });
+      socket.on('new-message', async (message) => {
+        const response = await ChatService.saveMessage(message);
+        const newMessage = response.get();
+        if (users[newMessage.sender]) {
+          users[newMessage.sender].emit('sent', newMessage);
+        }
+        if (!users[newMessage.receiver]) return 0;
+        users[newMessage.receiver].emit('newMessage', newMessage);
+      });
       socket.on('disconnect', async () => {
         disconnect = true;
         setTimeout(async () => {
@@ -34,7 +43,7 @@ const startSocket = (server) => {
             socket.broadcast.emit('user-disconnected', { userEmail: userName, lastActivity });
             delete users[userName];
           }
-        }, 10000);
+        }, 30000);
       });
     });
 };
