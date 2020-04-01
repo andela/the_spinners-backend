@@ -7,20 +7,6 @@ import UserService from '../services/user.service';
 /** Class representing comments controller. */
 class ChatController {
   /**
-   * Save a new message.
-   * @param {object} req request
-   * @param {object} res response
-   * @returns {object} response object
-   */
-  static async saveMessage(req, res) {
-    const newMessage = await ChatService.saveMessage({ ...req.body, sender: req.userData.email });
-    ChatService.sendMessage(newMessage.get());
-
-    ResponseService.setSuccess(200, 'message added successfully', newMessage);
-    ResponseService.send(res);
-  }
-
-  /**
    *
    * @static
    * @param {*} req request

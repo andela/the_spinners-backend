@@ -28,7 +28,8 @@ export default class ChatService {
   static async getMessages(param, unreadCounter) {
     const results = await Chat.findAll({
       where: param,
-      order: [['isRead', 'ASC'], ['createdAt', 'ASC']]
+      // order: [['isRead', 'ASC'], ['createdAt', 'ASC']]
+      order: [['id', 'ASC']]
     });
 
     const unread = await Chat.count({
