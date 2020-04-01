@@ -190,7 +190,7 @@ class AuthController {
   static async googleFacebookAuthHandler(req, res) {
     const token = JwtService.generateToken({ id: req.user.id, email: req.user.email });
     await UserService.updateUser({ id: req.user.id }, { token });
-    return res.redirect(`${process.env.FRONTEND_URL}/facebook/redirect?token=${token}`);
+    return res.redirect(`${process.env.FRONTEND_URL}/${req.user.provider}/redirect?token=${token}`);
   }
 }
 
