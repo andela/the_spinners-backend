@@ -6,7 +6,14 @@ import { booking,
   createTravelAdmin,
   travelAdminToken,
   newAccomodation,
-  crateMultipleAccommodations } from '../fixtures/accommodation.fixture';
+  crateMultipleAccommodations,
+  createNewBooking,
+  newBooking,
+  accommodationReactionValue,
+  invalidAccommodationId,
+  accommodationWrongReactionValue,
+  createAccommodationReactionRecord,
+  accommodationSameReactionValue } from '../fixtures/accommodation.fixture';
 import { loggedInToken, createUsers } from '../fixtures/users.fixture';
 import cleanAllTables from '../fixtures/database.fixture';
 
@@ -202,6 +209,134 @@ describe('Create accommmodation', () => {
         expect(res).to.have.status(404);
         expect(res.body).to.have.property('message');
         expect(res.body.message).eqls('Accomodation type you specified doesn\'t exists');
+        done();
+      });
+  });
+});
+
+describe('Test On User Like/Unlike Booked Accommodation:', () => {
+  before(async () => {
+    await createNewBooking();
+    await createAccommodationReactionRecord();
+  });
+  it('Should return status code 200 once an accommodation is successfully reacted on(Like)', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send(accommodationReactionValue)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('Reaction updated successfully');
+        done();
+      });
+  });
+
+  it('Should return status code 200 once an accommodation is successfully re-liked(Remove a like)', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send(accommodationReactionValue)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('Reaction updated successfully');
+        done();
+      });
+  });
+
+  it('Should return status code 200 once an accommodation is successfully reacted on(Dislike)', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send({ like: 'no', unlike: 'yes' })
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('Reaction updated successfully');
+        done();
+      });
+  });
+
+  it('Should return status code 200 once an accommodation is successfully re-disliked(Remove a dislike)', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send({ like: 'no', unlike: 'yes' })
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('Reaction updated successfully');
+        done();
+      });
+  });
+
+  it('Should return status code 404 once accommodation booking is not available', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${invalidAccommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send(accommodationReactionValue)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(404);
+        res.body.should.have.property('message').equal('Accommodation booking not found');
+        done();
+      });
+  });
+
+  it('Should return status code 400 once like and unlike input values are same (Yes)', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send(accommodationSameReactionValue)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('message').equal('Like and unlike must have different values');
+        done();
+      });
+  });
+
+  it('Should return status code 400 once like and unlike input values are same (No)', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send({ like: 'no', unlike: 'no' })
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('message').equal('Like and unlike must have different values');
+        done();
+      });
+  });
+
+  it('Should return status code 400 upon invalid input data: like must be one of yes no', (done) => {
+    chai.request(app)
+      .patch(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/react`)
+      .set('Authorization', loggedInToken)
+      .send(accommodationWrongReactionValue)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(400);
+        res.body.should.have.property('message');
+        res.body.message[0].should.be.equal('like must be one of yes no');
+        done();
+      });
+  });
+});
+
+describe('Test On Get Accommodation Reactions Count:', () => {
+  it('Should return status code 200 once an accommodation reactions count is successfully retrieved', (done) => {
+    chai.request(app)
+      .get(`/api/accommodations/${newBooking.accommodationId}/rooms/${newBooking.roomId}/reactions-count`)
+      .set('Authorization', loggedInToken)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.should.have.status(200);
+        res.body.should.have.property('message').equal('Reaction records successfully retrieved');
+        res.body.should.have.property('data');
+        res.body.data.should.have.property('likes');
+        res.body.data.should.have.property('dislikes');
         done();
       });
   });

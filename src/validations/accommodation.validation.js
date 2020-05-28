@@ -1,7 +1,7 @@
 import joiBase from '@hapi/joi';
 import joiDate from '@hapi/joi-date';
-import Response from '../services/response.service';
 import transformErrorHandler from '../helpers/transformErrorHandler';
+import ResponseService from '../services/response.service';
 
 const Joi = joiBase.extend(joiDate);
 
@@ -28,8 +28,8 @@ export const bookAccommodationValidation = async (req, res, next) => {
   const results = schema.validate({ ...req.body, ...req.params });
   if (results.error) {
     const errorMessages = results.error.details.map((error) => error.message.replace(/[^a-zA-Z0-9 .-]/g, ''));
-    Response.setError(400, errorMessages);
-    return Response.send(res);
+    ResponseService.setError(400, errorMessages);
+    return ResponseService.send(res);
   }
   next();
 };
@@ -181,4 +181,38 @@ export const createAccommodationValidations = async (req, res, next) => {
   }).options({ abortEarly: false });
 
   transformErrorHandler(createAccommodationSchema, req.body, res, next);
+};
+
+const likeAndUnlikeAccommodationSchema = Joi.object({
+  like: Joi.boolean()
+    .valid('yes', 'no')
+    .required()
+    .messages({
+      'string.base': 'Invalid type, likeValue must be a string',
+      'string.empty': 'Please enter likeValue',
+      'any.required': 'likeValue is required'
+    }),
+  unlike: Joi.boolean()
+    .valid('yes', 'no')
+    .required()
+    .messages({
+      'string.base': 'Invalid type, dislikeValue must be a string',
+      'string.empty': 'Please enter dislikeValue',
+      'any.required': 'dislikeValue is required'
+    })
+}).options({ abortEarly: false });
+
+const validateHandler = (schema, body, res, next) => {
+  const { error } = schema.validate(body);
+  if (error) {
+    const { details } = error;
+    const errors = details.map(({ message }) => (message.replace(/[^a-zA-Z0-9 .-]/g, '')));
+    ResponseService.setError(400, errors);
+    return ResponseService.send(res);
+  }
+  next();
+};
+
+export const validateAccommodationReaction = (req, res, next) => {
+  validateHandler(likeAndUnlikeAccommodationSchema, req.body, res, next);
 };

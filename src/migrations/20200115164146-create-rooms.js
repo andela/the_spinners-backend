@@ -21,6 +21,12 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Roo
   roomPrice: {
     type: Sequelize.DECIMAL(10, 2)
   },
+  likesCount: {
+    type: Sequelize.INTEGER
+  },
+  dislikesCount: {
+    type: Sequelize.INTEGER
+  },
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
