@@ -61,7 +61,7 @@
     "@hapi/joi-date": "^2.0.1",
     "@sendgrid/mail": "^6.4.0",
     "babel-plugin-istanbul": "^5.2.0",
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
