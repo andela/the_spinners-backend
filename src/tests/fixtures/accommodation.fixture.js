@@ -2,9 +2,9 @@ import faker from 'faker';
 import BcryptService from '../../services/bcrypt.service';
 import JwtService from '../../services/jwt.service';
 import models from '../../models';
-import { defaultPreferences } from './users.fixture';
+import { defaultPreferences, loggedInUser } from './users.fixture';
 
-const { Users, Preferences, Accommodation } = models;
+const { Users, Preferences, Accommodation, Booking, likes } = models;
 
 const fakerDate1 = faker.date.future(2);
 const month1 = (`0${fakerDate1.getMonth() + 1}`).slice(-2);
@@ -139,3 +139,45 @@ export const createTravelAdmin = async () => {
   await Users.create({ ...travelAdmin, token: travelAdminToken });
   await Preferences.create({ ...defaultPreferences, userId: travelAdmin.id });
 };
+export const newBooking = {
+  ...booking,
+  userId: loggedInUser.id,
+  accommodationId: 1,
+  roomId: faker.random.number({ min: 1, max: 3 })
+};
+export const accommodationReactionRecord = {
+  accommodationId: newBooking.accommodationId,
+  userId: newBooking.userId,
+  roomId: newBooking.roomId,
+  like: false,
+  unlike: false
+};
+
+export const createAccommodationReactionRecord = async () => {
+  await likes.destroy({ where: {} });
+  await likes.create(accommodationReactionRecord);
+};
+
+export const createNewBooking = async () => {
+  await Booking.destroy({ where: {} });
+  await Booking.create(newBooking);
+};
+
+export const accommodationReactionValue = {
+  like: 'yes',
+  unlike: 'no'
+};
+
+export const accommodationWrongReactionValue = {
+  ...accommodationReactionValue,
+  like: faker.random.number({ min: 1, max: 20 })
+};
+
+export const accommodationSameReactionValue = {
+  ...accommodationReactionValue,
+  unlike: 'yes'
+};
+
+export const invalidAccommodationId = faker.random.number({ min: 200000, max: 200001 });
+
+export default booking;

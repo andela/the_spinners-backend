@@ -187,3 +187,97 @@
  *       '401':
  *         description: No valid token supplied
  */
+
+/**
+* @swagger
+* definitions:
+*   React On Booked Accommodation:
+*     type: object
+*     properties:
+*       like:
+*         type: string
+*       unlike:
+*         type: string
+*     required:
+*         - like
+*         - unlike
+*/
+/**
+ * @swagger
+ * /api/accommodations/{accommodationId}/rooms/{roomId}/react:
+ *   patch:
+ *     tags:
+ *       - accommodation
+ *     name: Accommodation Likes
+ *     summary: A user should be able to like or unlike on a booked accommodation facility
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *              type: string
+ *       - name: accommodationId
+ *         in: path
+*       - name: roomId
+ *         in: path
+ *       - name: body
+ *         in: body
+ *         schema:
+ *           $ref: '#/definitions/React On Booked Accommodation'
+ *           type: object
+ *           like:
+ *              type: string
+ *           unlike:
+ *              type: string
+ *         required:
+ *              - like
+ *              - unlike
+ *     responses:
+ *       '200':
+ *         description: Reaction updated successfully
+ *       '400':
+ *         description: Invalid inputs
+ *       '401':
+ *         description: No Token supplied
+ *       '403':
+ *         description: Forbidden
+ *       '404':
+ *         description: Accommodation booking not found
+ */
+
+/**
+ * @swagger
+ * /api/accommodations/{accommodationId}/rooms/{roomId}/reactions-count:
+ *   get:
+ *     tags:
+ *       - accommodation
+ *     name: Accommodation Reactions Count
+ *     summary: A user should be able get count of both likes and dislikes on specific accommodation
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: authorization
+ *         in: header
+ *         schema:
+ *              type: string
+ *       - name: accommodationId
+ *         in: path
+*       - name: roomId
+ *         in: path
+ *     responses:
+ *       '200':
+ *         description: Reaction records successfully retrieved
+ *       '400':
+ *         description: Invalid inputs
+ *       '401':
+ *         description: No Token supplied
+ *       '403':
+ *         description: Forbidden
+ *       '404':
+ *         description: Accommodation booking not found
+ */
