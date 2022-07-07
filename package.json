@@ -71,7 +71,7 @@
     "find-up": "^4.1.0",
     "istanbul-lib-instrument": "^3.3.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "morgan": "^1.9.1",
     "node-mocks-http": "^1.8.1",
     "passport": "^0.4.1",
