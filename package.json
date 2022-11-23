@@ -84,7 +84,7 @@
     "sequelize-cli": "^5.5.1",
     "sinon": "^8.0.1",
     "sinon-chai": "^3.3.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "socket.io-client": "^2.3.0",
     "socketio-jwt": "^4.5.0",
     "swagger-jsdoc": "^3.4.0",
